@@ -1,0 +1,34 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="military_ammo_crate">
+    <static>true</static>
+    <link name="link">
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://military_ammo_crate/meshes/visual.dae</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>0.42 0.48 0.32 1.0</ambient>
+          <diffuse>0.58 0.66 0.45 1.0</diffuse>
+          <specular>0.2 0.2 0.2 1.0</specular>
+          <pbr>
+            <metal>
+              <albedo_map>/home/nammy/army_mine_bot/src/army_border_world/materials/textures/military_crate.png</albedo_map>
+              <roughness>0.8</roughness>
+              <metalness>0.1</metalness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://military_ammo_crate/meshes/collision.stl</uri>
+          </mesh>
+        </geometry>
+      </collision>
+    </link>
+  </model>
+</sdf>

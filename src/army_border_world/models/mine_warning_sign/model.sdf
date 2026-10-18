@@ -1,0 +1,34 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="mine_warning_sign">
+    <static>true</static>
+    <link name="link">
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://mine_warning_sign/meshes/visual.dae</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>0.80 0.25 0.20 1.0</ambient>
+          <diffuse>0.90 0.30 0.25 1.0</diffuse>
+          <specular>0.2 0.2 0.2 1.0</specular>
+          <pbr>
+            <metal>
+              <albedo_map>/home/nammy/army_mine_bot/src/army_border_world/materials/textures/danger_mines_sign.png</albedo_map>
+              <roughness>0.6</roughness>
+              <metalness>0.2</metalness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://mine_warning_sign/meshes/collision.stl</uri>
+          </mesh>
+        </geometry>
+      </collision>
+    </link>
+  </model>
+</sdf>

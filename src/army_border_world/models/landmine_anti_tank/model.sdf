@@ -1,0 +1,34 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="landmine_anti_tank">
+    <static>true</static>
+    <link name="link">
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://landmine_anti_tank/meshes/visual.dae</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>0.35 0.40 0.30 1.0</ambient>
+          <diffuse>0.48 0.55 0.42 1.0</diffuse>
+          <specular>0.2 0.2 0.2 1.0</specular>
+          <pbr>
+            <metal>
+              <albedo_map>/home/nammy/army_mine_bot/src/army_border_world/materials/textures/landmine_texture.png</albedo_map>
+              <roughness>0.6</roughness>
+              <metalness>0.3</metalness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://landmine_anti_tank/meshes/collision.stl</uri>
+          </mesh>
+        </geometry>
+      </collision>
+    </link>
+  </model>
+</sdf>

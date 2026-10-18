@@ -1,0 +1,1001 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="army_border_minefield">
+    <physics name="1ms" type="ignored">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+
+    <plugin filename="libignition-gazebo-physics-system.so" name="ignition::gazebo::systems::Physics"/>
+    <plugin filename="libignition-gazebo-user-commands-system.so" name="ignition::gazebo::systems::UserCommands"/>
+    <plugin filename="libignition-gazebo-scene-broadcaster-system.so" name="ignition::gazebo::systems::SceneBroadcaster"/>
+    <plugin filename="libignition-gazebo-contact-system.so" name="ignition::gazebo::systems::Contact"/>
+
+    <atmosphere type="adiabatic"/>
+
+    <!-- Atmospheric Sky & Sunlight -->
+    <scene>
+      <ambient>0.62 0.62 0.62 1.0</ambient>
+      <background>0.48 0.70 0.92 1.0</background>
+      <shadows>true</shadows>
+      <grid>false</grid>
+    </scene>
+    
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 50 0 0 0</pose>
+      <diffuse>0.92 0.88 0.80 1</diffuse>
+      <specular>0.3 0.3 0.25 1</specular>
+      <direction>-0.4 0.3 -0.85</direction>
+    </light>
+
+    <light type="directional" name="sky_fill">
+      <cast_shadows>false</cast_shadows>
+      <pose>0 0 40 0 0 0</pose>
+      <diffuse>0.35 0.40 0.45 1</diffuse>
+      <direction>0.4 -0.3 -0.7</direction>
+    </light>
+
+
+    <!-- sky_with_clouds -->
+    <include>
+      <name>sky_with_clouds</name>
+      <uri>model://sky_clouds_dome</uri>
+      <pose>-10.000 0.000 -5.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- border_terrain -->
+    <include>
+      <name>border_terrain</name>
+      <uri>model://uneven_minefield_terrain</uri>
+      <pose>0.000 0.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- army_tank_1 -->
+    <include>
+      <name>army_tank_1</name>
+      <uri>model://army_tank</uri>
+      <pose>-26.000 18.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- army_tank_2 -->
+    <include>
+      <name>army_tank_2</name>
+      <uri>model://army_tank</uri>
+      <pose>-26.000 -18.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- army_tank_3 -->
+    <include>
+      <name>army_tank_3</name>
+      <uri>model://army_tank</uri>
+      <pose>-36.000 0.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- army_truck_1 -->
+    <include>
+      <name>army_truck_1</name>
+      <uri>model://army_truck</uri>
+      <pose>-28.000 8.500 0.000 0.000 0.000 0.150</pose>
+      <static>true</static>
+    </include>
+
+    <!-- army_truck_2 -->
+    <include>
+      <name>army_truck_2</name>
+      <uri>model://army_truck</uri>
+      <pose>-28.000 -8.500 0.000 0.000 0.000 -0.150</pose>
+      <static>true</static>
+    </include>
+
+    <!-- vehicle_sentry_north -->
+    <include>
+      <name>vehicle_sentry_north</name>
+      <uri>model://soldier_standing_sentry</uri>
+      <pose>-21.000 14.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- vehicle_sentry_south -->
+    <include>
+      <name>vehicle_sentry_south</name>
+      <uri>model://soldier_standing_sentry</uri>
+      <pose>-21.000 -14.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- hq_command_tent -->
+    <include>
+      <name>hq_command_tent</name>
+      <uri>model://army_command_tent</uri>
+      <pose>-16.000 0.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- soldier_sitting_hq -->
+    <include>
+      <name>soldier_sitting_hq</name>
+      <uri>model://soldier_sitting</uri>
+      <pose>-15.200 0.000 0.000 0.000 0.000 3.140</pose>
+      <static>true</static>
+    </include>
+
+    <!-- barracks_tent_north -->
+    <include>
+      <name>barracks_tent_north</name>
+      <uri>model://army_barracks_tent</uri>
+      <pose>-16.000 10.000 0.000 0.000 0.000 -0.150</pose>
+      <static>true</static>
+    </include>
+
+    <!-- barracks_tent_south -->
+    <include>
+      <name>barracks_tent_south</name>
+      <uri>model://army_barracks_tent</uri>
+      <pose>-16.000 -10.000 0.000 0.000 0.000 0.150</pose>
+      <static>true</static>
+    </include>
+
+    <!-- soldiers_briefing_bench -->
+    <include>
+      <name>soldiers_briefing_bench</name>
+      <uri>model://soldier_sitting_bench</uri>
+      <pose>-11.000 -5.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- ammo_crate_courtyard -->
+    <include>
+      <name>ammo_crate_courtyard</name>
+      <uri>model://military_ammo_crate</uri>
+      <pose>-9.000 -5.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- soldier_sitting_courtyard -->
+    <include>
+      <name>soldier_sitting_courtyard</name>
+      <uri>model://soldier_sitting</uri>
+      <pose>-7.800 -5.000 0.000 0.000 0.000 3.140</pose>
+      <static>true</static>
+    </include>
+
+    <!-- soldiers_resting_bench -->
+    <include>
+      <name>soldiers_resting_bench</name>
+      <uri>model://soldier_sitting_bench</uri>
+      <pose>-12.000 10.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- soldier_robot_controller -->
+    <include>
+      <name>soldier_robot_controller</name>
+      <uri>model://soldier_robot_operator</uri>
+      <pose>-3.500 2.800 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- checkpoint_sentry_north -->
+    <include>
+      <name>checkpoint_sentry_north</name>
+      <uri>model://soldier_standing_sentry</uri>
+      <pose>-3.500 4.200 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- bunker_sentry_south -->
+    <include>
+      <name>bunker_sentry_south</name>
+      <uri>model://soldier_standing_sentry</uri>
+      <pose>-3.000 -8.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- army_mine_amr -->
+    <include>
+      <name>army_mine_amr</name>
+      <uri>model://army_mine_amr</uri>
+      <pose>-5.500 0.000 0.050 0.000 0.000 0.000</pose>
+      <static>false</static>
+    </include>
+
+    <!-- camp_watchtower_north -->
+    <include>
+      <name>camp_watchtower_north</name>
+      <uri>model://military_watchtower</uri>
+      <pose>-5.000 20.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- watchtower_sentry_north -->
+    <include>
+      <name>watchtower_sentry_north</name>
+      <uri>model://soldier_standing_sentry</uri>
+      <pose>-5.000 20.000 3.600 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- camp_watchtower_south -->
+    <include>
+      <name>camp_watchtower_south</name>
+      <uri>model://military_watchtower</uri>
+      <pose>-5.000 -20.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- watchtower_sentry_south -->
+    <include>
+      <name>watchtower_sentry_south</name>
+      <uri>model://soldier_standing_sentry</uri>
+      <pose>-5.000 -20.000 3.600 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- camp_watchtower_rear -->
+    <include>
+      <name>camp_watchtower_rear</name>
+      <uri>model://military_watchtower</uri>
+      <pose>-46.000 0.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- watchtower_sentry_rear -->
+    <include>
+      <name>watchtower_sentry_rear</name>
+      <uri>model://soldier_standing_sentry</uri>
+      <pose>-46.000 0.000 3.600 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- sandbag_bunker_south -->
+    <include>
+      <name>sandbag_bunker_south</name>
+      <uri>model://sandbag_bunker</uri>
+      <pose>-3.000 -8.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- sandbag_wall_gate_north -->
+    <include>
+      <name>sandbag_wall_gate_north</name>
+      <uri>model://sandbag_wall</uri>
+      <pose>-3.000 4.800 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- sandbag_wall_gate_south -->
+    <include>
+      <name>sandbag_wall_gate_south</name>
+      <uri>model://sandbag_wall</uri>
+      <pose>-3.000 -3.500 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- sandbag_wall_hq_protect -->
+    <include>
+      <name>sandbag_wall_hq_protect</name>
+      <uri>model://sandbag_wall</uri>
+      <pose>-12.000 0.000 0.000 0.000 0.000 1.570</pose>
+      <static>true</static>
+    </include>
+
+    <!-- radio_comms_outpost -->
+    <include>
+      <name>radio_comms_outpost</name>
+      <uri>model://military_radio_station</uri>
+      <pose>-38.000 -18.000 0.000 0.000 0.000 0.400</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fuel_drum_1 -->
+    <include>
+      <name>fuel_drum_1</name>
+      <uri>model://military_fuel_drum</uri>
+      <pose>-39.500 -17.500 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fuel_drum_2 -->
+    <include>
+      <name>fuel_drum_2</name>
+      <uri>model://military_fuel_drum</uri>
+      <pose>-39.500 -18.300 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fuel_drum_3 -->
+    <include>
+      <name>fuel_drum_3</name>
+      <uri>model://military_fuel_drum</uri>
+      <pose>-39.000 -17.900 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fuel_drum_4 -->
+    <include>
+      <name>fuel_drum_4</name>
+      <uri>model://military_fuel_drum</uri>
+      <pose>-33.500 -9.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fuel_drum_5 -->
+    <include>
+      <name>fuel_drum_5</name>
+      <uri>model://military_fuel_drum</uri>
+      <pose>-33.500 9.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- ammo_crate_stack_1 -->
+    <include>
+      <name>ammo_crate_stack_1</name>
+      <uri>model://military_ammo_crate</uri>
+      <pose>-38.000 18.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- ammo_crate_stack_2 -->
+    <include>
+      <name>ammo_crate_stack_2</name>
+      <uri>model://military_ammo_crate</uri>
+      <pose>-38.000 18.000 0.400 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- ammo_crate_stack_3 -->
+    <include>
+      <name>ammo_crate_stack_3</name>
+      <uri>model://military_ammo_crate</uri>
+      <pose>-33.000 17.500 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- floodlight_north -->
+    <include>
+      <name>floodlight_north</name>
+      <uri>model://camp_floodlight</uri>
+      <pose>-4.500 26.000 0.000 0.000 0.000 -0.500</pose>
+      <static>true</static>
+    </include>
+
+    <!-- floodlight_south -->
+    <include>
+      <name>floodlight_south</name>
+      <uri>model://camp_floodlight</uri>
+      <pose>-4.500 -26.000 0.000 0.000 0.000 0.500</pose>
+      <static>true</static>
+    </include>
+
+    <!-- floodlight_center -->
+    <include>
+      <name>floodlight_center</name>
+      <uri>model://camp_floodlight</uri>
+      <pose>-48.000 0.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_north_0 -->
+    <include>
+      <name>fence_north_0</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-50.000 30.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_south_0 -->
+    <include>
+      <name>fence_south_0</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-50.000 -30.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_north_1 -->
+    <include>
+      <name>fence_north_1</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-46.000 30.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_south_1 -->
+    <include>
+      <name>fence_south_1</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-46.000 -30.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_north_2 -->
+    <include>
+      <name>fence_north_2</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-42.000 30.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_south_2 -->
+    <include>
+      <name>fence_south_2</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-42.000 -30.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_north_3 -->
+    <include>
+      <name>fence_north_3</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-38.000 30.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_south_3 -->
+    <include>
+      <name>fence_south_3</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-38.000 -30.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_north_4 -->
+    <include>
+      <name>fence_north_4</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-34.000 30.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_south_4 -->
+    <include>
+      <name>fence_south_4</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-34.000 -30.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_north_5 -->
+    <include>
+      <name>fence_north_5</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-30.000 30.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_south_5 -->
+    <include>
+      <name>fence_south_5</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-30.000 -30.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_north_6 -->
+    <include>
+      <name>fence_north_6</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-26.000 30.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_south_6 -->
+    <include>
+      <name>fence_south_6</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-26.000 -30.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_north_7 -->
+    <include>
+      <name>fence_north_7</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-22.000 30.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_south_7 -->
+    <include>
+      <name>fence_south_7</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-22.000 -30.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_north_8 -->
+    <include>
+      <name>fence_north_8</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-18.000 30.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_south_8 -->
+    <include>
+      <name>fence_south_8</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-18.000 -30.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_north_9 -->
+    <include>
+      <name>fence_north_9</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-14.000 30.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_south_9 -->
+    <include>
+      <name>fence_south_9</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-14.000 -30.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_north_10 -->
+    <include>
+      <name>fence_north_10</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-10.000 30.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_south_10 -->
+    <include>
+      <name>fence_south_10</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-10.000 -30.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_north_11 -->
+    <include>
+      <name>fence_north_11</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-6.000 30.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_south_11 -->
+    <include>
+      <name>fence_south_11</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-6.000 -30.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_rear_0 -->
+    <include>
+      <name>fence_rear_0</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-52.000 -28.000 0.000 0.000 0.000 1.570</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_rear_1 -->
+    <include>
+      <name>fence_rear_1</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-52.000 -24.000 0.000 0.000 0.000 1.570</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_rear_2 -->
+    <include>
+      <name>fence_rear_2</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-52.000 -20.000 0.000 0.000 0.000 1.570</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_rear_3 -->
+    <include>
+      <name>fence_rear_3</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-52.000 -16.000 0.000 0.000 0.000 1.570</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_rear_4 -->
+    <include>
+      <name>fence_rear_4</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-52.000 -12.000 0.000 0.000 0.000 1.570</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_rear_5 -->
+    <include>
+      <name>fence_rear_5</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-52.000 -8.000 0.000 0.000 0.000 1.570</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_rear_6 -->
+    <include>
+      <name>fence_rear_6</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-52.000 -4.000 0.000 0.000 0.000 1.570</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_rear_7 -->
+    <include>
+      <name>fence_rear_7</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-52.000 0.000 0.000 0.000 0.000 1.570</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_rear_8 -->
+    <include>
+      <name>fence_rear_8</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-52.000 4.000 0.000 0.000 0.000 1.570</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_rear_9 -->
+    <include>
+      <name>fence_rear_9</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-52.000 8.000 0.000 0.000 0.000 1.570</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_rear_10 -->
+    <include>
+      <name>fence_rear_10</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-52.000 12.000 0.000 0.000 0.000 1.570</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_rear_11 -->
+    <include>
+      <name>fence_rear_11</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-52.000 16.000 0.000 0.000 0.000 1.570</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_rear_12 -->
+    <include>
+      <name>fence_rear_12</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-52.000 20.000 0.000 0.000 0.000 1.570</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_rear_13 -->
+    <include>
+      <name>fence_rear_13</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-52.000 24.000 0.000 0.000 0.000 1.570</pose>
+      <static>true</static>
+    </include>
+
+    <!-- fence_rear_14 -->
+    <include>
+      <name>fence_rear_14</name>
+      <uri>model://barbed_wire_fence</uri>
+      <pose>-52.000 28.000 0.000 0.000 0.000 1.570</pose>
+      <static>true</static>
+    </include>
+
+    <!-- border_post_1 -->
+    <include>
+      <name>border_post_1</name>
+      <uri>model://border_boundary_post</uri>
+      <pose>0.000 -24.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- border_post_2 -->
+    <include>
+      <name>border_post_2</name>
+      <uri>model://border_boundary_post</uri>
+      <pose>0.000 -16.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- border_post_3 -->
+    <include>
+      <name>border_post_3</name>
+      <uri>model://border_boundary_post</uri>
+      <pose>0.000 -8.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- border_post_4 -->
+    <include>
+      <name>border_post_4</name>
+      <uri>model://border_boundary_post</uri>
+      <pose>0.000 8.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- border_post_5 -->
+    <include>
+      <name>border_post_5</name>
+      <uri>model://border_boundary_post</uri>
+      <pose>0.000 16.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- border_post_6 -->
+    <include>
+      <name>border_post_6</name>
+      <uri>model://border_boundary_post</uri>
+      <pose>0.000 24.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- czech_hedgehog_1 -->
+    <include>
+      <name>czech_hedgehog_1</name>
+      <uri>model://czech_hedgehog</uri>
+      <pose>0.000 -18.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- czech_hedgehog_2 -->
+    <include>
+      <name>czech_hedgehog_2</name>
+      <uri>model://czech_hedgehog</uri>
+      <pose>0.000 -12.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- czech_hedgehog_3 -->
+    <include>
+      <name>czech_hedgehog_3</name>
+      <uri>model://czech_hedgehog</uri>
+      <pose>0.000 12.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- czech_hedgehog_4 -->
+    <include>
+      <name>czech_hedgehog_4</name>
+      <uri>model://czech_hedgehog</uri>
+      <pose>0.000 18.000 0.000 0.000 0.000 0.000</pose>
+      <static>true</static>
+    </include>
+
+    <!-- warning_sign_gate_n -->
+    <include>
+      <name>warning_sign_gate_n</name>
+      <uri>model://mine_warning_sign</uri>
+      <pose>0.500 3.500 0.000 0.000 0.000 3.140</pose>
+      <static>true</static>
+    </include>
+
+    <!-- warning_sign_gate_s -->
+    <include>
+      <name>warning_sign_gate_s</name>
+      <uri>model://mine_warning_sign</uri>
+      <pose>0.500 -3.500 0.000 0.000 0.000 3.140</pose>
+      <static>true</static>
+    </include>
+
+    <!-- warning_sign_border_n -->
+    <include>
+      <name>warning_sign_border_n</name>
+      <uri>model://mine_warning_sign</uri>
+      <pose>0.500 10.000 0.000 0.000 0.000 3.140</pose>
+      <static>true</static>
+    </include>
+
+    <!-- warning_sign_border_s -->
+    <include>
+      <name>warning_sign_border_s</name>
+      <uri>model://mine_warning_sign</uri>
+      <pose>0.500 -10.000 0.000 0.000 0.000 3.140</pose>
+      <static>true</static>
+    </include>
+
+    <!-- boulder_1 -->
+    <include>
+      <name>boulder_1</name>
+      <uri>model://rock_boulder</uri>
+      <pose>6.500 6.500 0.376 -0.011 -0.059 0.400</pose>
+      <static>true</static>
+    </include>
+
+    <!-- boulder_2 -->
+    <include>
+      <name>boulder_2</name>
+      <uri>model://rock_boulder</uri>
+      <pose>8.000 -11.000 0.351 0.022 -0.059 1.200</pose>
+      <static>true</static>
+    </include>
+
+    <!-- boulder_3 -->
+    <include>
+      <name>boulder_3</name>
+      <uri>model://rock_boulder</uri>
+      <pose>12.500 -3.500 0.686 -0.022 -0.027 2.100</pose>
+      <static>true</static>
+    </include>
+
+    <!-- boulder_4 -->
+    <include>
+      <name>boulder_4</name>
+      <uri>model://rock_boulder</uri>
+      <pose>16.000 18.000 0.704 -0.012 -0.038 -0.800</pose>
+      <static>true</static>
+    </include>
+
+    <!-- boulder_5 -->
+    <include>
+      <name>boulder_5</name>
+      <uri>model://rock_boulder</uri>
+      <pose>22.000 8.000 1.060 -0.010 -0.038 1.700</pose>
+      <static>true</static>
+    </include>
+
+    <!-- boulder_6 -->
+    <include>
+      <name>boulder_6</name>
+      <uri>model://rock_boulder</uri>
+      <pose>27.500 -20.000 1.137 -0.017 -0.045 -1.400</pose>
+      <static>true</static>
+    </include>
+
+    <!-- mine_at_01 -->
+    <include>
+      <name>mine_at_01</name>
+      <uri>model://landmine_anti_tank</uri>
+      <pose>4.500 1.500 0.239 0.007 -0.095 0.322</pose>
+      <static>true</static>
+    </include>
+
+    <!-- mine_at_02 -->
+    <include>
+      <name>mine_at_02</name>
+      <uri>model://landmine_anti_tank</uri>
+      <pose>6.500 -4.000 0.370 0.015 -0.102 -0.552</pose>
+      <static>true</static>
+    </include>
+
+    <!-- mine_at_03 -->
+    <include>
+      <name>mine_at_03</name>
+      <uri>model://landmine_anti_tank</uri>
+      <pose>9.500 4.200 0.418 0.001 0.010 0.416</pose>
+      <static>true</static>
+    </include>
+
+    <!-- mine_at_04 -->
+    <include>
+      <name>mine_at_04</name>
+      <uri>model://landmine_anti_tank</uri>
+      <pose>12.000 3.000 0.442 -0.015 -0.031 0.245</pose>
+      <static>true</static>
+    </include>
+
+    <!-- mine_at_05 -->
+    <include>
+      <name>mine_at_05</name>
+      <uri>model://landmine_anti_tank</uri>
+      <pose>13.500 -2.000 0.684 -0.034 -0.027 -0.147</pose>
+      <static>true</static>
+    </include>
+
+    <!-- mine_at_06 -->
+    <include>
+      <name>mine_at_06</name>
+      <uri>model://landmine_anti_tank</uri>
+      <pose>17.500 12.000 0.827 -0.011 -0.039 0.601</pose>
+      <static>true</static>
+    </include>
+
+    <!-- mine_at_07 -->
+    <include>
+      <name>mine_at_07</name>
+      <uri>model://landmine_anti_tank</uri>
+      <pose>18.200 8.000 0.895 -0.004 -0.058 0.414</pose>
+      <static>true</static>
+    </include>
+
+    <!-- mine_at_08 -->
+    <include>
+      <name>mine_at_08</name>
+      <uri>model://landmine_anti_tank</uri>
+      <pose>22.000 -6.000 0.830 -0.001 -0.054 -0.266</pose>
+      <static>true</static>
+    </include>
+
+    <!-- mine_at_09 -->
+    <include>
+      <name>mine_at_09</name>
+      <uri>model://landmine_anti_tank</uri>
+      <pose>25.000 2.500 1.200 0.003 -0.046 0.100</pose>
+      <static>true</static>
+    </include>
+
+    <!-- mine_at_10 -->
+    <include>
+      <name>mine_at_10</name>
+      <uri>model://landmine_anti_tank</uri>
+      <pose>28.000 14.000 1.278 -0.010 -0.034 0.464</pose>
+      <static>true</static>
+    </include>
+
+    <!-- mine_ap_01 -->
+    <include>
+      <name>mine_ap_01</name>
+      <uri>model://landmine_anti_personnel</uri>
+      <pose>3.500 6.000 0.146 -0.007 -0.082 1.043</pose>
+      <static>true</static>
+    </include>
+
+    <!-- mine_ap_02 -->
+    <include>
+      <name>mine_ap_02</name>
+      <uri>model://landmine_anti_personnel</uri>
+      <pose>5.000 -8.500 0.159 0.009 -0.078 -1.039</pose>
+      <static>true</static>
+    </include>
+
+    <!-- mine_ap_03 -->
+    <include>
+      <name>mine_ap_03</name>
+      <uri>model://landmine_anti_personnel</uri>
+      <pose>8.000 -2.000 0.502 -0.006 -0.043 -0.245</pose>
+      <static>true</static>
+    </include>
+
+    <!-- mine_ap_04 -->
+    <include>
+      <name>mine_ap_04</name>
+      <uri>model://landmine_anti_personnel</uri>
+      <pose>11.500 14.000 0.566 -0.008 -0.057 0.883</pose>
+      <static>true</static>
+    </include>
+
+    <!-- mine_ap_05 -->
+    <include>
+      <name>mine_ap_05</name>
+      <uri>model://landmine_anti_personnel</uri>
+      <pose>14.000 -12.500 0.686 0.019 -0.063 -0.729</pose>
+      <static>true</static>
+    </include>
+
+    <!-- mine_ap_06 -->
+    <include>
+      <name>mine_ap_06</name>
+      <uri>model://landmine_anti_personnel</uri>
+      <pose>16.500 -8.000 0.778 -0.014 -0.004 -0.451</pose>
+      <static>true</static>
+    </include>
+
+    <!-- mine_ap_07 -->
+    <include>
+      <name>mine_ap_07</name>
+      <uri>model://landmine_anti_personnel</uri>
+      <pose>20.000 -14.000 0.989 -0.008 -0.029 -0.611</pose>
+      <static>true</static>
+    </include>
+
+    <!-- mine_ap_08 -->
+    <include>
+      <name>mine_ap_08</name>
+      <uri>model://landmine_anti_personnel</uri>
+      <pose>24.000 18.000 1.053 -0.013 -0.047 0.644</pose>
+      <static>true</static>
+    </include>
+
+  </world>
+</sdf>

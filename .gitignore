@@ -1,0 +1,43 @@
+# ==============================================================================
+# ROS 2 Standard .gitignore (Humble / Rolling)
+# ==============================================================================
+
+# Colcon & ROS 2 Build / Install / Log directories
+build/
+install/
+log/
+*.log
+
+# Colcon metadata
+.colcon/
+colcon.meta
+
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# C / C++ compiled objects
+*.so
+*.dylib
+*.dll
+*.o
+*.obj
+*.a
+*.lib
+
+# IDE & Editor temporary files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.directory
+.DS_Store
+
+# Temporary files
+*.tmp
+*.bak

@@ -1,0 +1,49 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="uneven_minefield_terrain">
+    <static>true</static>
+    <link name="link">
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://uneven_minefield_terrain/meshes/visual.dae</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>0.65 0.58 0.42 1.0</ambient>
+          <diffuse>0.82 0.74 0.56 1.0</diffuse>
+          <specular>0.15 0.15 0.12 1.0</specular>
+          <pbr>
+            <metal>
+              <albedo_map>/home/nammy/army_mine_bot/src/army_border_world/materials/textures/desert_ground.png</albedo_map>
+              <roughness>0.85</roughness>
+              <metalness>0.0</metalness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://uneven_minefield_terrain/meshes/collision.stl</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>20.0</mu>
+              <mu2>20.0</mu2>
+            </ode>
+          </friction>
+          <contact>
+            <ode>
+              <kp>10000000.0</kp>
+              <kd>1.0</kd>
+              <min_depth>0.005</min_depth>
+            </ode>
+          </contact>
+        </surface>
+      </collision>
+    </link>
+  </model>
+</sdf>

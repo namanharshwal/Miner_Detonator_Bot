@@ -1,0 +1,34 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="army_barracks_tent">
+    <static>true</static>
+    <link name="link">
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://army_barracks_tent/meshes/visual.dae</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>0.38 0.44 0.32 1.0</ambient>
+          <diffuse>0.55 0.65 0.46 1.0</diffuse>
+          <specular>0.2 0.2 0.2 1.0</specular>
+          <pbr>
+            <metal>
+              <albedo_map>/home/nammy/army_mine_bot/src/army_border_world/materials/textures/camo_military.png</albedo_map>
+              <roughness>0.9</roughness>
+              <metalness>0.0</metalness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://army_barracks_tent/meshes/collision.stl</uri>
+          </mesh>
+        </geometry>
+      </collision>
+    </link>
+  </model>
+</sdf>
