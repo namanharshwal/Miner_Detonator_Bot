@@ -52,7 +52,18 @@ Photorealistic military vehicles (Main Battle Tanks, 6x6 tactical cargo trucks),
 ### 5. NIPUN AMR Army Executive Virtual Remote Controller
 Mil-Spec Ground Control Station (GCS) and Virtual Handheld Remote interface engineered for the Field Commander and Army Executive. Features 4WD skid-steer teleoperation with speed governor (1-2 km/h spec), mountain slope inclinometer (1:8 gradient check), real-time W-formation radar schematic, mandatory Executive Approval Gate (Client Req #18), NIPUN AP-mine payload monitor, senile auto-deactivation timer, seismic troop-footfall discrimination gauge (>0.45g threat vs <0.15g friendly), 3-axis magnetometer anomaly sensor, 4D LiDAR telemetry, and switchable Day/Night NVG/Thermal FLIR optical HUD.
 
+> 📖 **Official Visualization & Operational Guide**: Refer to the comprehensive [Virtual Remote Controller Visualization Guide & Operational Manual](docs/VIRTUAL_REMOTE_GUIDE.md) for complete HUD layout analysis, field operating checklists, and full compliance mapping to client specs.
+
 ![Army Executive Virtual Remote Controller HUD](docs/images/virtual_remote_controller_hud.png)
+
+#### Multi-Spectral HUD & Tactical Threat Modes
+| Day Optical Teleop | NVG Night Vision (Phosphor Green) | FLIR Thermal Imaging |
+|:---:|:---:|:---:|
+| ![Day Optical](docs/images/remote_day_teleop.png) | ![NVG Night](docs/images/remote_nvg_night_vision.png) | ![Thermal](docs/images/remote_flir_thermal.png) |
+
+| Seismic Troop Alert (>0.45g) | Magnetic Weapon Anomaly (>80µT) | Dual-Action Emergency E-STOP |
+|:---:|:---:|:---:|
+| ![Seismic Alert](docs/images/remote_seismic_hostile_alert.png) | ![Magnetic Alert](docs/images/remote_magnetometer_anomaly_alert.png) | ![E-STOP](docs/images/remote_estop_engaged.png) |
 
 ---
 
@@ -107,10 +118,17 @@ Miner_Detonator_Bot/
 ├── launch_remote.sh                    # Dedicated Army Executive Virtual Remote launcher
 ├── README.md                           # System documentation and operational manual
 ├── docs/                               # Documentation assets and high-res screenshots
+│   ├── VIRTUAL_REMOTE_GUIDE.md         # Dedicated Army Executive Remote Manual & Client Traceability
 │   └── images/
 │       ├── army_camp_military_models.png
 │       ├── full_simulation_side_by_side.png
 │       ├── gazebo_simulation_mountain_world.png
+│       ├── remote_day_teleop.png
+│       ├── remote_estop_engaged.png
+│       ├── remote_flir_thermal.png
+│       ├── remote_magnetometer_anomaly_alert.png
+│       ├── remote_nvg_night_vision.png
+│       ├── remote_seismic_hostile_alert.png
 │       ├── rviz_w_formation_slam_4d_lidar.png
 │       └── virtual_remote_controller_hud.png
 └── src/

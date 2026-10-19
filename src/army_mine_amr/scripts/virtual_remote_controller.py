@@ -301,20 +301,101 @@ class TacticalExecutiveRemote(QMainWindow):
             self.imu_sub = self.ros_node.create_subscription(
                 Imu, '/imu/data', self.on_imu_msg, 10
             )
+            self.scan_sub = self.ros_node.create_subscription(
+                LaserScan, '/scan', self.on_scan_msg, 10
+            )
+            self.remote_cmd_sub = self.ros_node.create_subscription(
+                String, '/army_mine_amr/remote_command', self.on_remote_command, 10
+            )
 
             # Service clients
             self.approve_client = self.ros_node.create_client(Trigger, '/army_mine_amr/approve_w_formation')
             self.deploy_client = self.ros_node.create_client(Trigger, '/army_mine_amr/trigger_deployment')
 
-            # Spin in thread
-            self.ros_thread = threading.Thread(target=lambda: rclpy.spin(self.ros_node), daemon=True)
-            self.ros_thread.start()
-            self.log_terminal("✅ Connected to ROS 2 Humble Domain: /cmd_vel, /odom, /imu, /formation")
+            # Spin in main Qt thread via QTimer (100% thread-safe & zero termination crashes)
+            self.ros_spin_timer = QTimer(self)
+            self.ros_spin_timer.timeout.connect(self.spin_ros_once)
+            self.ros_spin_timer.start(50)  # 20 Hz
+            self.log_terminal("✅ Connected to ROS 2 Humble Domain: /cmd_vel, /odom, /imu, /scan, /formation")
         except Exception as e:
             self.log_terminal(f"⚠️ ROS 2 background connection error: {e}")
 
+    def on_remote_command(self, msg):
+        cmd = msg.data.strip().upper()
+        if cmd == "FORWARD":
+            self.cmd_forward()
+        elif cmd == "REVERSE":
+            self.cmd_reverse()
+        elif cmd == "LEFT":
+            self.cmd_pivot_left()
+        elif cmd == "RIGHT":
+            self.cmd_pivot_right()
+        elif cmd in ("STOP", "BRAKE"):
+            self.cmd_stop()
+        elif cmd == "ESTOP":
+            self.trigger_estop()
+        elif cmd in ("CRAWL", "SPEED_CRAWL"):
+            self.set_speed(0.15, "0.5 km/h [CRAWL]")
+        elif cmd in ("NOMINAL", "SPEED_NOM"):
+            self.set_speed(0.35, "1.2 km/h [NOMINAL]")
+        elif cmd in ("MAX", "SPEED_MAX"):
+            self.set_speed(0.55, "2.0 km/h [MAXIMUM]")
+        elif cmd in ("THERMAL", "OPT_THERMAL"):
+            self.set_opt_mode("THERMAL")
+        elif cmd in ("NVG", "OPT_NVG"):
+            self.set_opt_mode("NVG")
+        elif cmd in ("DAY", "OPT_DAY"):
+            self.set_opt_mode("DAY")
+        elif cmd in ("TEST_SEISMIC", "TEST_FOOTFALL"):
+            self.trigger_enemy_footfall_test()
+        elif cmd in ("TEST_WEAPON", "TEST_MAGNETIC"):
+            self.trigger_weapon_anomaly_test()
+        elif cmd == "APPROVE":
+            self.action_approve_formation()
+        elif cmd == "DEPLOY":
+            self.action_deploy_mine()
+        elif cmd == "MODE_AUTO":
+            self.set_mode_str("AUTONOMOUS")
+        elif cmd == "MODE_MANUAL":
+            self.set_mode_str("MANUAL")
+        elif cmd.startswith("SPACING:"):
+            try:
+                val = float(cmd.split(":")[1])
+                self.spin_spacing.setValue(val)
+            except Exception:
+                pass
+
+    def spin_ros_once(self):
+        if ROS2_AVAILABLE and self.ros_node and rclpy.ok():
+            try:
+                rclpy.spin_once(self.ros_node, timeout_sec=0)
+            except Exception:
+                pass
+
     def on_status_msg(self, msg):
-        pass
+        status_text = msg.data
+        if "APPROVED" in status_text:
+            self.operator_approved = True
+            self.lbl_app_status.setText("STATUS: [APPROVED BY EXECUTIVE]")
+            self.lbl_app_status.setStyleSheet("color: #4ade80; font-family: monospace; font-size: 11px; font-weight: bold;")
+        elif "PENDING" in status_text:
+            self.operator_approved = False
+            self.lbl_app_status.setText("STATUS: [AWAITING EXECUTIVE SIGN-OFF]")
+            self.lbl_app_status.setStyleSheet("color: #f59e0b; font-family: monospace; font-size: 11px; font-weight: bold;")
+        if "ON_STATION_ARMED" in status_text or "DEPLOYED" in status_text:
+            self.nipun_deployed = True
+            self.lbl_payload.setText("📦 PAYLOAD: NIPUN AP MINE [DEPLOYED & ARMED]")
+            self.lbl_payload.setStyleSheet("color: #f87171; font-size: 10px; font-weight: bold;")
+
+    def on_scan_msg(self, msg):
+        valid_ranges = [r for r in msg.ranges if msg.range_min < r < msg.range_max]
+        if valid_ranges:
+            min_r = min(valid_ranges)
+            self.lbl_lidar_obs.setText(f"OBSTACLE PROXIMITY: {min_r:.2f}m ({'CLEAR' if min_r > 1.0 else 'CLOSE WARNING'})")
+            if min_r < 1.0:
+                self.lbl_lidar_obs.setStyleSheet("color: #ef4444; font-family: monospace; font-size: 10px; font-weight: bold;")
+            else:
+                self.lbl_lidar_obs.setStyleSheet("color: #a7f3d0; font-family: monospace; font-size: 10px;")
 
     def on_seismic_msg(self, msg):
         self.seismic_val = float(msg.data)
@@ -696,6 +777,10 @@ class TacticalExecutiveRemote(QMainWindow):
         vbox_seis.addWidget(self.lbl_seis_val)
         vbox_seis.addWidget(self.seis_bar)
         vbox_seis.addWidget(self.lbl_seis_status)
+        self.btn_test_footfall = QPushButton("⚠️ TEST ENEMY FOOTFALL (>0.45g)")
+        self.btn_test_footfall.setStyleSheet("background-color: #3b1111; color: #fca5a5; border: 1px solid #ef4444; font-size: 9px; padding: 3px;")
+        self.btn_test_footfall.clicked.connect(self.trigger_enemy_footfall_test)
+        vbox_seis.addWidget(self.btn_test_footfall)
         vbox_sensor.addWidget(seis_frame)
 
         # Magnetometer Anomaly Sensor (Client Req #8 & #12: Hostile Ferrous Weapons)
@@ -709,6 +794,10 @@ class TacticalExecutiveRemote(QMainWindow):
         self.lbl_mag_status.setStyleSheet("color: #34d399; font-family: monospace; font-size: 10px; font-weight: bold;")
         vbox_mag.addWidget(self.lbl_mag_val)
         vbox_mag.addWidget(self.lbl_mag_status)
+        self.btn_test_weapon = QPushButton("⚠️ TEST WEAPON ANOMALY (>80µT)")
+        self.btn_test_weapon.setStyleSheet("background-color: #3b2811; color: #fde047; border: 1px solid #f59e0b; font-size: 9px; padding: 3px;")
+        self.btn_test_weapon.clicked.connect(self.trigger_weapon_anomaly_test)
+        vbox_mag.addWidget(self.btn_test_weapon)
         vbox_sensor.addWidget(mag_frame)
 
         # 4D LiDAR Terrain Mapping Telemetry (Client Req #13 & #14)
@@ -937,9 +1026,11 @@ class TacticalExecutiveRemote(QMainWindow):
         self.lbl_dist_traveled.setText(f"📍 TRAVEL DISTANCE: {self.distance_traveled:.1f}m / 100m BUDGET")
 
         # Update Seismic Meter (simulate natural ground vibration or read from ROS)
-        if not ROS2_AVAILABLE or not self.ros_node:
+        if hasattr(self, 'sim_threat_until') and time.time() < self.sim_threat_until:
+            self.seismic_val = 0.54 + 0.08 * math.sin(time.time() * 12.0)
+        elif not ROS2_AVAILABLE or not self.ros_node:
             self.seismic_val = 0.08 + 0.03 * math.sin(time.time() * 3.0)
-            if self.linear_vel > 0:
+            if abs(self.linear_vel) > 0:
                 self.seismic_val += 0.04
 
         seis_pct = min(int((self.seismic_val / 0.6) * 100), 100)
@@ -949,11 +1040,23 @@ class TacticalExecutiveRemote(QMainWindow):
         if self.seismic_val > 0.45:
             self.lbl_seis_status.setText("🔴 ALERT: HOSTILE TROOP FOOTFALLS DETECTED (>0.45g)")
             self.lbl_seis_status.setStyleSheet("color: #ef4444; font-family: monospace; font-size: 10px; font-weight: bold;")
+            self.seis_bar.setStyleSheet("QProgressBar::chunk { background-color: #ef4444; }")
         else:
             self.lbl_seis_status.setText("🟢 STATUS: FRIENDLY MINELET MOVEMENT (FILTERED & IGNORED)")
             self.lbl_seis_status.setStyleSheet("color: #34d399; font-family: monospace; font-size: 10px; font-weight: bold;")
+            self.seis_bar.setStyleSheet("QProgressBar::chunk { background-color: #10b981; }")
 
         # Update Magnetometer
+        if hasattr(self, 'sim_weapon_until') and time.time() < self.sim_weapon_until:
+            self.mag_val = 84.5 + 4.0 * math.sin(time.time() * 8.0)
+            self.lbl_mag_status.setText("🔴 ALERT: FERROUS WEAPON / RIFLE ANOMALY DETECTED!")
+            self.lbl_mag_status.setStyleSheet("color: #ef4444; font-family: monospace; font-size: 10px; font-weight: bold;")
+        else:
+            if not ROS2_AVAILABLE or not self.ros_node:
+                self.mag_val = 47.6 + 0.5 * math.sin(time.time() * 2.0)
+            self.lbl_mag_status.setText("🟢 ANOMALY STATUS: CLEAR (NO HOSTILE WEAPON SIGNATURE)")
+            self.lbl_mag_status.setStyleSheet("color: #34d399; font-family: monospace; font-size: 10px; font-weight: bold;")
+
         self.lbl_mag_val.setText(f"🧲 MAGNETOMETER: {self.mag_val:.1f} µT [EARTH FLUX BASELINE]")
 
         # Update Optical HUD attitude
@@ -964,6 +1067,26 @@ class TacticalExecutiveRemote(QMainWindow):
             self.robot_x, self.robot_y, self.robot_yaw,
             self.spacing, self.operator_approved, self.nipun_deployed
         )
+
+    def trigger_enemy_footfall_test(self):
+        self.sim_threat_until = time.time() + 4.0
+        self.log_terminal("🚨 INJECTED SEISMIC TEST: Hostile heavy footsteps detected (>0.52g)!")
+
+    def trigger_weapon_anomaly_test(self):
+        self.sim_weapon_until = time.time() + 4.0
+        self.log_terminal("🚨 INJECTED MAGNETOMETER TEST: Ferrous weapon anomaly detected (84.2 µT)!")
+
+    def closeEvent(self, event):
+        if hasattr(self, 'ros_spin_timer'):
+            self.ros_spin_timer.stop()
+        if hasattr(self, 'timer'):
+            self.timer.stop()
+        if ROS2_AVAILABLE and rclpy.ok():
+            try:
+                rclpy.shutdown()
+            except Exception:
+                pass
+        event.accept()
 
 
 # ==============================================================================
@@ -977,7 +1100,13 @@ def main():
     remote = TacticalExecutiveRemote()
     remote.show()
 
-    sys.exit(app.exec_())
+    ret = app.exec_()
+    if ROS2_AVAILABLE and rclpy.ok():
+        try:
+            rclpy.shutdown()
+        except Exception:
+            pass
+    sys.exit(ret)
 
 
 if __name__ == '__main__':
