@@ -76,6 +76,9 @@ elif [ "$MODE" == "slam" ]; then
 elif [ "$MODE" == "teleop" ]; then
     echo "Starting AMR Keyboard Teleop & Defusal Console..."
     ros2 run army_mine_amr amr_teleop_keyboard.py
+elif [ "$MODE" == "remote" ]; then
+    echo "Starting NIPUN AMR Army Executive Virtual Remote Controller..."
+    python3 "$WORKSPACE_DIR/src/army_mine_amr/scripts/virtual_remote_controller.py"
 elif [ "$MODE" == "rviz" ]; then
     echo "Starting Mine Tracker Node and RViz2 visualization..."
     ros2 launch army_border_world view_mines_rviz.launch.py
