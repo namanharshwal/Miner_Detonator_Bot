@@ -13,12 +13,13 @@
 
     <atmosphere type="adiabatic"/>
 
-    <!-- Atmospheric Sky & Sunlight -->
+    <!-- Native Infinite Atmospheric Sky & Sunlight -->
     <scene>
-      <ambient>0.62 0.62 0.62 1.0</ambient>
-      <background>0.48 0.70 0.92 1.0</background>
+      <ambient>0.65 0.65 0.65 1.0</ambient>
+      <background>0.50 0.70 0.90 1.0</background>
       <shadows>true</shadows>
       <grid>false</grid>
+      <sky></sky>
     </scene>
     
     <light type="directional" name="sun">
@@ -35,15 +36,6 @@
       <diffuse>0.35 0.40 0.45 1</diffuse>
       <direction>0.4 -0.3 -0.7</direction>
     </light>
-
-
-    <!-- sky_with_clouds -->
-    <include>
-      <name>sky_with_clouds</name>
-      <uri>model://sky_clouds_dome</uri>
-      <pose>-10.000 0.000 -5.000 0.000 0.000 0.000</pose>
-      <static>true</static>
-    </include>
 
     <!-- border_terrain -->
     <include>
@@ -201,7 +193,7 @@
     <include>
       <name>army_mine_amr</name>
       <uri>model://army_mine_amr</uri>
-      <pose>-5.500 0.000 0.050 0.000 0.000 0.000</pose>
+      <pose>-5.500 0.000 0.002 0.000 0.000 0.000</pose>
       <static>false</static>
     </include>
 

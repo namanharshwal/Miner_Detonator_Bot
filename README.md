@@ -130,7 +130,6 @@ Miner_Detonator_Bot/
     │   │   ├── military_watchtower/
     │   │   ├── soldier_standing_sentry/
     │   │   ├── soldier_robot_operator/
-    │   │   ├── sky_clouds_dome/
     │   │   └── uneven_minefield_terrain/    # 100m x 70m terrain mesh with continuous 1:8 slope
     │   ├── scripts/
     │   │   ├── build_army_world_and_models.py # Master procedural terrain & UV model builder

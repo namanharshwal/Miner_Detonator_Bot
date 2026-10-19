@@ -376,8 +376,7 @@ def regenerate_world():
     </include>"""
 
     m_xml = []
-    # 1. Sky Dome with Clouds (centered over entire camp + mountain terrain)
-    m_xml.append(inc("sky_with_clouds", "sky_clouds_dome", -10.0, 0.0, -5.0))
+    # 1. Uneven Mountain Terrain
 
     # 2. Uneven Mountain Terrain
     m_xml.append(inc("border_terrain", "uneven_minefield_terrain", 0.0, 0.0, 0.0))
@@ -411,7 +410,7 @@ def regenerate_world():
     m_xml.append(inc("bunker_sentry_south", "soldier_standing_sentry", -3.0, -8.0, 0.0, yaw=0.0))
 
     # 8. AMR Spawning facing border (Clean, open straight path along y=0.0)
-    m_xml.append(inc("army_mine_amr", "army_mine_amr", -5.5, 0.0, 0.05, yaw=0.0, is_static=False))
+    m_xml.append(inc("army_mine_amr", "army_mine_amr", -5.5, 0.0, 0.002, yaw=0.0, is_static=False))
 
     # 9. Watchtowers
     m_xml.append(inc("camp_watchtower_north", "military_watchtower", -5.0, 20.0, 0.0))
@@ -498,12 +497,13 @@ def regenerate_world():
 
     <atmosphere type="adiabatic"/>
 
-    <!-- Atmospheric Sky & Sunlight -->
+    <!-- Native Atmospheric Sky & Sunlight -->
     <scene>
-      <ambient>0.62 0.62 0.62 1.0</ambient>
-      <background>0.48 0.70 0.92 1.0</background>
+      <ambient>0.65 0.65 0.65 1.0</ambient>
+      <background>0.50 0.70 0.90 1.0</background>
       <shadows>true</shadows>
       <grid>false</grid>
+      <sky></sky>
     </scene>
     
     <light type="directional" name="sun">

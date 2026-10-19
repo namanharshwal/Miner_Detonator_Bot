@@ -78,8 +78,8 @@
     </material>
   </gazebo>
 
-  <!-- ================= LEFT WHEEL ================= -->
-  <link name="lw_link">
+  <!-- ================= FRONT LEFT WHEEL ================= -->
+  <link name="fl_wheel_link">
     <inertial>
       <origin xyz="0 0 -0.005" rpy="0 0 0"/>
       <mass value="0.45"/>
@@ -93,30 +93,29 @@
       </geometry>
       <material name="wheel_rubber"/>
     </visual>
-    <!-- Cylindrical high-traction all-terrain tire collision -->
     <collision>
       <origin xyz="0 0 -0.007" rpy="0 0 0"/>
       <geometry>
-        <cylinder radius="0.051" length="0.045"/>
+        <cylinder radius="0.0525" length="0.045"/>
       </geometry>
     </collision>
   </link>
 
-  <joint name="lw_joint" type="continuous">
-    <origin xyz="0 0.11086 0.018076" rpy="-1.5708 0 0"/>
+  <joint name="fl_wheel_joint" type="continuous">
+    <origin xyz="0.075 0.11086 0.018076" rpy="-1.5708 0 0"/>
     <parent link="base_link"/>
-    <child link="lw_link"/>
+    <child link="fl_wheel_link"/>
     <axis xyz="0 0 1"/>
-    <limit effort="25" velocity="20"/>
-    <dynamics damping="0.15" friction="0.1"/>
+    <limit effort="50" velocity="20"/>
+    <dynamics damping="0.15" friction="0.10"/>
   </joint>
 
-  <gazebo reference="lw_link">
-    <mu1>1.8</mu1>
-    <mu2>1.8</mu2>
-    <kp>1000000.0</kp>
-    <kd>100.0</kd>
-    <minDepth>0.002</minDepth>
+  <gazebo reference="fl_wheel_link">
+    <mu1>100.0</mu1>
+    <mu2>100.0</mu2>
+    <kp>10000000.0</kp>
+    <kd>1.0</kd>
+    <minDepth>0.005</minDepth>
     <material>
       <ambient>0.1 0.1 0.1 1</ambient>
       <diffuse>0.15 0.15 0.15 1</diffuse>
@@ -124,8 +123,8 @@
     </material>
   </gazebo>
 
-  <!-- ================= RIGHT WHEEL ================= -->
-  <link name="rw_link">
+  <!-- ================= FRONT RIGHT WHEEL ================= -->
+  <link name="fr_wheel_link">
     <inertial>
       <origin xyz="0 0 0.005" rpy="0 0 0"/>
       <mass value="0.45"/>
@@ -139,30 +138,29 @@
       </geometry>
       <material name="wheel_rubber"/>
     </visual>
-    <!-- Cylindrical high-traction all-terrain tire collision -->
     <collision>
       <origin xyz="0 0 0.007" rpy="0 0 0"/>
       <geometry>
-        <cylinder radius="0.051" length="0.045"/>
+        <cylinder radius="0.0525" length="0.045"/>
       </geometry>
     </collision>
   </link>
 
-  <joint name="rw_joint" type="continuous">
-    <origin xyz="0 -0.11086 0.018076" rpy="-1.5708 0 0"/>
+  <joint name="fr_wheel_joint" type="continuous">
+    <origin xyz="0.075 -0.11086 0.018076" rpy="-1.5708 0 0"/>
     <parent link="base_link"/>
-    <child link="rw_link"/>
-    <axis xyz="0 0 -1"/>
-    <limit effort="25" velocity="20"/>
-    <dynamics damping="0.15" friction="0.1"/>
+    <child link="fr_wheel_link"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="50" velocity="20"/>
+    <dynamics damping="0.15" friction="0.10"/>
   </joint>
 
-  <gazebo reference="rw_link">
-    <mu1>1.8</mu1>
-    <mu2>1.8</mu2>
-    <kp>1000000.0</kp>
-    <kd>100.0</kd>
-    <minDepth>0.002</minDepth>
+  <gazebo reference="fr_wheel_link">
+    <mu1>100.0</mu1>
+    <mu2>100.0</mu2>
+    <kp>10000000.0</kp>
+    <kd>1.0</kd>
+    <minDepth>0.005</minDepth>
     <material>
       <ambient>0.1 0.1 0.1 1</ambient>
       <diffuse>0.15 0.15 0.15 1</diffuse>
@@ -170,137 +168,93 @@
     </material>
   </gazebo>
 
-  <!-- ================= FRONT CASTER ASSEMBLY ================= -->
-  <link name="fc_link">
+  <!-- ================= REAR LEFT WHEEL ================= -->
+  <link name="rl_wheel_link">
     <inertial>
-      <origin xyz="0.0045 -0.0003 -0.0044" rpy="0 0 0"/>
-      <mass value="0.08"/>
-      <inertia ixx="0.000005" ixy="0" ixz="0"
-               iyy="0.000005" iyz="0" izz="0.000008"/>
+      <origin xyz="0 0 -0.005" rpy="0 0 0"/>
+      <mass value="0.45"/>
+      <inertia ixx="0.00035" ixy="0" ixz="0"
+               iyy="0.00035" iyz="0" izz="0.00058"/>
     </inertial>
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-        <mesh filename="package://army_mine_amr/meshes/fc_link.STL"/>
-      </geometry>
-      <material name="tactical_dark"/>
-    </visual>
-  </link>
-
-  <joint name="fc_joint" type="continuous">
-    <origin xyz="0.071755 0 -0.0028894" rpy="0 0 0"/>
-    <parent link="base_link"/>
-    <child link="fc_link"/>
-    <axis xyz="0 0 1"/>
-    <limit effort="10" velocity="15"/>
-    <dynamics damping="0.05" friction="0.02"/>
-  </joint>
-
-  <link name="fcw_link">
-    <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <mass value="0.06"/>
-      <inertia ixx="0.000005" ixy="0" ixz="0"
-               iyy="0.000005" iyz="0" izz="0.000008"/>
-    </inertial>
-    <visual>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <geometry>
-        <mesh filename="package://army_mine_amr/meshes/fcw_link.STL"/>
+        <mesh filename="package://army_mine_amr/meshes/lw_link.STL"/>
       </geometry>
       <material name="wheel_rubber"/>
     </visual>
-    <!-- Smooth spherical collision contact: prevents catching on dirt ridges & crater edges -->
     <collision>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <origin xyz="0 0 -0.007" rpy="0 0 0"/>
       <geometry>
-        <sphere radius="0.013"/>
+        <cylinder radius="0.0525" length="0.045"/>
       </geometry>
     </collision>
   </link>
 
-  <joint name="fcw_joint" type="continuous">
-    <origin xyz="0.012 0 -0.017111" rpy="-1.5708 0 0"/>
-    <parent link="fc_link"/>
-    <child link="fcw_link"/>
-    <axis xyz="0 0 -1"/>
-    <limit effort="10" velocity="15"/>
-    <dynamics damping="0.02" friction="0.02"/>
+  <joint name="rl_wheel_joint" type="continuous">
+    <origin xyz="-0.075 0.11086 0.018076" rpy="-1.5708 0 0"/>
+    <parent link="base_link"/>
+    <child link="rl_wheel_link"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="50" velocity="20"/>
+    <dynamics damping="0.15" friction="0.10"/>
   </joint>
 
-  <gazebo reference="fcw_link">
-    <mu1>0.08</mu1>
-    <mu2>0.08</mu2>
+  <gazebo reference="rl_wheel_link">
+    <mu1>100.0</mu1>
+    <mu2>100.0</mu2>
+    <kp>10000000.0</kp>
+    <kd>1.0</kd>
+    <minDepth>0.005</minDepth>
     <material>
-      <ambient>0.15 0.15 0.15 1</ambient>
-      <diffuse>0.2 0.2 0.2 1</diffuse>
+      <ambient>0.1 0.1 0.1 1</ambient>
+      <diffuse>0.15 0.15 0.15 1</diffuse>
+      <specular>0.1 0.1 0.1 1</specular>
     </material>
   </gazebo>
 
-  <!-- ================= REAR CASTER ASSEMBLY ================= -->
-  <link name="rc_link">
+  <!-- ================= REAR RIGHT WHEEL ================= -->
+  <link name="rr_wheel_link">
     <inertial>
-      <origin xyz="-0.0045 0 -0.0044" rpy="0 0 0"/>
-      <mass value="0.08"/>
-      <inertia ixx="0.000005" ixy="0" ixz="0"
-               iyy="0.000005" iyz="0" izz="0.000008"/>
+      <origin xyz="0 0 0.005" rpy="0 0 0"/>
+      <mass value="0.45"/>
+      <inertia ixx="0.00035" ixy="0" ixz="0"
+               iyy="0.00035" iyz="0" izz="0.00058"/>
     </inertial>
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-        <mesh filename="package://army_mine_amr/meshes/rc_link.STL"/>
-      </geometry>
-      <material name="tactical_dark"/>
-    </visual>
-  </link>
-
-  <joint name="rc_joint" type="continuous">
-    <origin xyz="-0.071755 0 -0.0028894" rpy="0 0 0"/>
-    <parent link="base_link"/>
-    <child link="rc_link"/>
-    <axis xyz="0 0 1"/>
-    <limit effort="10" velocity="15"/>
-    <dynamics damping="0.05" friction="0.02"/>
-  </joint>
-
-  <link name="rcw_link">
-    <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <mass value="0.06"/>
-      <inertia ixx="0.000005" ixy="0" ixz="0"
-               iyy="0.000005" iyz="0" izz="0.000008"/>
-    </inertial>
-    <visual>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <geometry>
-        <mesh filename="package://army_mine_amr/meshes/rcw_link.STL"/>
+        <mesh filename="package://army_mine_amr/meshes/rw_link.STL"/>
       </geometry>
       <material name="wheel_rubber"/>
     </visual>
-    <!-- Smooth spherical collision contact -->
     <collision>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <origin xyz="0 0 0.007" rpy="0 0 0"/>
       <geometry>
-        <sphere radius="0.013"/>
+        <cylinder radius="0.0525" length="0.045"/>
       </geometry>
     </collision>
   </link>
 
-  <joint name="rcw_joint" type="continuous">
-    <origin xyz="0.012 0 -0.017111" rpy="-1.5708 0 0"/>
-    <parent link="rc_link"/>
-    <child link="rcw_link"/>
-    <axis xyz="0 0 -1"/>
-    <limit effort="10" velocity="15"/>
-    <dynamics damping="0.02" friction="0.02"/>
+  <joint name="rr_wheel_joint" type="continuous">
+    <origin xyz="-0.075 -0.11086 0.018076" rpy="-1.5708 0 0"/>
+    <parent link="base_link"/>
+    <child link="rr_wheel_link"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="50" velocity="20"/>
+    <dynamics damping="0.15" friction="0.10"/>
   </joint>
 
-  <gazebo reference="rcw_link">
-    <mu1>0.08</mu1>
-    <mu2>0.08</mu2>
+  <gazebo reference="rr_wheel_link">
+    <mu1>100.0</mu1>
+    <mu2>100.0</mu2>
+    <kp>10000000.0</kp>
+    <kd>1.0</kd>
+    <minDepth>0.005</minDepth>
     <material>
-      <ambient>0.15 0.15 0.15 1</ambient>
-      <diffuse>0.2 0.2 0.2 1</diffuse>
+      <ambient>0.1 0.1 0.1 1</ambient>
+      <diffuse>0.15 0.15 0.15 1</diffuse>
+      <specular>0.1 0.1 0.1 1</specular>
     </material>
   </gazebo>
 
@@ -438,22 +392,26 @@
 
   <!-- ================= GAZEBO SIM SIMULATION PLUGINS ================= -->
   <gazebo>
-    <!-- Differential Drive Navigation on Uneven Surface -->
+    <!-- 4-Wheel Skid-Steer Differential Drive on Uneven Terrain -->
     <plugin filename="libignition-gazebo-diff-drive-system.so"
             name="ignition::gazebo::systems::DiffDrive">
-      <left_joint>lw_joint</left_joint>
-      <right_joint>rw_joint</right_joint>
+      <left_joint>fl_wheel_joint</left_joint>
+      <left_joint>rl_wheel_joint</left_joint>
+      <right_joint>fr_wheel_joint</right_joint>
+      <right_joint>rr_wheel_joint</right_joint>
       <wheel_separation>0.22172</wheel_separation>
-      <wheel_radius>0.051</wheel_radius>
+      <wheel_radius>0.0525</wheel_radius>
       <odom_publish_frequency>50</odom_publish_frequency>
-      <max_linear_acceleration>3.0</max_linear_acceleration>
-      <min_linear_acceleration>-3.0</min_linear_acceleration>
-      <max_angular_acceleration>4.5</max_angular_acceleration>
-      <min_angular_acceleration>-4.5</min_angular_acceleration>
-      <max_linear_velocity>1.5</max_linear_velocity>
-      <min_linear_velocity>-1.5</min_linear_velocity>
-      <max_angular_velocity>3.0</max_angular_velocity>
-      <min_angular_velocity>-3.0</min_angular_velocity>
+      <max_wheel_torque>60.0</max_wheel_torque>
+      <max_wheel_acceleration>15.0</max_wheel_acceleration>
+      <max_linear_acceleration>5.0</max_linear_acceleration>
+      <min_linear_acceleration>-5.0</min_linear_acceleration>
+      <max_angular_acceleration>6.0</max_angular_acceleration>
+      <min_angular_acceleration>-6.0</min_angular_acceleration>
+      <max_linear_velocity>2.0</max_linear_velocity>
+      <min_linear_velocity>-2.0</min_linear_velocity>
+      <max_angular_velocity>3.5</max_angular_velocity>
+      <min_angular_velocity>-3.5</min_angular_velocity>
       <topic>/cmd_vel</topic>
       <odom_topic>/odom</odom_topic>
       <tf_topic>/tf</tf_topic>
@@ -461,16 +419,14 @@
       <child_frame_id>base_footprint</child_frame_id>
     </plugin>
 
-    <!-- Joint State Publisher -->
+    <!-- Joint State Publisher for 4 Wheels -->
     <plugin filename="libignition-gazebo-joint-state-publisher-system.so"
             name="ignition::gazebo::systems::JointStatePublisher">
       <topic>/joint_states</topic>
-      <joint_name>lw_joint</joint_name>
-      <joint_name>rw_joint</joint_name>
-      <joint_name>fc_joint</joint_name>
-      <joint_name>fcw_joint</joint_name>
-      <joint_name>rc_joint</joint_name>
-      <joint_name>rcw_joint</joint_name>
+      <joint_name>fl_wheel_joint</joint_name>
+      <joint_name>fr_wheel_joint</joint_name>
+      <joint_name>rl_wheel_joint</joint_name>
+      <joint_name>rr_wheel_joint</joint_name>
     </plugin>
 
     <!-- Sensor Rendering Plugin -->
