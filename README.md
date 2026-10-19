@@ -23,7 +23,7 @@ The **Miner Detonator Bot** project is an advanced, high-fidelity robotics simul
   * **Seismic Sensor**: Ground vibration detection to sense enemy troop footfalls ($>0.45\text{g}$) while ignoring lightweight friendly minelet movement ($<0.15\text{g}$).
   * **Magnetometer Sensor**: Magnetic anomaly detection for hostile metallic weapons/equipment.
   * **6-DOF IMU**: Attitude and pitch estimation on steep slopes.
-* **Locomotion & Traversability**: High-clearance all-terrain differential drive with skid/roller caster configuration capable of negotiating slopes up to **1:8 gradient** ($\sim 7.1^\circ$) without bottoming out or losing wheel traction.
+* **Locomotion & Traversability**: High-clearance all-terrain 4-wheel skid-steer drive ($4\times4$ high-friction treaded pneumatic tires) eliminating passive castor instability and capable of negotiating slopes up to **1:8 gradient** ($\sim 7.1^\circ$) without slip or loss of traction.
 
 ---
 
@@ -35,7 +35,7 @@ Real-time synchronized operation showing the autonomous AMR navigating from the 
 ![Full Simulation Verification](docs/images/full_simulation_side_by_side.png)
 
 ### 2. Mountain Minefield Terrain & Checkpoint Traversal
-The AMR traversing the continuous mountain slope ($\le 1:8$ gradient) with photorealistic golden desert ground textures, boulders, border posts, and atmospheric sky dome.
+The 4-wheeled AMR traversing the continuous mountain slope ($\le 1:8$ gradient) with photorealistic golden desert ground textures, boulders, border posts, and natural procedural atmospheric sky.
 
 ![Gazebo Mountain Terrain World](docs/images/gazebo_simulation_mountain_world.png)
 
@@ -45,7 +45,7 @@ Visualization of the 5-point coordinated W-shape layout (cyan guidelines), NIPUN
 ![RViz2 W-Formation and SLAM](docs/images/rviz_w_formation_slam_4d_lidar.png)
 
 ### 4. High-Fidelity Army Base Camp Environment
-Photorealistic military vehicles (Main Battle Tanks, 6x6 tactical cargo trucks), Command HQ tents, watchtowers, and sentries with embedded PBR textures and camouflage materials.
+Photorealistic military vehicles (Main Battle Tanks, 6x6 tactical cargo trucks), Command HQ tents, watchtowers, and sentries with embedded PBR textures and camouflage materials under natural atmospheric lighting.
 
 ![Army Camp Military Models](docs/images/army_camp_military_models.png)
 
@@ -57,7 +57,7 @@ Photorealistic military vehicles (Main Battle Tanks, 6x6 tactical cargo trucks),
 flowchart TD
     subgraph GAZEBO["Gazebo Sim Harmonic (Physics & World)"]
         GZ_WORLD["World: army_border_minefield.sdf\n(100m x 70m Mountain Terrain <= 1:8 slope)"]
-        GZ_ROBOT["Model: army_mine_amr\n(NIPUN Carrier, DiffDrive, 4D LiDAR, IMU)"]
+        GZ_ROBOT["Model: army_mine_amr\n(NIPUN Carrier, 4WD Skid-Steer, 4D LiDAR, IMU)"]
         GZ_SENSORS["Sensors: GPU LiDAR (16-beam), IMU, Odom"]
         GZ_WORLD --> GZ_ROBOT
         GZ_ROBOT --> GZ_SENSORS
