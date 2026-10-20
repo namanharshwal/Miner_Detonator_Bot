@@ -71,6 +71,15 @@ High-fidelity stereo vision perception integrated directly onto the forward nose
 
 ![RealSense D435 Depth Camera Integration Dashboard](docs/images/depth_camera_verification_dashboard.png)
 
+### 7. Alpine Mountain Grassland & Wildflower Environment (`mountain_grassland_world`)
+A dedicated, photorealistic **High-Altitude Alpine Meadow World** built as an independent ROS 2 package (`mountain_grassland_world`). Features procedural high-resolution mountain turf, wild Himalayan blue poppies, yellow buttercups, daisies, conifer pine trees, granite boulders, drainage ditches, and 18 NIPUN minelet stations under strict slope gradients ($\le 1:8$). The 4WD AMR navigates through dense grass clumps and floral clusters while the RealSense D435 camera profiles ground contours and the Executive Remote Controller operates in real-time RGB-D HUD mode.
+
+![Alpine Mountain Grassland Simulation Verification](docs/images/mountain_grassland_verification_dashboard.png)
+
+| Alpine Meadow & Flora (Gazebo Sim) | RealSense 3D Perception & SLAM (RViz2) | Executive Remote Controller (RGB-D Mode) |
+|:---:|:---:|:---:|
+| ![Gazebo Meadow](docs/images/gazebo_mountain_grassland_meadow.png) | ![RViz Perception](docs/images/rviz_mountain_grassland_driving.png) | ![Remote Controller](docs/images/remote_mountain_grassland_driving.png) |
+
 ---
 
 ## 🏛️ System Architecture
@@ -137,16 +146,21 @@ Miner_Detonator_Bot/
 │       ├── army_camp_military_models.png
 │       ├── depth_camera_verification_dashboard.png
 │       ├── full_simulation_side_by_side.png
+│       ├── gazebo_mountain_grassland_meadow.png
+│       ├── gazebo_mountain_grassland_tracked.png
 │       ├── gazebo_realsense_robot.png
 │       ├── gazebo_simulation_mountain_world.png
+│       ├── mountain_grassland_verification_dashboard.png
 │       ├── remote_day_teleop.png
 │       ├── remote_depth_camera_hud.png
 │       ├── remote_estop_engaged.png
 │       ├── remote_flir_thermal.png
 │       ├── remote_magnetometer_anomaly_alert.png
+│       ├── remote_mountain_grassland_driving.png
 │       ├── remote_movement_verified.png
 │       ├── remote_nvg_night_vision.png
 │       ├── remote_seismic_hostile_alert.png
+│       ├── rviz_mountain_grassland_driving.png
 │       ├── rviz_realsense_depth_cloud.png
 │       ├── rviz_w_formation_slam_4d_lidar.png
 │       └── virtual_remote_controller_hud.png
@@ -180,6 +194,40 @@ Miner_Detonator_Bot/
     │   │   └── mine_tracker_node.py          # Mine coordinate tracking and marker publisher
     │   └── worlds/
     │       └── army_border_minefield.sdf     # Master Gazebo world SDF
+    │
+    ├── mountain_grassland_world/       # High-Altitude Alpine Meadow & Wildflower World
+    │   ├── CMakeLists.txt
+    │   ├── package.xml
+    │   ├── README.md
+    │   ├── config/
+    │   │   └── grassland_mine_coordinates.yaml # 18 NIPUN AP mine coordinates (W-formation)
+    │   ├── launch/
+    │   │   ├── mountain_grassland_world.launch.py     # Standalone meadow world launcher
+    │   │   ├── mountain_grassland_with_amr.launch.py  # Master world + AMR + Depth + SLAM launcher
+    │   │   └── view_grassland_mines_rviz.launch.py    # RViz minefield visualizer
+    │   ├── materials/textures/         # Alpine meadow & floral PBR textures
+    │   │   ├── alpine_grass_meadow.png # 1024x1024 high-density turf
+    │   │   ├── alpine_wildflower_poppy.png
+    │   │   ├── alpine_wildflower_buttercup.png
+    │   │   ├── alpine_wildflower_daisy.png
+    │   │   ├── mountain_rock_cliff.png
+    │   │   ├── alpine_pine_bark.png
+    │   │   └── alpine_pine_foliage.png
+    │   ├── models/                     # Alpine terrain, vegetation, and obstacle models
+    │   │   ├── alpine_mountain_terrain/# 100m x 80m slope terrain mesh (<= 1:8 gradient)
+    │   │   ├── alpine_grass_clump/     # Volumetric grass tuft geometry
+    │   │   ├── alpine_wildflower_cluster/ # Himalayan poppies & buttercups
+    │   │   ├── alpine_boulder_cluster/ # Weathered granite boulders
+    │   │   ├── alpine_pine_tree/       # 4-tier conifer tree
+    │   │   ├── border_meadow_outpost/  # Fortified mountain outpost
+    │   │   └── nipun_mine_marker/      # 10cm dia x 4cm coaster-sized NIPUN minelet
+    │   ├── rviz/
+    │   │   └── mountain_grassland_slam.rviz
+    │   ├── scripts/
+    │   │   ├── build_mountain_grassland_world.py # Procedural builder script
+    │   │   └── grassland_mine_tracker_node.py   # Mine tracker & marker publisher
+    │   └── worlds/
+    │       └── mountain_grassland_minefield.sdf # Master alpine meadow world SDF
     │
     └── army_mine_amr/                  # All-Terrain Mobile Robot Package
         ├── CMakeLists.txt
@@ -262,7 +310,7 @@ cd Miner_Detonator_Bot
 source /opt/ros/humble/setup.bash
 
 # Build the workspace
-colcon build --symlink-install --packages-select army_border_world army_mine_amr
+colcon build --symlink-install --packages-select army_border_world army_mine_amr mountain_grassland_world
 
 # Source workspace overlay
 source install/setup.bash
@@ -275,12 +323,26 @@ source install/setup.bash
 The project includes an intelligent launcher script (`launch_world.sh`) that automates environment variable setup, process cleanup, and multi-node coordination.
 
 ### 🌟 Mode 1: Full Autonomous Mission with SLAM & W-Formation (Recommended)
-Launches Gazebo Sim Harmonic, RViz2, SLAM Toolbox, the native bridge, and the NIPUN W-Formation controller side-by-side:
+Launches Gazebo Sim Harmonic, RViz2, SLAM Toolbox, the native bridge, and the NIPUN W-Formation controller side-by-side in the rugged border world:
 ```bash
 ./launch_world.sh slam
 ```
 
-### Mode 2: Manual Keyboard Teleoperation
+### 🌿 Mode 2: Alpine Mountain Grassland & Wildflower Mission
+Launches the dedicated High-Altitude Alpine Meadow World (`mountain_grassland_world`) with lush grass, wildflowers, pine trees, boulders, RealSense D435 depth perception, 4D LiDAR, SLAM, and RViz2:
+```bash
+./launch_world.sh grassland
+# Or:
+./launch_world.sh alpine
+```
+
+### Mode 3: Standalone Alpine Mountain Grassland World Inspection
+Launch only the Alpine Meadow Gazebo simulation without the AMR:
+```bash
+./launch_world.sh grassland_gui
+```
+
+### Mode 4: Manual Keyboard Teleoperation
 In a new terminal, launch the interactive teleop console to manually drive the AMR across the mountain terrain:
 ```bash
 ./launch_world.sh teleop
@@ -291,19 +353,19 @@ In a new terminal, launch the interactive teleop console to manually drive the A
 * `s` / `Space` : Emergency stop
 * `1` - `5` : Quick speed presets ($0.25 - 1.5\text{ m/s}$)
 
-### Mode 3: Standalone Gazebo World Inspection
+### Mode 5: Standalone Army Border Gazebo World Inspection
 Launch only the Gazebo simulation environment for visual and terrain inspection:
 ```bash
 ./launch_world.sh gui
 ```
 
-### Mode 4: Headless Simulation (CI/CD & Cloud Servers)
+### Mode 6: Headless Simulation (CI/CD & Cloud Servers)
 Run physics and sensor simulation without GUI rendering:
 ```bash
 ./launch_world.sh headless
 ```
 
-### 🎖️ Mode 5: Army Executive Virtual Remote Controller
+### 🎖️ Mode 7: Army Executive Virtual Remote Controller
 Launch the Mil-Spec Ground Control Station (GCS) and Virtual Remote Controller:
 ```bash
 # Direct launcher:
@@ -339,6 +401,8 @@ Launch the Mil-Spec Ground Control Station (GCS) and Virtual Remote Controller:
 | `/army_mine_amr/seismic_sensor` | `std_msgs/msg/Float32` | Ground vibration diagnostics (troop detection vs friendly minelets) |
 | `/army_mine_amr/magnetometer_sensor` | `sensor_msgs/msg/MagneticField` | 3-axis magnetic anomaly detection |
 | `/army_mine_world/markers` | `visualization_msgs/msg/MarkerArray` | 3D markers for registered border minefield landmines |
+| `/mountain_grassland/markers` | `visualization_msgs/msg/MarkerArray` | 3D markers for registered alpine meadow NIPUN minelet stations |
+| `/mountain_grassland/mines` | `geometry_msgs/msg/PoseArray` | Metric 3D poses of registered alpine mine stations |
 | `/scan` | `sensor_msgs/msg/LaserScan` | 720-beam horizontal slice extracted from 4D LiDAR for 2D SLAM |
 | `/lidar4d/points_raw` | `sensor_msgs/msg/PointCloud2` | Full 16-beam multi-layer 3D pointcloud |
 | `/map` | `nav_msgs/msg/OccupancyGrid` | Real-time SLAM occupancy grid map |

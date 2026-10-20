@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="alpine_boulder_cluster">
+    <static>true</static>
+    <link name="link">
+      <visual name="visual">
+        <geometry><mesh><uri>model://alpine_boulder_cluster/meshes/visual.dae</uri></mesh></geometry>
+        <material>
+          <ambient>0.45 0.45 0.48 1.0</ambient>
+          <diffuse>0.60 0.60 0.65 1.0</diffuse>
+          <pbr><metal><albedo_map>/home/nammy/army_mine_bot/src/mountain_grassland_world/materials/textures/mountain_rock_cliff.png</albedo_map><roughness>0.85</roughness></metal></pbr>
+        </material>
+      </visual>
+      <collision name="collision">
+        <geometry><mesh><uri>model://alpine_boulder_cluster/meshes/collision.stl</uri></mesh></geometry>
+      </collision>
+    </link>
+  </model>
+</sdf>

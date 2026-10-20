@@ -7,6 +7,7 @@ set -e
 WORKSPACE_DIR="/home/nammy/army_mine_bot"
 WORLD_PATH="$WORKSPACE_DIR/src/army_border_world/worlds/army_border_minefield.sdf"
 MODELS_PATH="$WORKSPACE_DIR/src/army_border_world/models"
+GRASSLAND_MODELS="$WORKSPACE_DIR/src/mountain_grassland_world/models"
 
 # Ensure clean state: kill any stale servers
 pkill -9 -f "ign gazebo" 2>/dev/null || true
@@ -30,9 +31,9 @@ export IGN_IP=127.0.0.1
 export ROS_DOMAIN_ID=42
 
 # Export Gazebo Resource Paths
-export GZ_SIM_RESOURCE_PATH="$MODELS_PATH:$WORKSPACE_DIR/src:$GZ_SIM_RESOURCE_PATH"
-export IGN_GAZEBO_RESOURCE_PATH="$MODELS_PATH:$WORKSPACE_DIR/src:$IGN_GAZEBO_RESOURCE_PATH"
-export GAZEBO_MODEL_PATH="$MODELS_PATH:$WORKSPACE_DIR/src:$GAZEBO_MODEL_PATH"
+export GZ_SIM_RESOURCE_PATH="$GRASSLAND_MODELS:$MODELS_PATH:$WORKSPACE_DIR/src:$GZ_SIM_RESOURCE_PATH"
+export IGN_GAZEBO_RESOURCE_PATH="$GRASSLAND_MODELS:$MODELS_PATH:$WORKSPACE_DIR/src:$IGN_GAZEBO_RESOURCE_PATH"
+export GAZEBO_MODEL_PATH="$GRASSLAND_MODELS:$MODELS_PATH:$WORKSPACE_DIR/src:$GAZEBO_MODEL_PATH"
 
 # Display config
 export DISPLAY="${DISPLAY:-:1}"
@@ -73,6 +74,12 @@ elif [ "$MODE" == "amr" ]; then
 elif [ "$MODE" == "slam" ]; then
     echo "Launching Complete Army Border Simulation with AMR, 4D LiDAR, SLAM, and Defusal..."
     ros2 launch army_mine_amr army_border_with_amr.launch.py
+elif [ "$MODE" == "grassland" ] || [ "$MODE" == "alpine" ]; then
+    echo "Launching Complete Alpine Mountain Grassland & Wildflowers World with AMR, Depth Camera & SLAM..."
+    ros2 launch mountain_grassland_world mountain_grassland_with_amr.launch.py
+elif [ "$MODE" == "grassland_gui" ] || [ "$MODE" == "alpine_gui" ]; then
+    echo "Launching Standalone Alpine Mountain Grassland World in Gazebo Sim..."
+    ros2 launch mountain_grassland_world mountain_grassland_world.launch.py
 elif [ "$MODE" == "teleop" ]; then
     echo "Starting AMR Keyboard Teleop & Defusal Console..."
     ros2 run army_mine_amr amr_teleop_keyboard.py

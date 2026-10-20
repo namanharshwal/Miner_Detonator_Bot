@@ -1,0 +1,113 @@
+# 18 NIPUN Anti-Personnel Minelet Registry for Alpine Mountain Grassland Environment
+# Compliant with defense requirements in Downloads/1.docx
+environment: mountain_grassland_minefield
+total_mines: 18
+mines:
+  - id: 1
+    name: "nipun_wf_1_north_flank"
+    type: "nipun_ap"
+    x: 12.00
+    y: 6.00
+    z: 2.079
+  - id: 2
+    name: "nipun_wf_2_north_valley"
+    type: "nipun_ap"
+    x: 8.50
+    y: 3.00
+    z: 2.160
+  - id: 3
+    name: "nipun_wf_3_center_apex"
+    type: "nipun_ap"
+    x: 12.00
+    y: 0.00
+    z: 2.518
+  - id: 4
+    name: "nipun_wf_4_south_valley"
+    type: "nipun_ap"
+    x: 8.50
+    y: -3.00
+    z: 2.274
+  - id: 5
+    name: "nipun_wf_5_south_flank"
+    type: "nipun_ap"
+    x: 12.00
+    y: -6.00
+    z: 2.177
+  - id: 6
+    name: "nipun_meadow_alpha_1"
+    type: "nipun_ap"
+    x: 3.50
+    y: 4.50
+    z: 1.597
+  - id: 7
+    name: "nipun_meadow_alpha_2"
+    type: "nipun_ap"
+    x: 5.00
+    y: -5.20
+    z: 1.746
+  - id: 8
+    name: "nipun_meadow_bravo_1"
+    type: "nipun_ap"
+    x: 16.50
+    y: 7.50
+    z: 2.043
+  - id: 9
+    name: "nipun_meadow_bravo_2"
+    type: "nipun_ap"
+    x: 15.00
+    y: -8.00
+    z: 1.918
+  - id: 10
+    name: "nipun_meadow_charlie_1"
+    type: "nipun_ap"
+    x: 20.00
+    y: 2.50
+    z: 2.533
+  - id: 11
+    name: "nipun_meadow_charlie_2"
+    type: "nipun_ap"
+    x: 22.50
+    y: -3.50
+    z: 2.367
+  - id: 12
+    name: "nipun_pass_delta_1"
+    type: "nipun_ap"
+    x: 26.00
+    y: 5.00
+    z: 2.314
+  - id: 13
+    name: "nipun_pass_delta_2"
+    type: "nipun_ap"
+    x: 27.50
+    y: -4.80
+    z: 2.390
+  - id: 14
+    name: "nipun_ridge_echo_1"
+    type: "nipun_ap"
+    x: 10.50
+    y: 10.50
+    z: 1.453
+  - id: 15
+    name: "nipun_ridge_echo_2"
+    type: "nipun_ap"
+    x: 11.00
+    y: -11.00
+    z: 1.386
+  - id: 16
+    name: "nipun_perimeter_foxtrot_1"
+    type: "nipun_ap"
+    x: 31.00
+    y: 1.50
+    z: 2.651
+  - id: 17
+    name: "nipun_perimeter_foxtrot_2"
+    type: "nipun_ap"
+    x: 32.50
+    y: -6.50
+    z: 2.293
+  - id: 18
+    name: "nipun_reserve_golf_1"
+    type: "nipun_ap"
+    x: -2.00
+    y: 0.50
+    z: 1.057
