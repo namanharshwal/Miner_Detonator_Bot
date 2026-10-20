@@ -265,6 +265,8 @@ class TacticalExecutiveRemote(QMainWindow):
         self.mag_val = 47.6
         self.optical_mode = "THERMAL"
         self.e_stop = False
+        self.active_mode = "AUTONOMOUS"
+        self.is_moving = False
 
         # Build Tactical Dark GUI
         self.init_ui()
@@ -286,6 +288,7 @@ class TacticalExecutiveRemote(QMainWindow):
                 rclpy.init(args=None)
             self.ros_node = rclpy.create_node('virtual_executive_remote')
             self.cmd_vel_pub = self.ros_node.create_publisher(Twist, '/cmd_vel', 10)
+            self.mode_pub = self.ros_node.create_publisher(String, '/army_mine_amr/mode', 10)
             self.status_sub = self.ros_node.create_subscription(
                 String, '/army_mine_amr/formation_status', self.on_status_msg, 10
             )
@@ -371,6 +374,8 @@ class TacticalExecutiveRemote(QMainWindow):
                 rclpy.spin_once(self.ros_node, timeout_sec=0)
             except Exception:
                 pass
+            if getattr(self, 'active_mode', 'AUTONOMOUS') == 'MANUAL' and getattr(self, 'is_moving', False) and not self.e_stop:
+                self.send_cmd_vel()
 
     def on_status_msg(self, msg):
         status_text = msg.data
@@ -844,18 +849,29 @@ class TacticalExecutiveRemote(QMainWindow):
         self.terminal_log.verticalScrollBar().setValue(self.terminal_log.verticalScrollBar().maximum())
 
     def set_mode_str(self, mode):
+        self.active_mode = mode
         if mode == "AUTONOMOUS":
             self.btn_mode_auto.setStyleSheet("background-color: #047857; color: white; border: 1px solid #10b981;")
             self.btn_mode_teleop.setStyleSheet("background-color: #1e293b; color: #f8fafc; border: 1px solid #334155;")
             self.log_terminal("🤖 Mode changed: AUTONOMOUS W-FORMATION NAVIGATION.")
+            if hasattr(self, 'mode_pub') and self.mode_pub:
+                self.mode_pub.publish(String(data="AUTONOMOUS"))
         else:
             self.btn_mode_teleop.setStyleSheet("background-color: #0369a1; color: white; border: 1px solid #38bdf8;")
             self.btn_mode_auto.setStyleSheet("background-color: #1e293b; color: #f8fafc; border: 1px solid #334155;")
             self.log_terminal("🕹️ Mode changed: MANUAL TELEOPERATION D-PAD.")
+            if hasattr(self, 'mode_pub') and self.mode_pub:
+                self.mode_pub.publish(String(data="MANUAL"))
 
     def set_speed(self, val, label):
         self.speed_mode = val
         self.speed_label = label
+        if self.is_moving and not self.e_stop:
+            if self.linear_vel > 0:
+                self.linear_vel = val
+            elif self.linear_vel < 0:
+                self.linear_vel = -val
+            self.send_cmd_vel()
         self.btn_spd_crawl.setStyleSheet("background-color: #1e293b; color: #f8fafc; border: 1px solid #334155;")
         self.btn_spd_nom.setStyleSheet("background-color: #1e293b; color: #f8fafc; border: 1px solid #334155;")
         self.btn_spd_max.setStyleSheet("background-color: #1e293b; color: #f8fafc; border: 1px solid #334155;")
@@ -934,6 +950,9 @@ class TacticalExecutiveRemote(QMainWindow):
     def cmd_forward(self):
         if self.e_stop:
             return
+        if self.active_mode != "MANUAL":
+            self.set_mode_str("MANUAL")
+        self.is_moving = True
         self.linear_vel = self.speed_mode
         self.angular_vel = 0.0
         self.send_cmd_vel()
@@ -942,6 +961,9 @@ class TacticalExecutiveRemote(QMainWindow):
     def cmd_reverse(self):
         if self.e_stop:
             return
+        if self.active_mode != "MANUAL":
+            self.set_mode_str("MANUAL")
+        self.is_moving = True
         self.linear_vel = -self.speed_mode
         self.angular_vel = 0.0
         self.send_cmd_vel()
@@ -950,6 +972,9 @@ class TacticalExecutiveRemote(QMainWindow):
     def cmd_pivot_left(self):
         if self.e_stop:
             return
+        if self.active_mode != "MANUAL":
+            self.set_mode_str("MANUAL")
+        self.is_moving = True
         self.linear_vel = 0.0
         self.angular_vel = 0.65
         self.send_cmd_vel()
@@ -958,12 +983,16 @@ class TacticalExecutiveRemote(QMainWindow):
     def cmd_pivot_right(self):
         if self.e_stop:
             return
+        if self.active_mode != "MANUAL":
+            self.set_mode_str("MANUAL")
+        self.is_moving = True
         self.linear_vel = 0.0
         self.angular_vel = -0.65
         self.send_cmd_vel()
         self.log_terminal("► PIVOT RIGHT: -0.65 rad/s (Skid-Turn)")
 
     def cmd_stop(self):
+        self.is_moving = False
         self.linear_vel = 0.0
         self.angular_vel = 0.0
         self.send_cmd_vel()
@@ -971,10 +1000,11 @@ class TacticalExecutiveRemote(QMainWindow):
 
     def trigger_estop(self):
         self.e_stop = not self.e_stop
+        self.is_moving = False
+        self.linear_vel = 0.0
+        self.angular_vel = 0.0
+        self.send_cmd_vel()
         if self.e_stop:
-            self.linear_vel = 0.0
-            self.angular_vel = 0.0
-            self.send_cmd_vel()
             self.btn_estop.setText("🚨 E-STOP ENGAGED [CLICK TO RELEASE]")
             self.btn_estop.setStyleSheet("background-color: #991b1b; color: #fef08a; font-size: 14px; font-weight: bold; border: 2px solid #ef4444; border-radius: 6px; padding: 10px;")
             self.log_terminal("🚨🚨🚨 EMERGENCY STOP ENGAGED: ALL LOCOMOTION CUT IMMEDIATELY.")

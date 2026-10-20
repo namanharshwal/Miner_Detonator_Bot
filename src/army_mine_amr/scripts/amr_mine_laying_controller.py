@@ -58,6 +58,8 @@ class NipunMineLayingController(Node):
         self.formation_stations = self.calculate_w_formation()
         self.assigned_target = self.formation_stations[self.target_bot_idx]
         self.deployment_complete = False
+        self.manual_mode = False
+        self.stopped_sent = False
 
         # Publishers
         self.cmd_vel_pub = self.create_publisher(Twist, '/cmd_vel', 10)
@@ -68,6 +70,7 @@ class NipunMineLayingController(Node):
 
         # Subscribers
         self.odom_sub = self.create_subscription(Odometry, '/odom', self.odom_callback, qos_reliable)
+        self.mode_sub = self.create_subscription(String, '/army_mine_amr/mode', self.mode_callback, 10)
 
         # Services for Operator Approval (Requirement #18)
         self.approval_srv = self.create_service(Trigger, '/army_mine_amr/approve_w_formation', self.approve_callback)
@@ -127,8 +130,26 @@ class NipunMineLayingController(Node):
         self.get_logger().info("💥 NIPUN Mine deployed and armed in W-formation.")
         return response
 
+    def mode_callback(self, msg: String):
+        mode = msg.data.strip().upper()
+        if "MANUAL" in mode or "TELEOP" in mode:
+            if not self.manual_mode:
+                self.manual_mode = True
+                self.get_logger().info("🕹️ Switched to MANUAL TELEOP mode: autonomous navigation yielded to Remote.")
+        elif "AUTO" in mode:
+            if self.manual_mode:
+                self.manual_mode = False
+                self.stopped_sent = False
+                self.get_logger().info("🤖 Switched to AUTONOMOUS W-FORMATION mode: autonomous navigation resumed.")
+
     def control_loop(self):
         if not self.odom_received:
+            return
+
+        # If operator is manually teleoperating via the remote, yield /cmd_vel completely
+        if self.manual_mode:
+            status_str = "STATUS: MANUAL TELEOPERATION | Executive Remote in Control"
+            self.status_pub.publish(String(data=status_str))
             return
 
         # 1. Publish simulated seismic sensor data (Requirement #8)
@@ -159,19 +180,25 @@ class NipunMineLayingController(Node):
 
         if not self.operator_approved:
             # Awaiting operator confirmation
-            self.stop_robot()
+            if not self.stopped_sent:
+                self.stop_robot()
+                self.stopped_sent = True
             status_str += " | Waiting for Operator Approval"
             self.status_pub.publish(String(data=status_str))
             return
 
         if dist < 0.35:
             # Reached assigned W-formation station!
-            self.stop_robot()
+            if not self.stopped_sent:
+                self.stop_robot()
+                self.stopped_sent = True
             self.deployment_complete = True
             self.assigned_target["status"] = "ON_STATION_ARMED"
             status_str += " | ✅ ON STATION: NIPUN MINELET DEPLOYED & ARMED IN W-FORMATION"
             self.status_pub.publish(String(data=status_str))
             return
+
+        self.stopped_sent = False
 
         # Gentle proportional navigation (1-2 km/h = 0.28 - 0.55 m/s)
         target_heading = math.atan2(dy, dx)
