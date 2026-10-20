@@ -137,6 +137,46 @@ Visualization Manager:
       Use rainbow: true
       Value: true
 
+    - Axis: Z
+      Channel Name: z
+      Class: rviz_default_plugins/PointCloud2
+      Color: 255; 165; 0
+      Color Transformer: AxisColor
+      Decay Time: 0.1
+      Enabled: true
+      Name: RealSense Depth Cloud
+      Position Tolerance: 0.1
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.03
+      Style: Points
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /camera/depth/points
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: true
+
+    - Class: rviz_default_plugins/Image
+      Enabled: true
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: RealSense Optical View
+      Normalize Range: false
+      Queue Size: 2
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /camera/image_raw
+      Value: true
+
     - Class: rviz_default_plugins/MarkerArray
       Enabled: true
       Name: Mines Field Markers

@@ -19,6 +19,7 @@ The **Miner Detonator Bot** project is an advanced, high-fidelity robotics simul
 * **Payload & Hazard**: Carries the Indian Army **NIPUN Anti-Personnel Mine** ($\le 250\text{ g}$ payload capacity, compact coaster-sized $\sim 10\text{ cm}$ diameter form factor, operational speed $1-2\text{ km/h}$ / $0.28-0.55\text{ m/s}$).
 * **Tactical Formation**: Fully autonomous navigation to deploy and align in a coordinated **5-robot W-shape tactical formation** across the mountainous border front, with human-in-the-loop operator approval.
 * **Sensory Suite**:
+  * **RealSense D435 RGB-D Depth Camera**: High-fidelity optical and stereo depth perception ($640 \times 480$ resolution at $20\text{ Hz}$, $87^\circ\text{H} \times 58^\circ\text{V}$ FOV, $0.15\text{m} - 15.0\text{m}$ range). Generates dense 3D `sensor_msgs/PointCloud2`, metric depth maps (`32FC1`), optical RGB streams, and camera intrinsics for close-quarters obstacle avoidance, ground contour profiling, and remote pilot HUD.
   * **4D GPU LiDAR**: Real-time terrain mapping, contour tracking, and immediate obstacle negotiation (rocks, pebbles, ditches, mud).
   * **Seismic Sensor**: Ground vibration detection to sense enemy troop footfalls ($>0.45\text{g}$) while ignoring lightweight friendly minelet movement ($<0.15\text{g}$).
   * **Magnetometer Sensor**: Magnetic anomaly detection for hostile metallic weapons/equipment.
@@ -50,20 +51,25 @@ Photorealistic military vehicles (Main Battle Tanks, 6x6 tactical cargo trucks),
 ![Army Camp Military Models](docs/images/army_camp_military_models.png)
 
 ### 5. NIPUN AMR Army Executive Virtual Remote Controller
-Mil-Spec Ground Control Station (GCS) and Virtual Handheld Remote interface engineered for the Field Commander and Army Executive. Features 4WD skid-steer teleoperation with speed governor (1-2 km/h spec), mountain slope inclinometer (1:8 gradient check), real-time W-formation radar schematic, mandatory Executive Approval Gate (Client Req #18), NIPUN AP-mine payload monitor, senile auto-deactivation timer, seismic troop-footfall discrimination gauge (>0.45g threat vs <0.15g friendly), 3-axis magnetometer anomaly sensor, 4D LiDAR telemetry, and switchable Day/Night NVG/Thermal FLIR optical HUD.
+Mil-Spec Ground Control Station (GCS) and Virtual Handheld Remote interface engineered for the Field Commander and Army Executive. Features 4WD skid-steer teleoperation with speed governor (1-2 km/h spec), mountain slope inclinometer (1:8 gradient check), real-time W-formation radar schematic, mandatory Executive Approval Gate (Client Req #18), NIPUN AP-mine payload monitor, senile auto-deactivation timer, seismic troop-footfall discrimination gauge (>0.45g threat vs <0.15g friendly), 3-axis magnetometer anomaly sensor, 4D LiDAR telemetry, and switchable Day / Night NVG / Thermal FLIR / RGB-D Depth optical HUD.
 
 > 📖 **Official Visualization & Operational Guide**: Refer to the comprehensive [Virtual Remote Controller Visualization Guide & Operational Manual](docs/VIRTUAL_REMOTE_GUIDE.md) for complete HUD layout analysis, field operating checklists, and full compliance mapping to client specs.
 
 ![Army Executive Virtual Remote Controller HUD](docs/images/virtual_remote_controller_hud.png)
 
 #### Multi-Spectral HUD & Tactical Threat Modes
-| Day Optical Teleop | NVG Night Vision (Phosphor Green) | FLIR Thermal Imaging |
-|:---:|:---:|:---:|
-| ![Day Optical](docs/images/remote_day_teleop.png) | ![NVG Night](docs/images/remote_nvg_night_vision.png) | ![Thermal](docs/images/remote_flir_thermal.png) |
+| Day Optical Teleop | NVG Night Vision (Phosphor Green) | FLIR Thermal Imaging | RGB-D Depth Perception HUD |
+|:---:|:---:|:---:|:---:|
+| ![Day Optical](docs/images/remote_day_teleop.png) | ![NVG Night](docs/images/remote_nvg_night_vision.png) | ![Thermal](docs/images/remote_flir_thermal.png) | ![RGB-D Depth](docs/images/remote_depth_camera_hud.png) |
 
 | Seismic Troop Alert (>0.45g) | Magnetic Weapon Anomaly (>80µT) | Dual-Action Emergency E-STOP |
 |:---:|:---:|:---:|
 | ![Seismic Alert](docs/images/remote_seismic_hostile_alert.png) | ![Magnetic Alert](docs/images/remote_magnetometer_anomaly_alert.png) | ![E-STOP](docs/images/remote_estop_engaged.png) |
+
+### 6. RealSense D435 RGB-D Depth Camera Integration & 3D Perception System
+High-fidelity stereo vision perception integrated directly onto the forward nose of the NIPUN AMR beneath the 4D LiDAR. The RealSense D435 streams dense 3D pointclouds (`sensor_msgs/PointCloud2`), metric depth arrays (`sensor_msgs/Image` `32FC1`), optical RGB video (`sensor_msgs/Image` `rgb8`), and camera calibration matrices (`sensor_msgs/CameraInfo`), visualized simultaneously across RViz2 3D space, Gazebo Sim Harmonic physics, and the Executive Remote Controller HUD.
+
+![RealSense D435 Depth Camera Integration Dashboard](docs/images/depth_camera_verification_dashboard.png)
 
 ---
 
@@ -73,8 +79,8 @@ Mil-Spec Ground Control Station (GCS) and Virtual Handheld Remote interface engi
 flowchart TD
     subgraph GAZEBO["Gazebo Sim Harmonic (Physics & World)"]
         GZ_WORLD["World: army_border_minefield.sdf\n(100m x 70m Mountain Terrain <= 1:8 slope)"]
-        GZ_ROBOT["Model: army_mine_amr\n(NIPUN Carrier, 4WD Skid-Steer, 4D LiDAR, IMU)"]
-        GZ_SENSORS["Sensors: GPU LiDAR (16-beam), IMU, Odom"]
+        GZ_ROBOT["Model: army_mine_amr\n(NIPUN Carrier, 4WD Skid-Steer, RealSense D435, 4D LiDAR, IMU)"]
+        GZ_SENSORS["Sensors: RealSense RGB-D Camera, GPU LiDAR (16-beam), IMU, Odom"]
         GZ_WORLD --> GZ_ROBOT
         GZ_ROBOT --> GZ_SENSORS
     end
@@ -84,6 +90,10 @@ flowchart TD
         BR_TF["/tf (gz.msgs.Pose_V -> tf2_msgs/TFMessage)"]
         BR_SCAN["/scan (Horizontal slice for 2D SLAM)"]
         BR_PC["/lidar4d/points_raw (16-beam PointCloud2)"]
+        BR_RGBD["/camera/depth/points (3D Dense PointCloud2)"]
+        BR_DEPTH["/camera/depth/image_raw (32FC1 Depth Map)"]
+        BR_RGB["/camera/image_raw (RGB8 Optical Video)"]
+        BR_INFO["/camera/camera_info (Camera Calibration)"]
         BR_IMU["/imu/data (gz.msgs.IMU -> sensor_msgs/Imu)"]
         BR_CMD["/cmd_vel (geometry_msgs/Twist -> gz.msgs.Twist)"]
     end
@@ -93,7 +103,8 @@ flowchart TD
         SLAM["slam_toolbox\n(Async 2D Occupancy Grid Mapping)"]
         TRACKER["mine_tracker_node\n(Minefield Registry & Diagnostics)"]
         CONTROLLER["amr_mine_laying_controller\n(W-Formation & NIPUN Deployment)"]
-        RVIZ["RViz2 Visualizer\n(Side-by-Side 3D Telemetry Display)"]
+        REMOTE["virtual_remote_controller\n(Executive Tactical Remote & Depth HUD)"]
+        RVIZ["RViz2 Visualizer\n(3D PointCloud, RealSense Cloud & SLAM Display)"]
     end
 
     GZ_SENSORS --> BRIDGE
@@ -101,10 +112,13 @@ flowchart TD
     BRIDGE --> SLAM
     BRIDGE --> TRACKER
     BRIDGE --> CONTROLLER
+    BRIDGE --> REMOTE
     CONTROLLER -->|/cmd_vel| BRIDGE
+    REMOTE -->|/cmd_vel| BRIDGE
     SLAM --> RVIZ
     TRACKER --> RVIZ
     CONTROLLER --> RVIZ
+    BRIDGE --> RVIZ
 ```
 
 ---
@@ -121,14 +135,19 @@ Miner_Detonator_Bot/
 │   ├── VIRTUAL_REMOTE_GUIDE.md         # Dedicated Army Executive Remote Manual & Client Traceability
 │   └── images/
 │       ├── army_camp_military_models.png
+│       ├── depth_camera_verification_dashboard.png
 │       ├── full_simulation_side_by_side.png
+│       ├── gazebo_realsense_robot.png
 │       ├── gazebo_simulation_mountain_world.png
 │       ├── remote_day_teleop.png
+│       ├── remote_depth_camera_hud.png
 │       ├── remote_estop_engaged.png
 │       ├── remote_flir_thermal.png
 │       ├── remote_magnetometer_anomaly_alert.png
+│       ├── remote_movement_verified.png
 │       ├── remote_nvg_night_vision.png
 │       ├── remote_seismic_hostile_alert.png
+│       ├── rviz_realsense_depth_cloud.png
 │       ├── rviz_w_formation_slam_4d_lidar.png
 │       └── virtual_remote_controller_hud.png
 └── src/
@@ -301,7 +320,7 @@ Launch the Mil-Spec Ground Control Station (GCS) and Virtual Remote Controller:
 * **Executive Approval Gate (Client Req #18)**: Authorize W-formation alignment, adjust spacing (`3.0m - 10.0m`), and click `[✔ APPROVE W-ALIGNMENT]`.
 * **NIPUN Arming & Senile Clock (Client Req #2 & #16)**: Deploy minelet with `[💥 AUTHORIZE NIPUN LAYING]` and monitor the 120-day auto-deactivation timer.
 * **Seismic & Magnetic Defense Monitors (Client Req #8)**: Live vibration spectrum distinguishing enemy troop footsteps ($>0.45\text{g}$) from friendly minelets ($<0.15\text{g}$), and 3-axis magnetometer detecting weapon anomalies.
-* **Switchable Optical HUD (Client Req #19)**: Toggle between `FLIR THERMAL`, `NVG NIGHT VISION`, and `DAY OPTICAL` viewports with tactical crosshairs and laser rangefinder.
+* **Switchable Optical HUD (Client Req #19)**: Toggle between `FLIR THERMAL`, `NVG NIGHT VISION`, `DAY OPTICAL`, and `RGB-D DEPTH` viewports with tactical crosshairs, artificial horizon, RealSense false-color colormap, and stereo rangefinder.
 * **Emergency E-STOP**: Instant full-stop brake and motor power cut.
 
 ---
@@ -311,6 +330,10 @@ Launch the Mil-Spec Ground Control Station (GCS) and Virtual Remote Controller:
 ### Published Topics
 | Topic | Message Type | Description |
 |---|---|---|
+| `/camera/depth/points` | `sensor_msgs/msg/PointCloud2` | RealSense D435 dense 3D stereo pointcloud stream (20 Hz, frame: `camera_depth_optical_frame`) |
+| `/camera/image_raw` | `sensor_msgs/msg/Image` | High-definition optical RGB video stream (640x480 @ 20 Hz, 87° H FOV) |
+| `/camera/depth/image_raw` | `sensor_msgs/msg/Image` | Metric depth map stream (`32FC1`, 0.15m to 15.0m range, 640x480) |
+| `/camera/camera_info` | `sensor_msgs/msg/CameraInfo` | RealSense factory camera intrinsics, distortion model, projection & rectification matrices |
 | `/army_mine_amr/formation_markers` | `visualization_msgs/msg/MarkerArray` | Visual W-formation lines, station discs, and status labels for RViz2 |
 | `/army_mine_amr/formation_status` | `std_msgs/msg/String` | Telemetry status: distance to station, operator approval, deployment state |
 | `/army_mine_amr/seismic_sensor` | `std_msgs/msg/Float32` | Ground vibration diagnostics (troop detection vs friendly minelets) |

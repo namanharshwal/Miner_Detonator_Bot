@@ -47,11 +47,12 @@ flowchart TD
     end
 
     subgraph PANEL_RIGHT["3. SENSOR SUITES & MULTISPECTRAL OPTICAL HUD"]
-        S1["Tri-Mode Optical Viewport: FLIR Thermal | NVG Night Vision | Day Optical"]
+        S1["Quad-Mode Optical Viewport: FLIR Thermal | NVG Night Vision | Day Optical | RGB-D Depth"]
         S2["Artificial Horizon & Dynamic Pitch Ladder HUD Reticle"]
-        S3["Seismic Ground Sensor: Discriminates Friendly (<0.15g) vs Troop Footfalls (>0.45g)"]
-        S4["3-Axis Magnetometer: Baseline Earth Flux (47.8 µT) vs Ferrous Rifle/Weapon (>80 µT)"]
-        S5["4D GPU LiDAR Telemetry: 16-Beam Real-Time Obstacle Proximity Reading"]
+        S3["RealSense D435 3D Perception & Depth Colormap Telemetry"]
+        S4["Seismic Ground Sensor: Discriminates Friendly (<0.15g) vs Troop Footfalls (>0.45g)"]
+        S5["3-Axis Magnetometer: Baseline Earth Flux (47.8 µT) vs Ferrous Rifle/Weapon (>80 µT)"]
+        S6["4D GPU LiDAR Telemetry: 16-Beam Real-Time Obstacle Proximity Reading"]
     end
 
     subgraph PANEL_BOTTOM["COMMAND & TELEMETRY AUDIT LOG"]
@@ -97,7 +98,16 @@ In heavy battlefield smoke, dust storms, or total darkness, FLIR Thermal mode hi
 
 ---
 
-### 4. Multispectral Threat Alert: Hostile Troop Footfall Detection
+### 4. RealSense D435 RGB-D Depth Perception Mode
+Engineered for precision obstacle negotiation, steep slope profiling, and close-quarters tactical navigation. The RealSense D435 stereo vision subsystem renders a live false-color depth perception gradient (deep indigo for far horizon $\rightarrow$ cyan for mid ground $\rightarrow$ emerald for near obstacles $\rightarrow$ amber for immediate hazard zones).
+
+![RGB-D Depth Perception Mode](images/remote_depth_camera_hud.png)
+
+* **Telemetry Highlights**: Optical HUD indicates `OPT: REALSENSE D435 DEPTH`; RealSense optics calibrated with **$87^\circ \text{H} \times 58^\circ \text{V}$ FOV**, **$640 \times 480$ resolution at $20\text{ Hz}$**, and **$0.15\text{m} - 15.0\text{m}$** stereo range; live stereo laser rangefinder reporting **$1.07\text{ m}$ (CLEAR)**.
+
+---
+
+### 5. Multispectral Threat Alert: Hostile Troop Footfall Detection
 The remote controller actively monitors the AMR's onboard seismic sensor. While friendly mini-bot movements generate micro-vibrations ($<0.15\text{g}$) that are automatically filtered out, incoming enemy personnel generate ground impacts exceeding **$0.45\text{g}$**, immediately triggering visual and auditory warning banners.
 
 ![Seismic Hostile Footfall Alert](images/remote_seismic_hostile_alert.png)
@@ -106,7 +116,7 @@ The remote controller actively monitors the AMR's onboard seismic sensor. While 
 
 ---
 
-### 5. Magnetic Anomaly Detection: Ferrous Weapon / Rifle Signature
+### 6. Magnetic Anomaly Detection: Ferrous Weapon / Rifle Signature
 A high-sensitivity 3-axis fluxgate magnetometer continuously compares ambient magnetic flux against baseline Earth flux ($\sim 47.8\ \mu\text{T}$). When enemy combatants bearing metallic rifles, RPGs, or equipment approach the minelet perimeter, the sensor spikes above **$80\ \mu\text{T}$**, flagging an immediate perimeter breach.
 
 ![Magnetometer Weapon Anomaly Alert](images/remote_magnetometer_anomaly_alert.png)
@@ -115,7 +125,7 @@ A high-sensitivity 3-axis fluxgate magnetometer continuously compares ambient ma
 
 ---
 
-### 6. Emergency Stop (E-STOP) Failsafe Engaged
+### 7. Emergency Stop (E-STOP) Failsafe Engaged
 The remote features an instantaneous software and physical E-STOP interlock. Pressing the large red button immediately publishes a zero-velocity halt command over ROS 2 `/cmd_vel` and hardware relays, locking all 4 pneumatic wheels and freezing autonomous navigation.
 
 ![Emergency Stop Active](images/remote_estop_engaged.png)
@@ -195,7 +205,7 @@ The table below provides direct 1:1 traceability from every requirement in the c
 | **6** | **Operational Speed Governor** ($1-2\text{ km/h}$ / $0.28-0.55\text{ m/s}$) | 3-button speed governor: `0.5 km/h [CRAWL]`, `1.2 km/h [NOMINAL]`, `2.0 km/h [MAXIMUM]` limiting `/cmd_vel` output | ✅ **VERIFIED** telemetry clamp confirms max speed never exceeds 0.55 m/s |
 | **7** | **Power & Battery Management** | Battery voltage rail gauge (`POWER: 88% (25.2V)`) and operational countdown timer (`02:56 / 20:00 MIN`) | ✅ **VERIFIED** real-time battery voltage monitoring and mission duration tracking |
 | **8** | **IP58 Environmental Sealing** | Status widget: `🔒 SEAL: IP58 SECURE (DUST TIGHT & WATER RESISTANT)` | ✅ **VERIFIED** sealed chassis architecture model protecting avionics and sensors |
-| **9** | **Day/Night/Thermal Optical Camera System** | Multi-mode HUD toggle: `FLIR THERMAL`, `NVG NIGHT`, `DAY OPTICAL` with dynamic artificial horizon reticle | ✅ **VERIFIED** live switching across all 3 visual shaders with captured HUD screenshots |
+| **9** | **Day/Night/Thermal Optical & RGB-D Depth System** | Quad-mode HUD toggle: `FLIR THERMAL`, `NVG NIGHT`, `DAY OPTICAL`, `RGB-D DEPTH` with dynamic artificial horizon reticle, RealSense stereo depth colormap, and dense PointCloud2 streaming | ✅ **VERIFIED** live switching across all 4 visual modes with dense PointCloud2 and HUD verification |
 | **10** | **Contested EW Communications** ($100\text{m}+$ link range) | Telemetry header: `📡 COMMS: 100m+ LINK OK [ECCM ANTI-JAM ACTIVE]` with link budget margin | ✅ **VERIFIED** wireless channel simulation with packet verification over distance |
 | **11** | **Extreme Temperature Range** ($-50^\circ\text{C}$ to $+50^\circ\text{C}$) | Thermal health widget: displays live operating temperature and operational threshold limits | ✅ **VERIFIED** operational parameter checking inside remote HUD subsystem |
 | **12** | **Coordinated 5-Robot W-Shape Formation** | Polar tactical radar display mapping all 5 stations: `#1 North Flank`, `#2 North Valley`, `#3 AMR Apex`, `#4 South Valley`, `#5 South Flank` | ✅ **VERIFIED** live coordinates streamed from `/army_mine_amr/formation_status` |
@@ -243,6 +253,9 @@ ros2 topic pub --once /army_mine_amr/remote_command std_msgs/msg/String '{data: 
 
 # Switch Optical Mode to FLIR Thermal
 ros2 topic pub --once /army_mine_amr/remote_command std_msgs/msg/String '{data: "OPT_THERMAL"}'
+
+# Switch Optical Mode to RealSense RGB-D Depth
+ros2 topic pub --once /army_mine_amr/remote_command std_msgs/msg/String '{data: "OPT_DEPTH"}'
 
 # Inject Hostile Footfall Test
 ros2 topic pub --once /army_mine_amr/remote_command std_msgs/msg/String '{data: "TEST_FOOTFALL"}'

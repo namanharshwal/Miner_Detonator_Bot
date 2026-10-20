@@ -92,6 +92,59 @@
           <ambient>0.95 0.20 0.15 1</ambient>
         </material>
       </visual>
+      <!-- RealSense RGB-D Depth Camera Visual Housing -->
+      <visual name='base_footprint_depth_camera_housing_visual'>
+        <pose>0.12 0 0.193 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.025 0.090 0.025</size>
+          </box>
+        </geometry>
+        <material>
+          <diffuse>0.12 0.15 0.18 1</diffuse>
+          <ambient>0.12 0.15 0.18 1</ambient>
+          <specular>0.4 0.4 0.4 1</specular>
+        </material>
+      </visual>
+      <visual name='base_footprint_depth_camera_lens_rgb'>
+        <pose>0.133 0 0.193 0 1.5707963 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.006</radius>
+            <length>0.003</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <diffuse>0.05 0.35 0.65 1</diffuse>
+          <ambient>0.05 0.35 0.65 1</ambient>
+        </material>
+      </visual>
+      <visual name='base_footprint_depth_camera_lens_ir_l'>
+        <pose>0.133 0.028 0.193 0 1.5707963 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.005</radius>
+            <length>0.003</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <diffuse>0.6 0.1 0.1 1</diffuse>
+          <ambient>0.6 0.1 0.1 1</ambient>
+        </material>
+      </visual>
+      <visual name='base_footprint_depth_camera_lens_ir_r'>
+        <pose>0.133 -0.028 0.193 0 1.5707963 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.005</radius>
+            <length>0.003</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <diffuse>0.6 0.1 0.1 1</diffuse>
+          <ambient>0.6 0.1 0.1 1</ambient>
+        </material>
+      </visual>
       <sensor name='imu_sensor' type='imu'>
         <always_on>true</always_on>
         <update_rate>100</update_rate>
@@ -134,6 +187,38 @@
         </lidar>
         <pose>0 0 0.27700000000000002 0 0 0</pose>
         <gz_frame_id>lidar4d_link</gz_frame_id>
+      </sensor>
+      <!-- Tactical Intel RealSense D435 RGB-D Depth Camera -->
+      <sensor name='depth_camera' type='rgbd_camera'>
+        <always_on>true</always_on>
+        <update_rate>20</update_rate>
+        <visualize>true</visualize>
+        <topic>/camera</topic>
+        <camera>
+          <horizontal_fov>1.5184</horizontal_fov>
+          <image>
+            <width>640</width>
+            <height>480</height>
+            <format>RGB_INT8</format>
+          </image>
+          <clip>
+            <near>0.15</near>
+            <far>15.0</far>
+          </clip>
+          <depth_camera>
+            <clip>
+              <near>0.15</near>
+              <far>15.0</far>
+            </clip>
+          </depth_camera>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.005</stddev>
+          </noise>
+        </camera>
+        <pose>0.133 0 0.193 0 0 0</pose>
+        <gz_frame_id>camera_depth_optical_frame</gz_frame_id>
       </sensor>
     </link>
     <!-- ================= 4-WHEEL ALL-TERRAIN SKID-STEER DRIVE ================= -->
@@ -493,6 +578,19 @@
       <pose>0.10000000000000001 0 0.035000000000000003 0 0 0</pose>
     </frame>
     <frame name='mine_probe_link' attached_to='mine_probe_joint'>
+      <pose>0 0 0 0 0 0</pose>
+    </frame>
+    <!-- Intel RealSense D435 Depth Camera Frames -->
+    <frame name='camera_joint' attached_to='base_link'>
+      <pose>0.12 0 0.16 0 0 0</pose>
+    </frame>
+    <frame name='camera_link' attached_to='camera_joint'>
+      <pose>0 0 0 0 0 0</pose>
+    </frame>
+    <frame name='camera_depth_optical_joint' attached_to='camera_link'>
+      <pose>0 0 0 -1.5707963 0 -1.5707963</pose>
+    </frame>
+    <frame name='camera_depth_optical_frame' attached_to='camera_depth_optical_joint'>
       <pose>0 0 0 0 0 0</pose>
     </frame>
     <frame name='base_joint' attached_to='base_footprint'>

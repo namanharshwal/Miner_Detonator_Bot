@@ -201,6 +201,16 @@ class TacticalHUDViewport(QWidget):
             rad.setColorAt(1.0, QColor(5, 20, 10))
             painter.fillRect(0, 0, w, h, rad)
             hud_color = QColor(80, 255, 120)
+        elif self.mode == "DEPTH":
+            # RealSense False-Color Depth Colormap (Indigo -> Cyan -> Emerald -> Amber -> Crimson)
+            bg = QLinearGradient(0, 0, 0, h)
+            bg.setColorAt(0.0, QColor(15, 23, 42))   # Deep slate far field
+            bg.setColorAt(0.3, QColor(30, 58, 138))  # Blue far distance
+            bg.setColorAt(0.6, QColor(14, 116, 144)) # Cyan mid distance
+            bg.setColorAt(0.85, QColor(16, 185, 129))# Green near distance
+            bg.setColorAt(1.0, QColor(245, 158, 11)) # Amber closest obstacle
+            painter.fillRect(0, 0, w, h, bg)
+            hud_color = QColor(6, 182, 212)
         else:  # FLIR THERMAL IR
             painter.fillRect(0, 0, w, h, QColor(15, 10, 30))
             rad = QRadialGradient(w/2, h/2, w/2)
@@ -227,11 +237,18 @@ class TacticalHUDViewport(QWidget):
         font = QFont("Monospace", 8, QFont.Bold)
         painter.setFont(font)
         painter.setPen(hud_color)
-        painter.drawText(10, 18, f"OPTICAL: {self.mode} [IP58]")
-        painter.drawText(10, 32, f"PITCH: {self.pitch:+.1f}° | ROLL: {self.roll:+.1f}°")
-        painter.drawText(10, h - 8, f"LASER RANGE: {self.range_dist:.2f} m")
-        painter.drawText(w - 110, 18, "FOV: 72° H")
-        painter.drawText(w - 110, h - 8, "IR GAIN: HIGH")
+        if self.mode == "DEPTH":
+            painter.drawText(10, 16, "OPT: REALSENSE D435 DEPTH")
+            painter.drawText(10, 30, f"PITCH: {self.pitch:+.1f}° | ROLL: {self.roll:+.1f}°")
+            painter.drawText(10, h - 8, f"RANGE: {self.range_dist:.2f}m [0.15-15m]")
+            painter.drawText(w - 95, 16, "FOV 87°x58°")
+            painter.drawText(w - 95, h - 8, "640x480@20Hz")
+        else:
+            painter.drawText(10, 16, f"OPTICAL: {self.mode} [IP58]")
+            painter.drawText(10, 30, f"PITCH: {self.pitch:+.1f}° | ROLL: {self.roll:+.1f}°")
+            painter.drawText(10, h - 8, f"RANGE: {self.range_dist:.2f} m")
+            painter.drawText(w - 85, 16, "FOV 72° H")
+            painter.drawText(w - 85, h - 8, "IR GAIN: HI")
 
 
 # ==============================================================================
@@ -349,6 +366,8 @@ class TacticalExecutiveRemote(QMainWindow):
             self.set_opt_mode("NVG")
         elif cmd in ("DAY", "OPT_DAY"):
             self.set_opt_mode("DAY")
+        elif cmd in ("DEPTH", "OPT_DEPTH", "RGBD"):
+            self.set_opt_mode("DEPTH")
         elif cmd in ("TEST_SEISMIC", "TEST_FOOTFALL"):
             self.trigger_enemy_footfall_test()
         elif cmd in ("TEST_WEAPON", "TEST_MAGNETIC"):
@@ -757,13 +776,16 @@ class TacticalExecutiveRemote(QMainWindow):
         self.btn_thermal = QPushButton("FLIR THERMAL")
         self.btn_nvg = QPushButton("NVG NIGHT")
         self.btn_day = QPushButton("DAY OPTICAL")
+        self.btn_depth = QPushButton("RGB-D DEPTH")
         self.btn_thermal.setStyleSheet("background-color: #4c1d95; color: #c4b5fd; border: 1px solid #8b5cf6;")
         self.btn_thermal.clicked.connect(lambda: self.set_opt_mode("THERMAL"))
         self.btn_nvg.clicked.connect(lambda: self.set_opt_mode("NVG"))
         self.btn_day.clicked.connect(lambda: self.set_opt_mode("DAY"))
+        self.btn_depth.clicked.connect(lambda: self.set_opt_mode("DEPTH"))
         hbox_opt.addWidget(self.btn_thermal)
         hbox_opt.addWidget(self.btn_nvg)
         hbox_opt.addWidget(self.btn_day)
+        hbox_opt.addWidget(self.btn_depth)
         vbox_sensor.addLayout(hbox_opt)
 
         # Seismic Sensor Discrimination Meter (Client Req #8: Enemy vs Minelet)
@@ -891,13 +913,16 @@ class TacticalExecutiveRemote(QMainWindow):
         self.btn_thermal.setStyleSheet("background-color: #1e293b; color: #f8fafc; border: 1px solid #334155;")
         self.btn_nvg.setStyleSheet("background-color: #1e293b; color: #f8fafc; border: 1px solid #334155;")
         self.btn_day.setStyleSheet("background-color: #1e293b; color: #f8fafc; border: 1px solid #334155;")
+        self.btn_depth.setStyleSheet("background-color: #1e293b; color: #f8fafc; border: 1px solid #334155;")
 
         if mode == "THERMAL":
             self.btn_thermal.setStyleSheet("background-color: #4c1d95; color: #c4b5fd; border: 1px solid #8b5cf6;")
         elif mode == "NVG":
             self.btn_nvg.setStyleSheet("background-color: #064e3b; color: #a7f3d0; border: 1px solid #10b981;")
-        else:
+        elif mode == "DAY":
             self.btn_day.setStyleSheet("background-color: #0369a1; color: #bae6fd; border: 1px solid #38bdf8;")
+        elif mode == "DEPTH":
+            self.btn_depth.setStyleSheet("background-color: #0e7490; color: #a5f3fc; border: 1px solid #06b6d4;")
 
         self.log_terminal(f"👁️ Optical HUD switched to: {mode} MODE.")
 

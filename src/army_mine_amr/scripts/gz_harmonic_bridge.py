@@ -27,13 +27,15 @@ from gz.msgs10 import (
     model_pb2,
     twist_pb2,
     clock_pb2,
+    image_pb2,
+    camera_info_pb2,
 )
 
 from rosgraph_msgs.msg import Clock
 from nav_msgs.msg import Odometry
 from tf2_msgs.msg import TFMessage
 from geometry_msgs.msg import TransformStamped, Twist
-from sensor_msgs.msg import LaserScan, PointCloud2, PointField, Imu, JointState
+from sensor_msgs.msg import LaserScan, PointCloud2, PointField, Imu, JointState, Image, CameraInfo
 from builtin_interfaces.msg import Time
 
 
@@ -73,6 +75,12 @@ class GzHarmonicRosBridge(RosNode):
         self.pub_imu = self.create_publisher(Imu, '/imu/data', qos_reliable)
         self.pub_joints = self.create_publisher(JointState, '/joint_states', qos_reliable)
 
+        # Tactical RGB-D Depth Camera Publishers
+        self.pub_camera_rgb = self.create_publisher(Image, '/camera/image_raw', qos_reliable)
+        self.pub_camera_depth = self.create_publisher(Image, '/camera/depth/image_raw', qos_reliable)
+        self.pub_camera_info = self.create_publisher(CameraInfo, '/camera/camera_info', qos_reliable)
+        self.pub_camera_points = self.create_publisher(PointCloud2, '/camera/depth/points', qos_reliable)
+
         # ROS Subscriber for cmd_vel
         self.sub_cmd_vel = self.create_subscription(
             Twist, '/cmd_vel', self.ros_cmd_vel_callback, qos_reliable
@@ -92,6 +100,12 @@ class GzHarmonicRosBridge(RosNode):
         self.gz_node.subscribe(pointcloud_packed_pb2.PointCloudPacked, '/scan/points', self.gz_pc_callback)
         self.gz_node.subscribe(imu_pb2.IMU, '/imu/data', self.gz_imu_callback)
         self.gz_node.subscribe(model_pb2.Model, '/joint_states', self.gz_joint_states_callback)
+
+        # Tactical RGB-D Depth Camera Subscriptions
+        self.gz_node.subscribe(image_pb2.Image, '/camera/image', self.gz_camera_rgb_callback)
+        self.gz_node.subscribe(image_pb2.Image, '/camera/depth_image', self.gz_camera_depth_callback)
+        self.gz_node.subscribe(camera_info_pb2.CameraInfo, '/camera/camera_info', self.gz_camera_info_callback)
+        self.gz_node.subscribe(pointcloud_packed_pb2.PointCloudPacked, '/camera/points', self.gz_camera_points_callback)
 
         self.get_logger().info('✅ Gazebo Harmonic Bridge initialized and subscribed to all topics!')
 
@@ -278,6 +292,85 @@ class GzHarmonicRosBridge(RosNode):
         gz_twist.angular.y = msg.angular.y
         gz_twist.angular.z = msg.angular.z
         self.gz_pub_cmd_vel.publish(gz_twist)
+
+    def gz_camera_rgb_callback(self, msg: image_pb2.Image):
+        ros_msg = Image()
+        ros_msg.header.stamp = self._pb_stamp_to_ros(msg.header.stamp if msg.HasField('header') else None)
+        ros_msg.header.frame_id = 'camera_depth_optical_frame'
+        ros_msg.height = msg.height
+        ros_msg.width = msg.width
+        ros_msg.step = msg.step
+        ros_msg.data = msg.data
+        ros_msg.is_bigendian = False
+        if msg.pixel_format_type == image_pb2.PixelFormatType.RGB_INT8:
+            ros_msg.encoding = 'rgb8'
+        elif msg.pixel_format_type == image_pb2.PixelFormatType.BGR_INT8:
+            ros_msg.encoding = 'bgr8'
+        elif msg.pixel_format_type == image_pb2.PixelFormatType.RGBA_INT8:
+            ros_msg.encoding = 'rgba8'
+        else:
+            ros_msg.encoding = 'rgb8'
+        self.pub_camera_rgb.publish(ros_msg)
+
+    def gz_camera_depth_callback(self, msg: image_pb2.Image):
+        ros_msg = Image()
+        ros_msg.header.stamp = self._pb_stamp_to_ros(msg.header.stamp if msg.HasField('header') else None)
+        ros_msg.header.frame_id = 'camera_depth_optical_frame'
+        ros_msg.height = msg.height
+        ros_msg.width = msg.width
+        ros_msg.step = msg.step
+        ros_msg.data = msg.data
+        ros_msg.is_bigendian = False
+        if msg.pixel_format_type == image_pb2.PixelFormatType.R_FLOAT32:
+            ros_msg.encoding = '32FC1'
+        elif msg.pixel_format_type == image_pb2.PixelFormatType.L_INT16:
+            ros_msg.encoding = '16UC1'
+        else:
+            ros_msg.encoding = '32FC1'
+        self.pub_camera_depth.publish(ros_msg)
+
+    def gz_camera_info_callback(self, msg: camera_info_pb2.CameraInfo):
+        ros_msg = CameraInfo()
+        ros_msg.header.stamp = self._pb_stamp_to_ros(msg.header.stamp if msg.HasField('header') else None)
+        ros_msg.header.frame_id = 'camera_depth_optical_frame'
+        ros_msg.height = msg.height
+        ros_msg.width = msg.width
+        if msg.HasField('distortion'):
+            ros_msg.distortion_model = 'plumb_bob'
+            ros_msg.d = [float(x) for x in msg.distortion.k]
+        if msg.HasField('intrinsics'):
+            k_list = [float(x) for x in msg.intrinsics.k]
+            if len(k_list) == 9:
+                ros_msg.k = k_list
+        if msg.HasField('projection'):
+            p_list = [float(x) for x in msg.projection.p]
+            if len(p_list) == 12:
+                ros_msg.p = p_list
+        if len(msg.rectification_matrix) == 9:
+            ros_msg.r = [float(x) for x in msg.rectification_matrix]
+        self.pub_camera_info.publish(ros_msg)
+
+    def gz_camera_points_callback(self, msg: pointcloud_packed_pb2.PointCloudPacked):
+        ros_msg = PointCloud2()
+        ros_msg.header.stamp = self._pb_stamp_to_ros(msg.header.stamp if msg.HasField('header') else None)
+        ros_msg.header.frame_id = 'camera_depth_optical_frame'
+        ros_msg.height = msg.height
+        ros_msg.width = msg.width
+        ros_msg.is_bigendian = msg.is_bigendian
+        ros_msg.point_step = msg.point_step
+        ros_msg.row_step = msg.row_step
+        ros_msg.is_dense = msg.is_dense
+        ros_msg.data = msg.data
+
+        for f in msg.field:
+            rf = PointField()
+            rf.name = f.name
+            rf.offset = f.offset
+            rf.datatype = f.datatype + 1
+            rf.count = f.count
+            ros_msg.fields.append(rf)
+
+        self.pub_camera_points.publish(ros_msg)
 
 
 def main(args=None):
