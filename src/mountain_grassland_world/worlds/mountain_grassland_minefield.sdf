@@ -6,7 +6,7 @@
       <real_time_factor>1.0</real_time_factor>
     </physics>
 
-    <!-- Plugins -->
+    <!-- Core Gazebo Sim Harmonic Plugins -->
     <plugin filename="libignition-gazebo-physics-system.so" name="ignition::gazebo::systems::Physics"/>
     <plugin filename="libignition-gazebo-user-commands-system.so" name="ignition::gazebo::systems::UserCommands"/>
     <plugin filename="libignition-gazebo-scene-broadcaster-system.so" name="ignition::gazebo::systems::SceneBroadcaster"/>
@@ -14,33 +14,47 @@
 
     <atmosphere type="adiabatic"/>
 
-    <!-- High-Altitude Mountain Atmosphere & Natural Daylight -->
+    <!-- Scene GUI Camera configured for Scenic Ground-Level Operations -->
+    <gui fullscreen="0">
+      <camera name="user_camera">
+        <pose>-25.0 -5.0 2.8 0 0.08 0.32</pose>
+        <view_controller>orbit</view_controller>
+      </camera>
+    </gui>
+
+    <!-- High-Altitude Crisp Alpine Atmosphere & Lighting -->
     <scene>
-      <ambient>0.65 0.70 0.65 1.0</ambient>
-      <background>0.50 0.70 0.90 1.0</background>
+      <ambient>0.40 0.42 0.46 1.0</ambient>
+      <background>0.42 0.65 0.90 1.0</background>
       <shadows>true</shadows>
       <grid>false</grid>
-      <sky></sky>
+      <sky>
+        <clouds>
+          <speed>0.8</speed>
+          <direction>0.5 0.5</direction>
+          <humidity>0.5</humidity>
+        </clouds>
+      </sky>
     </scene>
 
-    <!-- Main Alpine Sun -->
+    <!-- High-Altitude Mountain Sunlight (Golden white 5400K, sharp shadows) -->
     <light type="directional" name="alpine_sun">
       <cast_shadows>true</cast_shadows>
-      <pose>20 -30 60 0 0 0</pose>
-      <diffuse>0.96 0.94 0.88 1.0</diffuse>
-      <specular>0.35 0.35 0.35 1.0</specular>
-      <direction>-0.35 0.45 -0.82</direction>
+      <pose>25 -35 75 0 0 0</pose>
+      <diffuse>1.0 0.96 0.90 1.0</diffuse>
+      <specular>0.3 0.3 0.3 1.0</specular>
+      <direction>-0.38 0.42 -0.82</direction>
     </light>
 
-    <!-- Sky fill light for valley shadows -->
-    <light type="directional" name="sky_fill">
+    <!-- Sky Ambient Fill Light -->
+    <light type="directional" name="sky_ambient">
       <cast_shadows>false</cast_shadows>
-      <pose>0 0 50 0 0 0</pose>
-      <diffuse>0.40 0.50 0.55 1.0</diffuse>
-      <direction>0.3 -0.3 -0.8</direction>
+      <pose>0 0 60 0 0 0</pose>
+      <diffuse>0.32 0.40 0.50 1.0</diffuse>
+      <direction>0.2 -0.2 -0.95</direction>
     </light>
 
-    <!-- 1. Master Alpine Mountain Grassland Terrain Mesh -->
+    <!-- 1. Master Alpine Mountain Grassland Terrain Mesh (110m x 90m, slope <= 1:8) -->
     <include>
       <name>alpine_mountain_terrain</name>
       <uri>model://alpine_mountain_terrain</uri>
@@ -48,7 +62,15 @@
       <static>true</static>
     </include>
 
-    <!-- 2. Border Meadow Checkpoint Outpost -->
+    <!-- 2. 360-Degree Himalayan Mountain Horizon Peaks Ring -->
+    <include>
+      <name>alpine_mountain_peaks</name>
+      <uri>model://alpine_mountain_peaks</uri>
+      <pose>0 0 0 0 0 0</pose>
+      <static>true</static>
+    </include>
+
+    <!-- 3. Border Meadow Checkpoint Outpost -->
     <include>
       <name>border_meadow_outpost</name>
       <uri>model://border_meadow_outpost</uri>
@@ -56,7 +78,7 @@
       <static>true</static>
     </include>
 
-    <!-- 3. All-Terrain 4WD NIPUN Minelet AMR with 4D LiDAR & RealSense D435 Depth Camera -->
+    <!-- 4. All-Terrain 4WD NIPUN Minelet AMR with 4D LiDAR & RealSense D435 Depth Camera -->
     <include>
       <name>army_mine_amr</name>
       <uri>model://army_mine_amr</uri>
@@ -64,1074 +86,1882 @@
       <static>false</static>
     </include>
 
-    <!-- 4. Alpine Wildflowers (Blue Poppies, Buttercups, Daisies, Asters) -->
-    
+
+    <!-- Realistic Himalayan Conifer Pine Trees -->
     <include>
-      <name>wildflower_01</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>-12.539 -11.559 0.318 0 0 2.557</pose>
+      <name>alpine_pine_01</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>12.433 15.088 1.522 0 0 2.510</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_02</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>-9.938 11.234 0.350 0 0 0.240</pose>
+      <name>alpine_pine_02</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>-17.448 19.745 2.709 0 0 1.378</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_03</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>10.201 -4.698 2.262 0 0 5.351</pose>
+      <name>alpine_pine_03</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>20.391 30.402 9.837 0 0 6.268</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_04</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>-7.496 -4.558 0.437 0 0 2.096</pose>
+      <name>alpine_pine_04</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>33.159 16.543 2.116 0 0 3.201</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_05</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>-3.477 -13.953 0.847 0 0 2.740</pose>
+      <name>alpine_pine_05</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>-5.402 15.200 0.999 0 0 0.571</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_06</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>-10.882 2.733 0.177 0 0 0.439</pose>
+      <name>alpine_pine_06</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>-22.072 26.376 6.984 0 0 0.296</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_07</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>-0.173 -1.447 1.333 0 0 5.686</pose>
+      <name>alpine_pine_07</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>-37.824 19.173 2.315 0 0 0.689</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_08</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>-10.640 -10.019 0.359 0 0 4.962</pose>
+      <name>alpine_pine_08</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>13.291 27.306 7.381 0 0 3.942</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_09</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>-14.002 11.512 0.225 0 0 3.601</pose>
+      <name>alpine_pine_09</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>-21.924 28.348 8.505 0 0 4.977</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_10</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>-2.530 9.459 0.764 0 0 4.828</pose>
+      <name>alpine_pine_10</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>26.373 14.653 1.624 0 0 2.653</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_11</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>1.143 8.442 1.068 0 0 1.299</pose>
+      <name>alpine_pine_11</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>26.077 30.906 10.470 0 0 0.399</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_12</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>13.618 0.758 2.532 0 0 5.083</pose>
+      <name>alpine_pine_12</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>-12.099 18.154 1.990 0 0 2.398</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_13</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>-0.183 -2.849 1.310 0 0 4.831</pose>
+      <name>alpine_pine_13</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>38.491 22.410 4.686 0 0 6.259</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_14</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>9.099 5.175 2.002 0 0 4.009</pose>
+      <name>alpine_pine_14</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>-32.395 16.773 1.243 0 0 3.325</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_15</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>16.333 10.923 1.550 0 0 3.053</pose>
+      <name>alpine_pine_15</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>29.495 28.688 8.823 0 0 6.101</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_16</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>16.418 -3.513 2.329 0 0 0.200</pose>
+      <name>alpine_pine_16</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>26.185 31.649 11.095 0 0 5.408</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_17</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>20.446 -8.919 1.815 0 0 5.151</pose>
+      <name>alpine_pine_17</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>3.971 37.368 16.081 0 0 0.072</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_18</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>27.941 4.426 2.383 0 0 1.068</pose>
+      <name>alpine_pine_18</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>-8.960 27.473 7.946 0 0 4.528</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_19</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>0.835 -3.047 1.424 0 0 0.460</pose>
+      <name>alpine_pine_19</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>28.011 29.035 9.042 0 0 4.283</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_20</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>6.468 2.049 2.058 0 0 2.111</pose>
+      <name>alpine_pine_20</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>30.660 28.068 8.383 0 0 3.374</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_21</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>-6.114 -11.532 0.529 0 0 3.946</pose>
+      <name>alpine_pine_21</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>17.775 15.577 1.715 0 0 1.677</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_22</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>-14.397 -4.146 0.081 0 0 1.439</pose>
+      <name>alpine_pine_22</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>-21.312 21.301 3.562 0 0 4.027</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_23</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>10.004 6.263 1.945 0 0 5.709</pose>
+      <name>alpine_pine_23</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>-33.457 -32.529 11.525 0 0 0.701</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_24</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>15.024 13.770 1.383 0 0 6.054</pose>
+      <name>alpine_pine_24</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>-31.718 -31.468 10.680 0 0 2.732</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_25</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>14.610 -7.466 1.987 0 0 3.038</pose>
+      <name>alpine_pine_25</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>12.126 -29.426 8.945 0 0 2.851</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_26</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>-6.653 13.775 0.766 0 0 2.791</pose>
+      <name>alpine_pine_26</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>-9.645 -33.077 12.669 0 0 5.993</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_27</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>20.328 -12.764 1.435 0 0 0.846</pose>
+      <name>alpine_pine_27</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>-18.108 -15.989 0.924 0 0 5.503</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_28</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>-5.921 -6.822 0.609 0 0 2.211</pose>
+      <name>alpine_pine_28</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>13.139 -23.685 5.026 0 0 1.655</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_29</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>-2.219 -1.840 1.062 0 0 2.640</pose>
+      <name>alpine_pine_29</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>-25.967 -20.866 3.233 0 0 3.145</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_30</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>-9.895 -12.247 0.433 0 0 2.230</pose>
+      <name>alpine_pine_30</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>-26.601 -29.083 8.923 0 0 1.123</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_31</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>-10.827 -1.870 0.122 0 0 0.054</pose>
+      <name>alpine_pine_31</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>41.141 -22.960 5.018 0 0 5.734</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_32</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>10.183 -11.942 1.207 0 0 4.360</pose>
+      <name>alpine_pine_32</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>5.670 -21.912 4.024 0 0 5.470</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_33</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>3.998 13.590 0.962 0 0 1.649</pose>
+      <name>alpine_pine_33</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>29.114 -19.764 3.226 0 0 1.875</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_34</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>7.208 7.023 1.672 0 0 2.103</pose>
+      <name>alpine_pine_34</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>-21.218 -37.246 16.412 0 0 4.015</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_35</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>1.373 3.896 1.400 0 0 6.090</pose>
+      <name>alpine_pine_35</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>-14.133 -31.708 11.483 0 0 3.826</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_36</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>26.542 -2.267 2.560 0 0 4.507</pose>
+      <name>alpine_pine_36</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>-22.699 -15.842 0.816 0 0 0.960</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_37</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>16.915 -3.581 2.307 0 0 1.476</pose>
+      <name>alpine_pine_37</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>31.862 -30.605 10.448 0 0 4.791</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_38</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>-11.316 10.609 0.288 0 0 0.359</pose>
+      <name>alpine_pine_38</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>13.746 -28.703 8.398 0 0 3.389</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_39</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>9.379 1.051 2.350 0 0 0.918</pose>
+      <name>alpine_pine_39</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>34.993 -27.217 7.844 0 0 4.892</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_40</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>15.829 11.643 1.437 0 0 4.874</pose>
+      <name>alpine_pine_40</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>-18.280 -32.204 11.849 0 0 3.332</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_41</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>3.295 -10.459 1.079 0 0 6.123</pose>
+      <name>alpine_pine_41</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>6.032 -31.826 10.985 0 0 0.004</pose>
       <static>true</static>
     </include>
     <include>
-      <name>wildflower_42</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>9.304 3.629 2.162 0 0 5.038</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>wildflower_43</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>3.154 -12.262 0.904 0 0 0.854</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>wildflower_44</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>16.417 -4.213 2.268 0 0 5.470</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>wildflower_45</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>19.788 13.452 1.412 0 0 4.200</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>wildflower_46</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>-0.721 8.151 0.944 0 0 0.177</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>wildflower_47</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>9.515 10.399 1.412 0 0 3.232</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>wildflower_48</name>
-      <uri>model://alpine_wildflower_cluster</uri>
-      <pose>-8.544 0.003 0.272 0 0 3.425</pose>
+      <name>alpine_pine_42</name>
+      <uri>model://alpine_pine_tree</uri>
+      <pose>7.936 -16.901 1.846 0 0 2.037</pose>
       <static>true</static>
     </include>
 
-    <!-- 5. Alpine Meadow Grass Clumps & Fescue Tufts -->
-    
+    <!-- Weathered Granite Boulders & Field Rocks -->
+    <include>
+      <name>granite_boulder_01</name>
+      <uri>model://alpine_glacial_boulder</uri>
+      <pose>-15.000 8.500 0.094 0 0 4.700</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_02</name>
+      <uri>model://alpine_medium_boulder</uri>
+      <pose>-12.000 -7.500 0.216 0 0 0.359</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_03</name>
+      <uri>model://alpine_meadow_rock</uri>
+      <pose>-5.000 11.200 0.585 0 0 3.670</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_04</name>
+      <uri>model://alpine_granite_rock_2</uri>
+      <pose>2.000 -9.800 1.099 0 0 3.160</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_05</name>
+      <uri>model://alpine_talus_scree</uri>
+      <pose>8.500 9.200 1.583 0 0 5.358</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_06</name>
+      <uri>model://alpine_glacial_boulder</uri>
+      <pose>16.000 -8.500 2.102 0 0 0.989</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_07</name>
+      <uri>model://alpine_medium_boulder</uri>
+      <pose>22.000 7.800 2.333 0 0 6.037</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_08</name>
+      <uri>model://alpine_meadow_rock</uri>
+      <pose>28.000 -6.500 2.488 0 0 0.503</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_09</name>
+      <uri>model://alpine_granite_rock_2</uri>
+      <pose>-2.000 6.200 1.014 0 0 1.168</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_10</name>
+      <uri>model://alpine_talus_scree</uri>
+      <pose>11.000 -4.500 2.499 0 0 3.739</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_11</name>
+      <uri>model://alpine_glacial_boulder</uri>
+      <pose>19.500 5.000 2.728 0 0 4.242</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_12</name>
+      <uri>model://alpine_medium_boulder</uri>
+      <pose>32.000 8.200 2.296 0 0 1.478</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_13</name>
+      <uri>model://alpine_meadow_rock</uri>
+      <pose>-33.578 -10.577 0.215 0 0 0.753</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_14</name>
+      <uri>model://alpine_granite_rock_2</uri>
+      <pose>-17.520 12.131 0.041 0 0 5.594</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_15</name>
+      <uri>model://alpine_talus_scree</uri>
+      <pose>-28.747 15.318 0.682 0 0 1.547</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_16</name>
+      <uri>model://alpine_glacial_boulder</uri>
+      <pose>-25.627 -14.853 0.478 0 0 3.735</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_17</name>
+      <uri>model://alpine_medium_boulder</uri>
+      <pose>3.520 16.886 1.728 0 0 3.892</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_18</name>
+      <uri>model://alpine_meadow_rock</uri>
+      <pose>17.045 -13.268 1.445 0 0 2.634</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_19</name>
+      <uri>model://alpine_granite_rock_2</uri>
+      <pose>-3.019 15.728 1.215 0 0 3.667</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_20</name>
+      <uri>model://alpine_talus_scree</uri>
+      <pose>-30.326 9.273 0.162 0 0 3.285</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_21</name>
+      <uri>model://alpine_glacial_boulder</uri>
+      <pose>-34.475 18.202 1.853 0 0 5.873</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_22</name>
+      <uri>model://alpine_medium_boulder</uri>
+      <pose>31.096 20.175 3.447 0 0 1.283</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_23</name>
+      <uri>model://alpine_meadow_rock</uri>
+      <pose>-14.671 -14.990 0.644 0 0 4.500</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_24</name>
+      <uri>model://alpine_granite_rock_2</uri>
+      <pose>-17.261 15.149 0.638 0 0 1.500</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_25</name>
+      <uri>model://alpine_talus_scree</uri>
+      <pose>-27.924 -16.493 1.089 0 0 2.487</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_26</name>
+      <uri>model://alpine_glacial_boulder</uri>
+      <pose>28.060 9.704 2.028 0 0 4.220</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_27</name>
+      <uri>model://alpine_medium_boulder</uri>
+      <pose>-30.575 18.467 1.968 0 0 1.885</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_28</name>
+      <uri>model://alpine_meadow_rock</uri>
+      <pose>-16.848 -16.168 1.019 0 0 1.987</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_29</name>
+      <uri>model://alpine_granite_rock_2</uri>
+      <pose>-21.605 15.014 0.521 0 0 4.724</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_30</name>
+      <uri>model://alpine_talus_scree</uri>
+      <pose>-2.651 20.198 3.099 0 0 0.456</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_31</name>
+      <uri>model://alpine_glacial_boulder</uri>
+      <pose>12.607 16.028 1.726 0 0 2.879</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_32</name>
+      <uri>model://alpine_medium_boulder</uri>
+      <pose>32.625 -19.838 3.300 0 0 6.273</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_33</name>
+      <uri>model://alpine_meadow_rock</uri>
+      <pose>0.139 20.240 3.133 0 0 6.259</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_34</name>
+      <uri>model://alpine_granite_rock_2</uri>
+      <pose>-7.335 -18.552 2.242 0 0 0.460</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_35</name>
+      <uri>model://alpine_talus_scree</uri>
+      <pose>-14.177 -12.503 0.118 0 0 1.339</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>granite_boulder_36</name>
+      <uri>model://alpine_glacial_boulder</uri>
+      <pose>-23.700 12.857 0.000 0 0 1.666</pose>
+      <static>true</static>
+    </include>
+
+    <!-- Dense Alpine Wildflower Beds (Poppies, Buttercups, Daisies, Gentians) -->
+    <include>
+      <name>wildflower_001</name>
+      <uri>model://alpine_wildflower_buttercup</uri>
+      <pose>-5.971 -6.352 0.678 0 0 2.322</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_002</name>
+      <uri>model://alpine_wildflower_daisy</uri>
+      <pose>-8.680 0.438 0.372 0 0 3.843</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_003</name>
+      <uri>model://alpine_wildflower_poppy</uri>
+      <pose>-7.353 -4.327 0.536 0 0 4.196</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_004</name>
+      <uri>model://alpine_wildflower_poppy</uri>
+      <pose>-18.983 -6.183 0.000 0 0 5.899</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_005</name>
+      <uri>model://alpine_wildflower_poppy</uri>
+      <pose>-10.947 -2.964 0.198 0 0 4.665</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_006</name>
+      <uri>model://alpine_wildflower_buttercup</uri>
+      <pose>-10.543 -2.112 0.218 0 0 4.509</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_007</name>
+      <uri>model://alpine_wildflower_daisy</uri>
+      <pose>-10.695 -0.196 0.215 0 0 3.176</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_008</name>
+      <uri>model://alpine_wildflower_poppy</uri>
+      <pose>-12.049 2.119 0.170 0 0 0.580</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_009</name>
+      <uri>model://alpine_wildflower_poppy</uri>
+      <pose>-14.284 -2.959 0.080 0 0 2.096</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_010</name>
+      <uri>model://alpine_wildflower_buttercup</uri>
+      <pose>-5.914 1.729 0.648 0 0 4.657</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_011</name>
+      <uri>model://alpine_wildflower_poppy</uri>
+      <pose>-15.204 -4.944 0.070 0 0 0.703</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_012</name>
+      <uri>model://alpine_wildflower_buttercup</uri>
+      <pose>-7.385 -5.452 0.540 0 0 3.428</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_013</name>
+      <uri>model://alpine_wildflower_buttercup</uri>
+      <pose>-9.856 -7.190 0.347 0 0 2.700</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_014</name>
+      <uri>model://alpine_wildflower_poppy</uri>
+      <pose>-9.057 -3.307 0.347 0 0 5.648</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_015</name>
+      <uri>model://alpine_wildflower_poppy</uri>
+      <pose>-11.398 -1.945 0.167 0 0 2.222</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_016</name>
+      <uri>model://alpine_wildflower_buttercup</uri>
+      <pose>-18.066 -6.097 0.001 0 0 5.817</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_017</name>
+      <uri>model://alpine_wildflower_buttercup</uri>
+      <pose>-5.841 6.662 0.621 0 0 5.538</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_018</name>
+      <uri>model://alpine_wildflower_daisy</uri>
+      <pose>-0.836 5.709 1.171 0 0 4.916</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_019</name>
+      <uri>model://alpine_wildflower_buttercup</uri>
+      <pose>-10.050 7.196 0.319 0 0 1.676</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_020</name>
+      <uri>model://alpine_wildflower_poppy</uri>
+      <pose>-5.644 3.697 0.659 0 0 5.395</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_021</name>
+      <uri>model://alpine_wildflower_gentian</uri>
+      <pose>-4.984 10.080 0.625 0 0 2.197</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_022</name>
+      <uri>model://alpine_wildflower_buttercup</uri>
+      <pose>-3.221 -0.122 1.042 0 0 0.149</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_023</name>
+      <uri>model://alpine_wildflower_poppy</uri>
+      <pose>-5.002 7.340 0.686 0 0 6.075</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_024</name>
+      <uri>model://alpine_wildflower_gentian</uri>
+      <pose>-6.834 8.944 0.519 0 0 4.270</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_025</name>
+      <uri>model://alpine_wildflower_poppy</uri>
+      <pose>-4.407 2.911 0.811 0 0 0.725</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_026</name>
+      <uri>model://alpine_wildflower_daisy</uri>
+      <pose>-4.027 4.675 0.824 0 0 0.240</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_027</name>
+      <uri>model://alpine_wildflower_daisy</uri>
+      <pose>-8.421 3.529 0.415 0 0 2.742</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_028</name>
+      <uri>model://alpine_wildflower_buttercup</uri>
+      <pose>-4.421 4.863 0.777 0 0 1.600</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_029</name>
+      <uri>model://alpine_wildflower_buttercup</uri>
+      <pose>-6.048 4.843 0.612 0 0 2.288</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_030</name>
+      <uri>model://alpine_wildflower_daisy</uri>
+      <pose>-1.722 6.761 1.018 0 0 3.915</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_031</name>
+      <uri>model://alpine_wildflower_daisy</uri>
+      <pose>-6.855 3.764 0.542 0 0 3.186</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_032</name>
+      <uri>model://alpine_wildflower_daisy</uri>
+      <pose>-7.418 2.844 0.492 0 0 3.483</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_033</name>
+      <uri>model://alpine_wildflower_gentian</uri>
+      <pose>1.691 1.867 1.702 0 0 4.256</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_034</name>
+      <uri>model://alpine_wildflower_daisy</uri>
+      <pose>3.625 -4.220 1.785 0 0 2.551</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_035</name>
+      <uri>model://alpine_wildflower_buttercup</uri>
+      <pose>1.368 -4.061 1.548 0 0 2.701</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_036</name>
+      <uri>model://alpine_wildflower_gentian</uri>
+      <pose>-4.090 -3.967 0.931 0 0 2.776</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_037</name>
+      <uri>model://alpine_wildflower_buttercup</uri>
+      <pose>-1.725 -4.991 1.167 0 0 4.140</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_038</name>
+      <uri>model://alpine_wildflower_daisy</uri>
+      <pose>-0.996 2.042 1.321 0 0 0.587</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_039</name>
+      <uri>model://alpine_wildflower_daisy</uri>
+      <pose>2.236 -2.609 1.735 0 0 1.411</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_040</name>
+      <uri>model://alpine_wildflower_buttercup</uri>
+      <pose>0.224 -1.409 1.531 0 0 6.182</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_041</name>
+      <uri>model://alpine_wildflower_gentian</uri>
+      <pose>-4.190 -5.083 0.895 0 0 2.604</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_042</name>
+      <uri>model://alpine_wildflower_gentian</uri>
+      <pose>-1.443 -3.340 1.269 0 0 3.106</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_043</name>
+      <uri>model://alpine_wildflower_poppy</uri>
+      <pose>0.177 2.088 1.490 0 0 5.609</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_044</name>
+      <uri>model://alpine_wildflower_gentian</uri>
+      <pose>4.260 -6.481 1.638 0 0 1.375</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_045</name>
+      <uri>model://alpine_wildflower_gentian</uri>
+      <pose>1.647 -6.073 1.420 0 0 0.316</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_046</name>
+      <uri>model://alpine_wildflower_gentian</uri>
+      <pose>0.031 3.438 1.409 0 0 0.838</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_047</name>
+      <uri>model://alpine_wildflower_daisy</uri>
+      <pose>-3.842 -1.241 0.969 0 0 5.969</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_048</name>
+      <uri>model://alpine_wildflower_gentian</uri>
+      <pose>3.421 -4.431 1.745 0 0 5.219</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_049</name>
+      <uri>model://alpine_wildflower_gentian</uri>
+      <pose>1.481 2.230 1.660 0 0 2.828</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_050</name>
+      <uri>model://alpine_wildflower_daisy</uri>
+      <pose>8.068 -1.359 2.446 0 0 4.812</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_051</name>
+      <uri>model://alpine_wildflower_daisy</uri>
+      <pose>3.548 3.475 1.810 0 0 2.764</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_052</name>
+      <uri>model://alpine_wildflower_daisy</uri>
+      <pose>7.469 2.007 2.264 0 0 2.009</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_053</name>
+      <uri>model://alpine_wildflower_buttercup</uri>
+      <pose>6.309 3.619 2.027 0 0 2.407</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_054</name>
+      <uri>model://alpine_wildflower_gentian</uri>
+      <pose>9.273 5.592 2.062 0 0 2.561</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_055</name>
+      <uri>model://alpine_wildflower_buttercup</uri>
+      <pose>4.800 3.232 1.940 0 0 5.233</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_056</name>
+      <uri>model://alpine_wildflower_poppy</uri>
+      <pose>3.786 7.071 1.472 0 0 5.383</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_057</name>
+      <uri>model://alpine_wildflower_poppy</uri>
+      <pose>8.306 1.274 2.389 0 0 5.923</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_058</name>
+      <uri>model://alpine_wildflower_gentian</uri>
+      <pose>7.043 6.655 1.760 0 0 3.382</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_059</name>
+      <uri>model://alpine_wildflower_buttercup</uri>
+      <pose>7.447 -0.999 2.386 0 0 3.068</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_060</name>
+      <uri>model://alpine_wildflower_gentian</uri>
+      <pose>7.470 7.195 1.734 0 0 2.112</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_061</name>
+      <uri>model://alpine_wildflower_buttercup</uri>
+      <pose>6.597 1.428 2.229 0 0 5.281</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_062</name>
+      <uri>model://alpine_wildflower_poppy</uri>
+      <pose>15.868 0.189 2.904 0 0 5.698</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_063</name>
+      <uri>model://alpine_wildflower_poppy</uri>
+      <pose>4.045 1.746 1.972 0 0 4.039</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_064</name>
+      <uri>model://alpine_wildflower_poppy</uri>
+      <pose>10.343 6.347 2.070 0 0 1.635</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_065</name>
+      <uri>model://alpine_wildflower_daisy</uri>
+      <pose>13.354 -0.273 2.810 0 0 4.783</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_066</name>
+      <uri>model://alpine_wildflower_gentian</uri>
+      <pose>11.125 0.220 2.672 0 0 1.585</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_067</name>
+      <uri>model://alpine_wildflower_poppy</uri>
+      <pose>15.551 -2.727 2.763 0 0 6.283</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_068</name>
+      <uri>model://alpine_wildflower_poppy</uri>
+      <pose>12.275 0.284 2.745 0 0 4.739</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_069</name>
+      <uri>model://alpine_wildflower_poppy</uri>
+      <pose>17.028 -3.581 2.687 0 0 3.904</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_070</name>
+      <uri>model://alpine_wildflower_poppy</uri>
+      <pose>15.261 0.164 2.884 0 0 3.544</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_071</name>
+      <uri>model://alpine_wildflower_daisy</uri>
+      <pose>15.992 1.254 2.903 0 0 1.054</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_072</name>
+      <uri>model://alpine_wildflower_poppy</uri>
+      <pose>10.849 -5.901 2.318 0 0 4.887</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_073</name>
+      <uri>model://alpine_wildflower_poppy</uri>
+      <pose>16.425 -0.929 2.885 0 0 5.836</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_074</name>
+      <uri>model://alpine_wildflower_gentian</uri>
+      <pose>8.787 -5.804 2.174 0 0 2.492</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_075</name>
+      <uri>model://alpine_wildflower_buttercup</uri>
+      <pose>14.723 -4.086 2.643 0 0 0.640</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_076</name>
+      <uri>model://alpine_wildflower_poppy</uri>
+      <pose>15.878 -8.403 2.115 0 0 5.003</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_077</name>
+      <uri>model://alpine_wildflower_gentian</uri>
+      <pose>14.152 -3.326 2.708 0 0 4.156</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_078</name>
+      <uri>model://alpine_wildflower_poppy</uri>
+      <pose>19.194 -1.302 2.910 0 0 5.338</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_079</name>
+      <uri>model://alpine_wildflower_daisy</uri>
+      <pose>15.663 -4.188 2.632 0 0 3.993</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_080</name>
+      <uri>model://alpine_wildflower_gentian</uri>
+      <pose>17.381 -6.863 2.318 0 0 1.107</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_081</name>
+      <uri>model://alpine_wildflower_gentian</uri>
+      <pose>17.404 4.447 2.749 0 0 2.921</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_082</name>
+      <uri>model://alpine_wildflower_daisy</uri>
+      <pose>23.964 1.665 3.017 0 0 5.351</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_083</name>
+      <uri>model://alpine_wildflower_gentian</uri>
+      <pose>22.662 3.958 2.849 0 0 1.532</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_084</name>
+      <uri>model://alpine_wildflower_gentian</uri>
+      <pose>17.714 5.845 2.580 0 0 2.114</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_085</name>
+      <uri>model://alpine_wildflower_gentian</uri>
+      <pose>19.165 5.089 2.712 0 0 1.333</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_086</name>
+      <uri>model://alpine_wildflower_daisy</uri>
+      <pose>22.864 2.560 2.966 0 0 3.492</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_087</name>
+      <uri>model://alpine_wildflower_buttercup</uri>
+      <pose>19.928 4.810 2.755 0 0 4.524</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_088</name>
+      <uri>model://alpine_wildflower_gentian</uri>
+      <pose>16.622 5.338 2.612 0 0 4.058</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_089</name>
+      <uri>model://alpine_wildflower_poppy</uri>
+      <pose>16.331 5.286 2.607 0 0 1.849</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_090</name>
+      <uri>model://alpine_wildflower_daisy</uri>
+      <pose>20.029 6.182 2.571 0 0 2.974</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_091</name>
+      <uri>model://alpine_wildflower_daisy</uri>
+      <pose>18.694 4.431 2.783 0 0 2.210</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_092</name>
+      <uri>model://alpine_wildflower_buttercup</uri>
+      <pose>19.376 5.687 2.636 0 0 0.758</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_093</name>
+      <uri>model://alpine_wildflower_buttercup</uri>
+      <pose>22.570 6.322 2.560 0 0 1.203</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_094</name>
+      <uri>model://alpine_wildflower_daisy</uri>
+      <pose>21.816 2.753 2.953 0 0 6.161</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_095</name>
+      <uri>model://alpine_wildflower_daisy</uri>
+      <pose>23.331 2.962 2.936 0 0 1.127</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_096</name>
+      <uri>model://alpine_wildflower_daisy</uri>
+      <pose>25.940 5.307 2.696 0 0 0.286</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_097</name>
+      <uri>model://alpine_wildflower_buttercup</uri>
+      <pose>32.505 -0.218 2.959 0 0 4.008</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_098</name>
+      <uri>model://alpine_wildflower_poppy</uri>
+      <pose>30.026 -2.303 2.896 0 0 3.607</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_099</name>
+      <uri>model://alpine_wildflower_buttercup</uri>
+      <pose>26.615 -0.423 3.044 0 0 6.066</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_100</name>
+      <uri>model://alpine_wildflower_poppy</uri>
+      <pose>29.901 4.569 2.789 0 0 5.166</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_101</name>
+      <uri>model://alpine_wildflower_poppy</uri>
+      <pose>28.981 -0.358 3.003 0 0 0.953</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_102</name>
+      <uri>model://alpine_wildflower_poppy</uri>
+      <pose>32.927 -7.336 2.436 0 0 6.245</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_103</name>
+      <uri>model://alpine_wildflower_buttercup</uri>
+      <pose>34.003 2.225 2.923 0 0 4.874</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_104</name>
+      <uri>model://alpine_wildflower_daisy</uri>
+      <pose>24.887 3.181 2.917 0 0 5.405</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_105</name>
+      <uri>model://alpine_wildflower_poppy</uri>
+      <pose>32.726 -1.150 2.937 0 0 3.830</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_106</name>
+      <uri>model://alpine_wildflower_buttercup</uri>
+      <pose>29.516 -7.786 2.315 0 0 3.930</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_107</name>
+      <uri>model://alpine_wildflower_buttercup</uri>
+      <pose>29.879 0.147 2.995 0 0 1.092</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_108</name>
+      <uri>model://alpine_wildflower_gentian</uri>
+      <pose>30.209 -0.907 2.963 0 0 4.331</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_109</name>
+      <uri>model://alpine_wildflower_daisy</uri>
+      <pose>29.190 -0.864 2.985 0 0 4.442</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_110</name>
+      <uri>model://alpine_wildflower_buttercup</uri>
+      <pose>28.975 -3.947 2.783 0 0 5.805</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_111</name>
+      <uri>model://alpine_wildflower_buttercup</uri>
+      <pose>31.055 -4.812 2.682 0 0 2.671</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>wildflower_112</name>
+      <uri>model://alpine_wildflower_daisy</uri>
+      <pose>25.558 -2.118 2.987 0 0 5.194</pose>
+      <static>true</static>
+    </include>
+
+    <!-- Alpine Dwarf Rhododendron Mountain Shrubs -->
+    <include>
+      <name>alpine_shrub_01</name>
+      <uri>model://alpine_dwarf_rhododendron</uri>
+      <pose>-20.715 -8.686 0.000 0 0 1.933</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>alpine_shrub_02</name>
+      <uri>model://alpine_dwarf_rhododendron</uri>
+      <pose>19.937 1.799 2.990 0 0 1.813</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>alpine_shrub_03</name>
+      <uri>model://alpine_dwarf_rhododendron</uri>
+      <pose>-17.539 4.906 0.004 0 0 4.397</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>alpine_shrub_04</name>
+      <uri>model://alpine_dwarf_rhododendron</uri>
+      <pose>31.561 0.012 2.969 0 0 3.103</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>alpine_shrub_05</name>
+      <uri>model://alpine_dwarf_rhododendron</uri>
+      <pose>-20.173 -11.964 0.000 0 0 2.715</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>alpine_shrub_06</name>
+      <uri>model://alpine_dwarf_rhododendron</uri>
+      <pose>-5.661 -6.490 0.705 0 0 0.574</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>alpine_shrub_07</name>
+      <uri>model://alpine_dwarf_rhododendron</uri>
+      <pose>32.715 8.735 2.219 0 0 3.614</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>alpine_shrub_08</name>
+      <uri>model://alpine_dwarf_rhododendron</uri>
+      <pose>32.047 12.989 1.556 0 0 4.224</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>alpine_shrub_09</name>
+      <uri>model://alpine_dwarf_rhododendron</uri>
+      <pose>-8.829 -11.954 0.387 0 0 4.752</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>alpine_shrub_10</name>
+      <uri>model://alpine_dwarf_rhododendron</uri>
+      <pose>3.230 3.939 1.742 0 0 5.756</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>alpine_shrub_11</name>
+      <uri>model://alpine_dwarf_rhododendron</uri>
+      <pose>-14.111 2.219 0.081 0 0 3.988</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>alpine_shrub_12</name>
+      <uri>model://alpine_dwarf_rhododendron</uri>
+      <pose>4.504 -10.628 1.179 0 0 2.186</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>alpine_shrub_13</name>
+      <uri>model://alpine_dwarf_rhododendron</uri>
+      <pose>-5.001 4.423 0.719 0 0 5.389</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>alpine_shrub_14</name>
+      <uri>model://alpine_dwarf_rhododendron</uri>
+      <pose>-5.212 5.036 0.691 0 0 1.811</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>alpine_shrub_15</name>
+      <uri>model://alpine_dwarf_rhododendron</uri>
+      <pose>31.712 8.153 2.301 0 0 3.456</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>alpine_shrub_16</name>
+      <uri>model://alpine_dwarf_rhododendron</uri>
+      <pose>2.290 -4.823 1.590 0 0 2.031</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>alpine_shrub_17</name>
+      <uri>model://alpine_dwarf_rhododendron</uri>
+      <pose>33.211 -2.491 2.885 0 0 3.233</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>alpine_shrub_18</name>
+      <uri>model://alpine_dwarf_rhododendron</uri>
+      <pose>34.287 4.099 2.804 0 0 3.409</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>alpine_shrub_19</name>
+      <uri>model://alpine_dwarf_rhododendron</uri>
+      <pose>-0.205 -8.123 1.082 0 0 2.273</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>alpine_shrub_20</name>
+      <uri>model://alpine_dwarf_rhododendron</uri>
+      <pose>20.387 3.261 2.912 0 0 4.775</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>alpine_shrub_21</name>
+      <uri>model://alpine_dwarf_rhododendron</uri>
+      <pose>-12.787 1.280 0.126 0 0 5.829</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>alpine_shrub_22</name>
+      <uri>model://alpine_dwarf_rhododendron</uri>
+      <pose>1.287 5.155 1.447 0 0 0.763</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>alpine_shrub_23</name>
+      <uri>model://alpine_dwarf_rhododendron</uri>
+      <pose>33.389 2.831 2.896 0 0 1.504</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>alpine_shrub_24</name>
+      <uri>model://alpine_dwarf_rhododendron</uri>
+      <pose>-15.497 1.322 0.042 0 0 3.470</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>alpine_shrub_25</name>
+      <uri>model://alpine_dwarf_rhododendron</uri>
+      <pose>-19.407 12.799 0.020 0 0 5.736</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>alpine_shrub_26</name>
+      <uri>model://alpine_dwarf_rhododendron</uri>
+      <pose>2.687 -9.946 1.133 0 0 5.229</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>alpine_shrub_27</name>
+      <uri>model://alpine_dwarf_rhododendron</uri>
+      <pose>4.903 5.632 1.712 0 0 3.197</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>alpine_shrub_28</name>
+      <uri>model://alpine_dwarf_rhododendron</uri>
+      <pose>-8.595 8.703 0.400 0 0 6.159</pose>
+      <static>true</static>
+    </include>
+
+    <!-- Volumetric Meadow Grass Tussocks & Ryegrass Tufts -->
     <include>
       <name>grass_tuft_01</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>0.295 12.590 0.773 0 0 2.136</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>-11.914 1.435 0.168 0 0 2.410</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_02</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>-5.054 0.202 0.641 0 0 1.277</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>32.843 0.231 2.964 0 0 5.525</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_03</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>-2.287 -3.259 1.049 0 0 5.892</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>29.026 -6.265 2.519 0 0 4.964</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_04</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>-15.580 -9.693 0.172 0 0 1.253</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>-0.614 12.159 0.732 0 0 3.190</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_05</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>34.740 12.506 1.710 0 0 1.219</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>26.156 -6.081 2.548 0 0 1.876</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_06</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>11.054 -13.277 1.207 0 0 1.991</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>10.738 13.969 1.306 0 0 3.077</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_07</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>-1.237 1.206 1.149 0 0 5.836</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>-18.193 1.080 0.014 0 0 2.168</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_08</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>24.496 1.094 2.562 0 0 4.937</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>8.427 1.216 2.404 0 0 2.861</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_09</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>6.618 7.378 1.587 0 0 4.879</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>-6.763 -8.718 0.567 0 0 4.383</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_10</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>-5.873 10.649 0.552 0 0 3.629</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>9.739 -7.460 2.009 0 0 4.873</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_11</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>6.737 -3.334 2.080 0 0 1.408</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>-25.119 6.852 0.000 0 0 4.431</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_12</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>7.569 -11.965 1.106 0 0 3.986</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>25.553 -3.190 2.902 0 0 4.170</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_13</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>29.405 9.297 1.902 0 0 3.826</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>26.169 13.463 1.513 0 0 3.112</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_14</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>7.196 6.265 1.753 0 0 0.768</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>-25.557 0.064 0.015 0 0 3.708</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_15</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>-17.116 11.573 0.183 0 0 2.272</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>29.400 10.477 1.895 0 0 2.767</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_16</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>16.792 -2.536 2.397 0 0 2.252</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>6.713 -1.206 2.308 0 0 4.539</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_17</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>22.366 -5.023 2.230 0 0 4.733</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>-0.941 4.334 1.231 0 0 0.970</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_18</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>25.126 -10.218 1.673 0 0 6.137</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>2.986 13.138 0.849 0 0 2.127</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_19</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>-16.566 -2.729 0.113 0 0 3.143</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>17.719 4.195 2.785 0 0 5.352</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_20</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>25.615 -10.404 1.649 0 0 3.511</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>28.255 10.062 1.966 0 0 2.388</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_21</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>0.268 13.494 0.868 0 0 0.768</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>-7.100 6.124 0.521 0 0 4.771</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_22</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>-5.402 10.234 0.579 0 0 2.024</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>29.577 -12.995 1.542 0 0 0.430</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_23</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>31.932 -14.349 1.757 0 0 2.439</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>13.657 11.786 1.494 0 0 6.267</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_24</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>-14.089 2.353 0.100 0 0 6.048</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>21.287 -1.849 2.924 0 0 0.619</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_25</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>-2.142 4.699 0.919 0 0 1.670</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>13.827 10.432 1.717 0 0 2.788</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_26</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>4.157 2.289 1.811 0 0 1.560</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>17.804 11.296 1.661 0 0 0.289</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_27</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>17.976 0.032 2.528 0 0 5.686</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>24.545 -5.786 2.573 0 0 2.355</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_28</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>-4.874 14.555 0.989 0 0 1.144</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>-18.392 0.873 0.015 0 0 3.556</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_29</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>-18.905 5.127 0.126 0 0 4.608</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>24.306 -9.240 2.016 0 0 0.496</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_30</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>6.253 -14.632 1.210 0 0 6.268</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>29.475 3.352 2.900 0 0 1.513</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_31</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>-12.215 11.855 0.273 0 0 5.599</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>32.247 -9.993 2.041 0 0 2.897</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_32</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>-7.853 11.646 0.450 0 0 2.910</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>-11.237 -6.851 0.249 0 0 0.059</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_33</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>29.477 12.401 1.548 0 0 4.863</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>25.106 11.234 1.765 0 0 4.258</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_34</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>-4.121 2.563 0.711 0 0 6.163</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>-17.574 -1.632 0.038 0 0 2.171</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_35</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>-2.366 -3.632 1.034 0 0 4.321</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>10.780 3.890 2.373 0 0 2.666</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_36</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>-16.555 -7.892 0.137 0 0 1.055</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>-11.494 9.669 0.229 0 0 1.252</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_37</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>2.883 -2.401 1.688 0 0 3.812</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>-2.610 -0.470 1.136 0 0 1.490</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_38</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>7.325 -10.727 1.268 0 0 0.293</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>9.747 2.095 2.450 0 0 6.237</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_39</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>8.862 8.443 1.622 0 0 5.821</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>-8.515 13.382 0.447 0 0 4.136</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_40</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>26.180 -6.312 2.200 0 0 5.436</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>-9.884 1.846 0.294 0 0 4.309</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_41</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>5.707 -6.962 1.639 0 0 0.579</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>21.148 -12.627 1.471 0 0 3.810</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_42</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>4.349 1.439 1.870 0 0 1.754</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>4.784 11.316 1.058 0 0 1.798</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_43</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>-9.259 14.108 0.752 0 0 0.426</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>24.725 2.998 2.932 0 0 2.214</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_44</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>31.667 -2.995 2.578 0 0 4.971</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>14.017 3.385 2.676 0 0 4.259</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_45</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>-13.898 2.240 0.100 0 0 4.783</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>19.581 4.457 2.792 0 0 5.267</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_46</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>3.981 -4.593 1.686 0 0 3.097</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>13.464 11.295 1.567 0 0 4.061</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_47</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>-9.305 -9.228 0.399 0 0 1.515</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>-7.610 -1.657 0.482 0 0 3.642</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_48</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>-17.934 13.121 0.319 0 0 0.461</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>20.336 -11.476 1.654 0 0 1.854</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_49</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>30.993 -15.649 1.955 0 0 4.121</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>21.334 -9.082 2.021 0 0 0.830</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_50</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>10.081 -14.661 1.307 0 0 5.912</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>7.601 13.202 1.091 0 0 3.335</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_51</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>20.192 12.132 1.400 0 0 2.736</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>32.290 9.253 2.129 0 0 1.615</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_52</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>-3.974 -10.050 0.665 0 0 0.708</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>26.430 -0.508 3.044 0 0 5.067</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_53</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>16.902 10.297 1.647 0 0 1.331</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>21.273 -4.516 2.646 0 0 0.724</pose>
       <static>true</static>
     </include>
     <include>
       <name>grass_tuft_54</name>
-      <uri>model://alpine_grass_clump</uri>
-      <pose>-18.572 -4.431 0.169 0 0 0.960</pose>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>35.551 -10.059 2.094 0 0 6.073</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>grass_tuft_55</name>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>28.769 6.278 2.577 0 0 6.157</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>grass_tuft_56</name>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>35.840 8.528 2.314 0 0 2.298</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>grass_tuft_57</name>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>24.185 -13.610 1.472 0 0 3.371</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>grass_tuft_58</name>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>2.016 4.839 1.548 0 0 4.224</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>grass_tuft_59</name>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>10.581 9.028 1.760 0 0 5.908</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>grass_tuft_60</name>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>-20.849 -7.453 0.000 0 0 0.157</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>grass_tuft_61</name>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>30.359 1.719 2.975 0 0 5.751</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>grass_tuft_62</name>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>-13.390 -12.230 0.158 0 0 5.176</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>grass_tuft_63</name>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>32.020 -5.539 2.620 0 0 2.565</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>grass_tuft_64</name>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>-18.775 12.495 0.011 0 0 1.912</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>grass_tuft_65</name>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>4.513 -11.279 1.102 0 0 5.575</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>grass_tuft_66</name>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>-19.046 -1.298 0.021 0 0 4.213</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>grass_tuft_67</name>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>21.047 12.487 1.508 0 0 2.633</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>grass_tuft_68</name>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>20.990 -9.673 1.932 0 0 2.607</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>grass_tuft_69</name>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>-21.465 -0.298 0.003 0 0 2.564</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>grass_tuft_70</name>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>34.800 -13.084 1.629 0 0 2.328</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>grass_tuft_71</name>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>1.263 12.616 0.765 0 0 5.375</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>grass_tuft_72</name>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>-21.443 5.199 0.003 0 0 3.421</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>grass_tuft_73</name>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>36.538 -3.957 2.938 0 0 2.502</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>grass_tuft_74</name>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>-15.473 -10.580 0.051 0 0 5.328</pose>
+      <static>true</static>
+    </include>
+    <include>
+      <name>grass_tuft_75</name>
+      <uri>model://alpine_grass_tussock</uri>
+      <pose>2.011 4.558 1.571 0 0 4.032</pose>
       <static>true</static>
     </include>
 
-    <!-- 6. Weathered Mountain Granite Boulders & Rock Scree -->
-    
+    <!-- Registered NIPUN Anti-Personnel Minelet Stations (Coaster 10cm x 4cm) -->
     <include>
-      <name>boulder_01</name>
-      <uri>model://alpine_boulder_cluster</uri>
-      <pose>0.797 -12.038 0.796 0 -0.062 2.453</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>boulder_02</name>
-      <uri>model://alpine_boulder_cluster</uri>
-      <pose>-6.301 -10.184 0.545 0 0.046 0.874</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>boulder_03</name>
-      <uri>model://alpine_boulder_cluster</uri>
-      <pose>33.806 -13.859 1.784 0 -0.097 3.465</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>boulder_04</name>
-      <uri>model://alpine_boulder_cluster</uri>
-      <pose>15.002 11.599 1.434 0 0.066 0.664</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>boulder_05</name>
-      <uri>model://alpine_boulder_cluster</uri>
-      <pose>26.144 14.335 1.625 0 -0.059 4.902</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>boulder_06</name>
-      <uri>model://alpine_boulder_cluster</uri>
-      <pose>8.446 12.769 1.109 0 -0.099 5.347</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>boulder_07</name>
-      <uri>model://alpine_boulder_cluster</uri>
-      <pose>27.864 9.777 1.810 0 -0.014 1.376</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>boulder_08</name>
-      <uri>model://alpine_boulder_cluster</uri>
-      <pose>-0.361 12.642 0.762 0 -0.082 2.897</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>boulder_09</name>
-      <uri>model://alpine_boulder_cluster</uri>
-      <pose>22.081 12.230 1.416 0 -0.053 5.130</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>boulder_10</name>
-      <uri>model://alpine_boulder_cluster</uri>
-      <pose>10.702 15.044 1.410 0 0.034 1.832</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>boulder_11</name>
-      <uri>model://alpine_boulder_cluster</uri>
-      <pose>6.587 11.060 1.141 0 -0.050 0.693</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>boulder_12</name>
-      <uri>model://alpine_boulder_cluster</uri>
-      <pose>1.255 -17.993 1.979 0 0.095 5.753</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>boulder_13</name>
-      <uri>model://alpine_boulder_cluster</uri>
-      <pose>16.649 -16.828 1.894 0 0.021 5.506</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>boulder_14</name>
-      <uri>model://alpine_boulder_cluster</uri>
-      <pose>6.793 -17.970 1.970 0 -0.099 3.180</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>boulder_15</name>
-      <uri>model://alpine_boulder_cluster</uri>
-      <pose>4.118 -16.347 1.514 0 -0.079 2.793</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>boulder_16</name>
-      <uri>model://alpine_boulder_cluster</uri>
-      <pose>18.624 15.710 1.700 0 0.044 1.204</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>boulder_17</name>
-      <uri>model://alpine_boulder_cluster</uri>
-      <pose>10.514 13.328 1.229 0 -0.048 2.432</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>boulder_18</name>
-      <uri>model://alpine_boulder_cluster</uri>
-      <pose>-8.506 17.224 1.733 0 -0.027 4.899</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>boulder_19</name>
-      <uri>model://alpine_boulder_cluster</uri>
-      <pose>-5.161 -12.558 0.585 0 0.083 0.761</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>boulder_20</name>
-      <uri>model://alpine_boulder_cluster</uri>
-      <pose>7.333 -14.750 1.252 0 0.024 2.579</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>boulder_21</name>
-      <uri>model://alpine_boulder_cluster</uri>
-      <pose>14.932 13.983 1.399 0 -0.034 6.124</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>boulder_22</name>
-      <uri>model://alpine_boulder_cluster</uri>
-      <pose>28.364 -11.141 1.583 0 -0.053 2.760</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>boulder_23</name>
-      <uri>model://alpine_boulder_cluster</uri>
-      <pose>-5.509 -17.092 1.700 0 0.064 5.258</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>boulder_24</name>
-      <uri>model://alpine_boulder_cluster</uri>
-      <pose>32.470 12.229 1.628 0 -0.017 2.433</pose>
-      <static>true</static>
-    </include>
-
-    <!-- 7. Alpine Conifer Pine Trees Framing Mountain Ridges -->
-    
-    <include>
-      <name>pine_tree_01</name>
-      <uri>model://alpine_pine_tree</uri>
-      <pose>-16.521 16.077 1.131 0 0 1.097</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>pine_tree_02</name>
-      <uri>model://alpine_pine_tree</uri>
-      <pose>-14.465 -18.089 1.932 0 0 0.408</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>pine_tree_03</name>
-      <uri>model://alpine_pine_tree</uri>
-      <pose>-33.165 30.242 7.700 0 0 4.007</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>pine_tree_04</name>
-      <uri>model://alpine_pine_tree</uri>
-      <pose>6.857 -28.414 6.687 0 0 6.236</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>pine_tree_05</name>
-      <uri>model://alpine_pine_tree</uri>
-      <pose>16.250 21.546 3.374 0 0 2.681</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>pine_tree_06</name>
-      <uri>model://alpine_pine_tree</uri>
-      <pose>3.307 23.609 4.235 0 0 1.069</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>pine_tree_07</name>
-      <uri>model://alpine_pine_tree</uri>
-      <pose>-31.355 -19.073 1.902 0 0 3.632</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>pine_tree_08</name>
-      <uri>model://alpine_pine_tree</uri>
-      <pose>-20.384 -19.291 2.229 0 0 4.466</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>pine_tree_09</name>
-      <uri>model://alpine_pine_tree</uri>
-      <pose>37.297 17.343 2.519 0 0 0.563</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>pine_tree_10</name>
-      <uri>model://alpine_pine_tree</uri>
-      <pose>-31.710 25.629 4.956 0 0 1.308</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>pine_tree_11</name>
-      <uri>model://alpine_pine_tree</uri>
-      <pose>-32.256 31.396 8.440 0 0 5.259</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>pine_tree_12</name>
-      <uri>model://alpine_pine_tree</uri>
-      <pose>26.382 -22.925 4.408 0 0 4.157</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>pine_tree_13</name>
-      <uri>model://alpine_pine_tree</uri>
-      <pose>14.505 23.285 4.046 0 0 0.548</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>pine_tree_14</name>
-      <uri>model://alpine_pine_tree</uri>
-      <pose>-18.369 -22.409 3.756 0 0 2.291</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>pine_tree_15</name>
-      <uri>model://alpine_pine_tree</uri>
-      <pose>-2.598 20.737 3.090 0 0 3.350</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>pine_tree_16</name>
-      <uri>model://alpine_pine_tree</uri>
-      <pose>30.078 32.678 10.135 0 0 5.591</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>pine_tree_17</name>
-      <uri>model://alpine_pine_tree</uri>
-      <pose>11.501 18.592 2.216 0 0 2.851</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>pine_tree_18</name>
-      <uri>model://alpine_pine_tree</uri>
-      <pose>15.454 -19.102 2.469 0 0 0.185</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>pine_tree_19</name>
-      <uri>model://alpine_pine_tree</uri>
-      <pose>-12.188 -27.277 6.649 0 0 5.234</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>pine_tree_20</name>
-      <uri>model://alpine_pine_tree</uri>
-      <pose>23.797 -22.259 3.992 0 0 1.248</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>pine_tree_21</name>
-      <uri>model://alpine_pine_tree</uri>
-      <pose>-31.945 -32.257 9.014 0 0 4.737</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>pine_tree_22</name>
-      <uri>model://alpine_pine_tree</uri>
-      <pose>16.074 32.277 9.197 0 0 1.454</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>pine_tree_23</name>
-      <uri>model://alpine_pine_tree</uri>
-      <pose>-5.456 18.444 2.197 0 0 4.795</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>pine_tree_24</name>
-      <uri>model://alpine_pine_tree</uri>
-      <pose>2.585 -29.829 7.723 0 0 2.105</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>pine_tree_25</name>
-      <uri>model://alpine_pine_tree</uri>
-      <pose>37.209 -26.507 6.254 0 0 2.122</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>pine_tree_26</name>
-      <uri>model://alpine_pine_tree</uri>
-      <pose>2.028 20.235 2.782 0 0 4.339</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>pine_tree_27</name>
-      <uri>model://alpine_pine_tree</uri>
-      <pose>19.761 18.587 2.456 0 0 0.924</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>pine_tree_28</name>
-      <uri>model://alpine_pine_tree</uri>
-      <pose>14.977 28.338 6.684 0 0 4.844</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>pine_tree_29</name>
-      <uri>model://alpine_pine_tree</uri>
-      <pose>32.819 -22.228 4.208 0 0 3.141</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>pine_tree_30</name>
-      <uri>model://alpine_pine_tree</uri>
-      <pose>-34.596 -27.697 6.163 0 0 1.412</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>pine_tree_31</name>
-      <uri>model://alpine_pine_tree</uri>
-      <pose>-2.130 -25.497 5.432 0 0 0.297</pose>
-      <static>true</static>
-    </include>
-    <include>
-      <name>pine_tree_32</name>
-      <uri>model://alpine_pine_tree</uri>
-      <pose>-1.938 -32.411 9.651 0 0 2.785</pose>
-      <static>true</static>
-    </include>
-
-    <!-- 8. 18 Registered NIPUN Anti-Personnel Minelets -->
-    
-    <include>
-      <name>nipun_wf_1_north_flank</name>
+      <name>nipun_mine_01</name>
       <uri>model://nipun_mine_marker</uri>
-      <pose>12.000 6.000 2.079 0 0 0</pose>
+      <pose>12.000 6.000 2.245 0 0 0</pose>
       <static>true</static>
     </include>
     <include>
-      <name>nipun_wf_2_north_valley</name>
+      <name>nipun_mine_02</name>
       <uri>model://nipun_mine_marker</uri>
-      <pose>8.500 3.000 2.160 0 0 0</pose>
+      <pose>8.500 3.000 2.265 0 0 0</pose>
       <static>true</static>
     </include>
     <include>
-      <name>nipun_wf_3_center_apex</name>
+      <name>nipun_mine_03</name>
       <uri>model://nipun_mine_marker</uri>
-      <pose>12.000 0.000 2.518 0 0 0</pose>
+      <pose>12.000 0.000 2.736 0 0 0</pose>
       <static>true</static>
     </include>
     <include>
-      <name>nipun_wf_4_south_valley</name>
+      <name>nipun_mine_04</name>
       <uri>model://nipun_mine_marker</uri>
-      <pose>8.500 -3.000 2.274 0 0 0</pose>
+      <pose>8.500 -3.000 2.428 0 0 0</pose>
       <static>true</static>
     </include>
     <include>
-      <name>nipun_wf_5_south_flank</name>
+      <name>nipun_mine_05</name>
       <uri>model://nipun_mine_marker</uri>
-      <pose>12.000 -6.000 2.177 0 0 0</pose>
+      <pose>12.000 -6.000 2.365 0 0 0</pose>
       <static>true</static>
     </include>
     <include>
-      <name>nipun_meadow_alpha_1</name>
+      <name>nipun_mine_06</name>
       <uri>model://nipun_mine_marker</uri>
-      <pose>3.500 4.500 1.597 0 0 0</pose>
+      <pose>3.500 4.500 1.716 0 0 0</pose>
       <static>true</static>
     </include>
     <include>
-      <name>nipun_meadow_alpha_2</name>
+      <name>nipun_mine_07</name>
       <uri>model://nipun_mine_marker</uri>
-      <pose>5.000 -5.200 1.746 0 0 0</pose>
+      <pose>5.000 -5.200 1.851 0 0 0</pose>
       <static>true</static>
     </include>
     <include>
-      <name>nipun_meadow_bravo_1</name>
+      <name>nipun_mine_08</name>
       <uri>model://nipun_mine_marker</uri>
-      <pose>16.500 7.500 2.043 0 0 0</pose>
+      <pose>16.500 7.500 2.287 0 0 0</pose>
       <static>true</static>
     </include>
     <include>
-      <name>nipun_meadow_bravo_2</name>
+      <name>nipun_mine_09</name>
       <uri>model://nipun_mine_marker</uri>
-      <pose>15.000 -8.000 1.918 0 0 0</pose>
+      <pose>15.000 -8.000 2.162 0 0 0</pose>
       <static>true</static>
     </include>
     <include>
-      <name>nipun_meadow_charlie_1</name>
+      <name>nipun_mine_10</name>
       <uri>model://nipun_mine_marker</uri>
-      <pose>20.000 2.500 2.533 0 0 0</pose>
+      <pose>20.000 2.500 2.960 0 0 0</pose>
       <static>true</static>
     </include>
     <include>
-      <name>nipun_meadow_charlie_2</name>
+      <name>nipun_mine_11</name>
       <uri>model://nipun_mine_marker</uri>
-      <pose>22.500 -3.500 2.367 0 0 0</pose>
+      <pose>22.500 -3.500 2.810 0 0 0</pose>
       <static>true</static>
     </include>
     <include>
-      <name>nipun_pass_delta_1</name>
+      <name>nipun_mine_12</name>
       <uri>model://nipun_mine_marker</uri>
-      <pose>26.000 5.000 2.314 0 0 0</pose>
+      <pose>26.000 5.000 2.733 0 0 0</pose>
       <static>true</static>
     </include>
     <include>
-      <name>nipun_pass_delta_2</name>
+      <name>nipun_mine_13</name>
       <uri>model://nipun_mine_marker</uri>
-      <pose>27.500 -4.800 2.390 0 0 0</pose>
+      <pose>27.500 -4.800 2.714 0 0 0</pose>
       <static>true</static>
     </include>
     <include>
-      <name>nipun_ridge_echo_1</name>
+      <name>nipun_mine_14</name>
       <uri>model://nipun_mine_marker</uri>
-      <pose>10.500 10.500 1.453 0 0 0</pose>
+      <pose>10.500 10.500 1.554 0 0 0</pose>
       <static>true</static>
     </include>
     <include>
-      <name>nipun_ridge_echo_2</name>
+      <name>nipun_mine_15</name>
       <uri>model://nipun_mine_marker</uri>
-      <pose>11.000 -11.000 1.386 0 0 0</pose>
+      <pose>11.000 -11.000 1.504 0 0 0</pose>
       <static>true</static>
     </include>
     <include>
-      <name>nipun_perimeter_foxtrot_1</name>
+      <name>nipun_mine_16</name>
       <uri>model://nipun_mine_marker</uri>
-      <pose>31.000 1.500 2.651 0 0 0</pose>
+      <pose>31.000 1.500 2.972 0 0 0</pose>
       <static>true</static>
     </include>
     <include>
-      <name>nipun_perimeter_foxtrot_2</name>
+      <name>nipun_mine_17</name>
       <uri>model://nipun_mine_marker</uri>
-      <pose>32.500 -6.500 2.293 0 0 0</pose>
+      <pose>32.500 -6.500 2.526 0 0 0</pose>
       <static>true</static>
     </include>
     <include>
-      <name>nipun_reserve_golf_1</name>
+      <name>nipun_mine_18</name>
       <uri>model://nipun_mine_marker</uri>
-      <pose>-2.000 0.500 1.057 0 0 0</pose>
+      <pose>-2.000 0.500 1.211 0 0 0</pose>
       <static>true</static>
     </include>
 

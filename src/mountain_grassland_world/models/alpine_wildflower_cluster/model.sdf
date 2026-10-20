@@ -4,16 +4,31 @@
     <static>true</static>
     <link name="link">
       <visual name="visual">
-        <geometry><mesh><uri>model://alpine_wildflower_cluster/meshes/visual.dae</uri></mesh></geometry>
+        <geometry>
+          <mesh>
+            <uri>model://alpine_wildflower_cluster/meshes/visual.dae</uri>
+          </mesh>
+        </geometry>
         <material>
-          <ambient>0.2 0.6 0.9 1.0</ambient>
-          <diffuse>0.3 0.7 1.0 1.0</diffuse>
-          <pbr><metal><albedo_map>/home/nammy/army_mine_bot/src/mountain_grassland_world/materials/textures/alpine_wildflower_poppy.png</albedo_map><roughness>0.8</roughness></metal></pbr>
+          <double_sided>true</double_sided>
+          <diffuse>1.0 1.0 1.0 1.0</diffuse>
+          <pbr>
+            <metal>
+              <albedo_map>model://alpine_wildflower_cluster/materials/textures/alpine_wildflower_poppy.png</albedo_map>
+              <roughness>0.82</roughness>
+              <metalness>0.0</metalness>
+            </metal>
+          </pbr>
         </material>
       </visual>
       <collision name="collision">
-        <geometry><box><size>0.35 0.35 0.30</size></box></geometry>
-        <pose>0 0 0.15 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.21</radius>
+            <length>0.27</length>
+          </cylinder>
+        </geometry>
+        <pose>0 0 0.14 0 0 0</pose>
       </collision>
     </link>
   </model>

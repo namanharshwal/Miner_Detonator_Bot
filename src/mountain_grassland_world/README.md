@@ -29,9 +29,9 @@ The dashboard demonstrates end-to-end integration: Gazebo Sim Harmonic 8.14 rend
 ![Mountain Grassland Verification Dashboard](../../docs/images/mountain_grassland_verification_dashboard.png)
 
 ### Key Views
-| Alpine Meadow & Flora (Gazebo Sim) | RealSense 3D Perception & SLAM (RViz2) |
-|:---:|:---:|
-| ![Gazebo Meadow](../../docs/images/gazebo_mountain_grassland_meadow.png) | ![RViz Perception](../../docs/images/rviz_mountain_grassland_driving.png) |
+| Alpine Meadow & Flora (Gazebo Sim) | RealSense 3D Perception & SLAM (RViz2) | Executive Remote Controller (RGB-D Mode) |
+|:---:|:---:|:---:|
+| ![Gazebo Meadow](../../docs/images/gazebo_mountain_grassland_meadow.png) | ![RViz Perception](../../docs/images/rviz_mountain_grassland_driving.png) | ![Remote Controller](../../docs/images/remote_mountain_grassland_driving.png) |
 
 ---
 
@@ -48,26 +48,44 @@ mountain_grassland_world/
 │   ├── mountain_grassland_world.launch.py     # Standalone Gazebo world launcher
 │   ├── mountain_grassland_with_amr.launch.py  # Master full-stack launcher (World + AMR + SLAM + RViz)
 │   └── view_grassland_mines_rviz.launch.py    # Standalone RViz2 minelet visualizer
-├── materials/textures/                  # Procedural high-resolution PBR textures
-│   ├── alpine_grass_meadow.png          # 1024x1024 lush mountain turf texture
-│   ├── alpine_wildflower_poppy.png      # 512x512 transparent Himalayan blue poppy
-│   ├── alpine_wildflower_buttercup.png  # 512x512 transparent yellow alpine buttercup
-│   ├── alpine_wildflower_daisy.png      # 512x512 transparent mountain daisy
-│   ├── mountain_rock_cliff.png          # 512x512 weathered granite rock texture
-│   ├── alpine_pine_bark.png             # Conifer trunk bark texture
-│   └── alpine_pine_foliage.png          # Conifer needle bough texture
-├── models/                              # Standalone Gazebo SDF models with collision meshes
-│   ├── alpine_mountain_terrain/         # 100m x 80m continuous mountain slope mesh (<= 1:8 gradient)
-│   ├── alpine_grass_clump/              # 4-plane volumetric ryegrass / fescue tufts
-│   ├── alpine_wildflower_cluster/       # 3-plane intersecting poppy / buttercup flowers
-│   ├── alpine_boulder_cluster/          # Weathered granite rock clusters with collision STL
-│   ├── alpine_pine_tree/                # 4-tier conifer tree model
-│   ├── border_meadow_outpost/           # Fortified outpost shelter, mast & sandbags
+├── materials/textures/                  # 2048x2048 & 1024x1024 Photorealistic PBR Textures
+│   ├── alpine_grass_meadow.png          # High-density mountain turf & soil
+│   ├── alpine_grass_meadow_normal.png   # Tangent-space grass blade & soil normal map
+│   ├── alpine_grass_meadow_roughness.png# PBR roughness map
+│   ├── mountain_rock_cliff.png          # Granite metamorphic rock with lichen & quartz
+│   ├── mountain_rock_cliff_normal.png   # Deep granite fracture normal map
+│   ├── mountain_rock_cliff_roughness.png
+│   ├── alpine_pine_foliage.png          # Alpha-masked conifer needle boughs
+│   ├── alpine_pine_bark.png             # Conifer trunk furrowed bark
+│   ├── alpine_wildflower_poppy.png      # Himalayan blue poppy (Meconopsis)
+│   ├── alpine_wildflower_buttercup.png  # Golden alpine buttercup (Ranunculus)
+│   ├── alpine_wildflower_daisy.png      # Mountain chamomile daisy (Asteraceae)
+│   ├── alpine_wildflower_gentian.png    # Royal purple alpine gentian
+│   └── alpine_dwarf_rhododendron.png    # Mountain evergreen shrub with pink blooms
+├── models/                              # Photorealistic 3D SDF Models with PBR Materials
+│   ├── alpine_mountain_terrain/         # 110m x 90m continuous slope mesh (<= 1:8 gradient)
+│   ├── alpine_mountain_peaks/           # 360-degree surrounding Himalayan mountain horizon ring
+│   ├── alpine_pine_tree/                # High-fidelity 3D conifer pine tree with bark & needle boughs
+│   ├── alpine_glacial_boulder/          # Photogrammetry-scanned large granite erratic boulder
+│   ├── alpine_medium_boulder/           # Photogrammetry-scanned medium mountain boulder
+│   ├── alpine_meadow_rock/              # Photogrammetry-scanned weathered field rock
+│   ├── alpine_granite_rock_2/           # Photogrammetry-scanned fractured rock fragment
+│   ├── alpine_talus_scree/              # Photogrammetry-scanned scree stone scatter
+│   ├── alpine_wildflower_poppy/         # Volumetric Himalayan blue poppy bouquet with basal rosette
+│   ├── alpine_wildflower_buttercup/     # Volumetric golden buttercup cluster
+│   ├── alpine_wildflower_daisy/         # Volumetric mountain daisy bed
+│   ├── alpine_wildflower_gentian/       # Volumetric purple gentian cluster
+│   ├── alpine_dwarf_rhododendron/       # Volumetric dwarf mountain shrub dome
+│   ├── alpine_grass_tussock/            # Volumetric tall fescue grass tuft
+│   ├── alpine_grass_clump/              # Multi-blade ryegrass clump
+│   ├── border_meadow_outpost/           # Fortified outpost shelter (camo canvas, sandbags, comms mast)
 │   └── nipun_mine_marker/               # 10cm dia x 4cm coaster-sized NIPUN minelet with LED
 ├── rviz/
 │   └── mountain_grassland_slam.rviz     # Tailored RViz2 layout with RealSense RGB-D & LiDAR
 └── scripts/
-    ├── build_mountain_grassland_world.py # Master procedural procedural mesh generator
+    ├── install_photorealistic_assets.py # Configures photogrammetry rocks and conifer models
+    ├── create_realistic_textures.py     # Generates 2048x2048 PBR albedo, normal & roughness textures
+    ├── build_realistic_models_and_world.py # Master procedural terrain & world builder
     └── grassland_mine_tracker_node.py   # Publishes /mountain_grassland/markers & /mines
 ```
 

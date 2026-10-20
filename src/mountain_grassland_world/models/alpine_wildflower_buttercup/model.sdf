@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="alpine_wildflower_buttercup">
+    <static>true</static>
+    <link name="link">
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://alpine_wildflower_buttercup/meshes/visual.dae</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <double_sided>true</double_sided>
+          <diffuse>1.0 1.0 1.0 1.0</diffuse>
+          <pbr>
+            <metal>
+              <albedo_map>model://alpine_wildflower_buttercup/materials/textures/alpine_wildflower_buttercup.png</albedo_map>
+              <roughness>0.82</roughness>
+              <metalness>0.0</metalness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+      <collision name="collision">
+        <geometry>
+          <cylinder>
+            <radius>0.17</radius>
+            <length>0.21</length>
+          </cylinder>
+        </geometry>
+        <pose>0 0 0.10 0 0 0</pose>
+      </collision>
+    </link>
+  </model>
+</sdf>

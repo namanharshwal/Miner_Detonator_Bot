@@ -3,18 +3,56 @@
   <model name="alpine_pine_tree">
     <static>true</static>
     <link name="link">
-      <visual name="visual">
-        <geometry><mesh><uri>model://alpine_pine_tree/meshes/visual.dae</uri></mesh></geometry>
+      <collision name="collision">
+        <geometry>
+          <cylinder>
+            <radius>0.30</radius>
+            <length>8.5</length>
+          </cylinder>
+        </geometry>
+        <pose>0 0 4.25 0 0 0</pose>
+      </collision>
+      <visual name="branch">
+        <geometry>
+          <mesh>
+            <uri>model://alpine_pine_tree/meshes/pine_tree.dae</uri>
+            <submesh>
+              <name>Branch</name>
+            </submesh>
+          </mesh>
+        </geometry>
         <material>
-          <ambient>0.15 0.38 0.20 1.0</ambient>
-          <diffuse>0.22 0.52 0.28 1.0</diffuse>
-          <pbr><metal><albedo_map>/home/nammy/army_mine_bot/src/mountain_grassland_world/materials/textures/alpine_pine_foliage.png</albedo_map><roughness>0.9</roughness></metal></pbr>
+          <double_sided>true</double_sided>
+          <diffuse>1.0 1.0 1.0 1.0</diffuse>
+          <pbr>
+            <metal>
+              <albedo_map>model://alpine_pine_tree/materials/textures/branch_2_diffuse.png</albedo_map>
+              <roughness>0.85</roughness>
+              <metalness>0.0</metalness>
+            </metal>
+          </pbr>
         </material>
       </visual>
-      <collision name="collision">
-        <geometry><cylinder><radius>0.25</radius><length>4.5</length></cylinder></geometry>
-        <pose>0 0 2.25 0 0 0</pose>
-      </collision>
+      <visual name="bark">
+        <geometry>
+          <mesh>
+            <uri>model://alpine_pine_tree/meshes/pine_tree.dae</uri>
+            <submesh>
+              <name>Bark</name>
+            </submesh>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>1.0 1.0 1.0 1.0</diffuse>
+          <pbr>
+            <metal>
+              <albedo_map>model://alpine_pine_tree/materials/textures/bark_diffuse.png</albedo_map>
+              <roughness>0.90</roughness>
+              <metalness>0.0</metalness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
     </link>
   </model>
 </sdf>

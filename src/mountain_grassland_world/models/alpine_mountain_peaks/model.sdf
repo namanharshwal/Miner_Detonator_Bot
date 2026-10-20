@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="alpine_mountain_peaks">
+    <static>true</static>
+    <link name="link">
+      <visual name="visual">
+        <geometry><mesh><uri>model://alpine_mountain_peaks/meshes/visual.dae</uri></mesh></geometry>
+        <material>
+          <ambient>0.85 0.85 0.88 1.0</ambient>
+          <diffuse>1.0 1.0 1.0 1.0</diffuse>
+          <specular>0.15 0.15 0.15 1.0</specular>
+          <pbr>
+            <metal>
+              <albedo_map>/home/nammy/army_mine_bot/src/mountain_grassland_world/materials/textures/mountain_rock_cliff.png</albedo_map>
+              <normal_map>/home/nammy/army_mine_bot/src/mountain_grassland_world/materials/textures/mountain_rock_cliff_normal.png</normal_map>
+              <roughness_map>/home/nammy/army_mine_bot/src/mountain_grassland_world/materials/textures/mountain_rock_cliff_roughness.png</roughness_map>
+              <roughness>0.9</roughness>
+              <metalness>0.0</metalness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+      <collision name="collision">
+        <geometry><mesh><uri>model://alpine_mountain_peaks/meshes/collision.stl</uri></mesh></geometry>
+      </collision>
+    </link>
+  </model>
+</sdf>

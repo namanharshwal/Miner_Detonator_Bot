@@ -4,15 +4,28 @@
     <static>true</static>
     <link name="link">
       <visual name="visual">
-        <geometry><mesh><uri>model://border_meadow_outpost/meshes/visual.dae</uri></mesh></geometry>
+        <geometry>
+          <mesh>
+            <uri>model://border_meadow_outpost/meshes/visual.dae</uri>
+          </mesh>
+        </geometry>
         <material>
-          <ambient>0.35 0.42 0.30 1.0</ambient>
-          <diffuse>0.48 0.58 0.42 1.0</diffuse>
-          <specular>0.2 0.2 0.2 1.0</specular>
+          <diffuse>1.0 1.0 1.0 1.0</diffuse>
+          <pbr>
+            <metal>
+              <albedo_map>model://border_meadow_outpost/materials/textures/camo_military.png</albedo_map>
+              <roughness>0.88</roughness>
+              <metalness>0.0</metalness>
+            </metal>
+          </pbr>
         </material>
       </visual>
       <collision name="collision">
-        <geometry><mesh><uri>model://border_meadow_outpost/meshes/collision.stl</uri></mesh></geometry>
+        <geometry>
+          <mesh>
+            <uri>model://border_meadow_outpost/meshes/collision.stl</uri>
+          </mesh>
+        </geometry>
       </collision>
     </link>
   </model>

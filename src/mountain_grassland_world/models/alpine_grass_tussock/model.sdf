@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="alpine_grass_tussock">
+    <static>true</static>
+    <link name="link">
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://alpine_grass_tussock/meshes/visual.dae</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <double_sided>true</double_sided>
+          <diffuse>1.0 1.0 1.0 1.0</diffuse>
+          <pbr>
+            <metal>
+              <albedo_map>model://alpine_grass_tussock/materials/textures/alpine_grass_meadow.png</albedo_map>
+              <roughness>0.85</roughness>
+              <metalness>0.0</metalness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+      <collision name="collision">
+        <geometry>
+          <cylinder>
+            <radius>0.25</radius>
+            <length>0.40</length>
+          </cylinder>
+        </geometry>
+        <pose>0 0 0.20 0 0 0</pose>
+      </collision>
+    </link>
+  </model>
+</sdf>
