@@ -142,9 +142,9 @@ Visualization Manager:
       Class: rviz_default_plugins/PointCloud2
       Color: 255; 165; 0
       Color Transformer: AxisColor
-      Decay Time: 0.1
+      Decay Time: 0.5
       Enabled: true
-      Name: RealSense Depth Cloud
+      Name: RealSense Depth Cloud (Front FOV)
       Position Tolerance: 0.1
       Queue Size: 10
       Selectable: true
@@ -157,6 +157,66 @@ Visualization Manager:
         History Policy: Keep Last
         Reliability Policy: Reliable
         Value: /camera/depth/points
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: true
+
+    - Alpha: 0.9
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 5
+        Min Value: -2
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz_default_plugins/PointCloud2
+      Color: 0; 255; 100
+      Color Transformer: Intensity
+      Decay Time: 0.2
+      Enabled: true
+      Name: Real-Time Fused PointCloud (Camera+LiDAR)
+      Position Tolerance: 0.1
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.03
+      Style: Points
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /perception/points_fused
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: true
+
+    - Alpha: 0.95
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 5
+        Min Value: -2
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz_default_plugins/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: AxisColor
+      Decay Time: 0.0
+      Enabled: true
+      Name: Static Continuous 3D PointCloud (Persistent Map)
+      Position Tolerance: 0.1
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.04
+      Style: Points
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /perception/static_continuous_pointcloud
       Use Fixed Frame: true
       Use rainbow: true
       Value: true

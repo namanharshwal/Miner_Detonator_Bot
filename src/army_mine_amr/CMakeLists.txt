@@ -31,6 +31,7 @@ install(PROGRAMS
   scripts/amr_mine_laying_controller.py
   scripts/amr_teleop_keyboard.py
   scripts/gz_harmonic_bridge.py
+  scripts/static_pointcloud_fusion_node.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

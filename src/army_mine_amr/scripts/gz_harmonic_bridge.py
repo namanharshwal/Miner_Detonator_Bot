@@ -353,7 +353,7 @@ class GzHarmonicRosBridge(RosNode):
     def gz_camera_points_callback(self, msg: pointcloud_packed_pb2.PointCloudPacked):
         ros_msg = PointCloud2()
         ros_msg.header.stamp = self._pb_stamp_to_ros(msg.header.stamp if msg.HasField('header') else None)
-        ros_msg.header.frame_id = 'camera_depth_optical_frame'
+        ros_msg.header.frame_id = 'camera_link'
         ros_msg.height = msg.height
         ros_msg.width = msg.width
         ros_msg.is_bigendian = msg.is_bigendian

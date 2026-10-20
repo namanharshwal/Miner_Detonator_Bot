@@ -218,7 +218,7 @@
           </noise>
         </camera>
         <pose>0.133 0 0.193 0 0 0</pose>
-        <gz_frame_id>camera_depth_optical_frame</gz_frame_id>
+        <gz_frame_id>camera_link</gz_frame_id>
       </sensor>
     </link>
     <!-- ================= 4-WHEEL ALL-TERRAIN SKID-STEER DRIVE ================= -->

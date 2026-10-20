@@ -23,10 +23,10 @@ Engineered strictly against the client requirements defined in `1.docx`, this pa
 
 ## 🖼️ Visual Showcase
 
-### Full Simulation Verification & Telemetry Dashboard
-The dashboard demonstrates end-to-end integration: Gazebo Sim Harmonic 8.14 rendering the alpine meadow, RViz2 visual sensor fusion (RealSense D435 dense point cloud, 16-beam 4D LiDAR, SLAM occupancy grid), and the Army Executive Virtual Remote Controller in RGB-D Depth mode.
+### Full Simulation, Front FOV Depth Camera & PointCloud Fusion Verification Dashboard
+The dashboard demonstrates end-to-end integration: Gazebo Sim Harmonic 8.14 rendering the alpine meadow, RViz2 visual sensor fusion (RealSense D435 forward FOV point cloud, 16-beam 4D LiDAR, Real-Time Fused PointCloud, and the continuous persistent Static 3D PointCloud in the fixed `map` frame), alongside the Army Executive Virtual Remote Controller in RGB-D Depth mode.
 
-![Mountain Grassland Verification Dashboard](../../docs/images/mountain_grassland_verification_dashboard.png)
+![PointCloud Fusion Verification Dashboard](../../docs/images/pointcloud_fusion_verification_dashboard.png)
 
 ### Key Views
 | Alpine Meadow & Flora (Gazebo Sim) | RealSense 3D Perception & SLAM (RViz2) | Executive Remote Controller (RGB-D Mode) |
@@ -81,12 +81,13 @@ mountain_grassland_world/
 │   ├── border_meadow_outpost/           # Fortified outpost shelter (camo canvas, sandbags, comms mast)
 │   └── nipun_mine_marker/               # 10cm dia x 4cm coaster-sized NIPUN minelet with LED
 ├── rviz/
-│   └── mountain_grassland_slam.rviz     # Tailored RViz2 layout with RealSense RGB-D & LiDAR
+│   └── mountain_grassland_slam.rviz     # Tailored RViz2 layout with RealSense RGB-D, 4D LiDAR & Static Cloud
 └── scripts/
     ├── install_photorealistic_assets.py # Configures photogrammetry rocks and conifer models
     ├── create_realistic_textures.py     # Generates 2048x2048 PBR albedo, normal & roughness textures
     ├── build_realistic_models_and_world.py # Master procedural terrain & world builder
-    └── grassland_mine_tracker_node.py   # Publishes /mountain_grassland/markers & /mines
+    ├── grassland_mine_tracker_node.py   # Publishes /mountain_grassland/markers & /mines
+    └── static_pointcloud_fusion_node.py # Real-time sensor fusion & persistent 3D voxel pointcloud accumulator
 ```
 
 ---
@@ -128,8 +129,10 @@ To teleoperate the robot across the alpine meadow and monitor RealSense depth te
 | `/mountain_grassland/mines` | `geometry_msgs/msg/PoseArray` | Metric 3D poses of all registered mine stations |
 | `/camera/image_raw` | `sensor_msgs/msg/Image` | Forward RealSense D435 optical RGB camera feed (640x480 @ 20 Hz) |
 | `/camera/depth/image_raw` | `sensor_msgs/msg/Image` | Metric depth map stream (`32FC1`) |
-| `/camera/depth/points` | `sensor_msgs/msg/PointCloud2` | Dense 3D point cloud of grass, flowers, boulders, and terrain |
-| `/lidar4d/points_raw` | `sensor_msgs/msg/PointCloud2` | 16-beam 4D LiDAR terrain point cloud |
+| `/camera/depth/points` | `sensor_msgs/msg/PointCloud2` | Dense 3D point cloud strictly aligned with front FOV (`camera_link`, forward depth along +X) |
+| `/lidar4d/points_raw` | `sensor_msgs/msg/PointCloud2` | 16-beam 4D LiDAR terrain point cloud (360° surround) |
+| `/perception/points_fused` | `sensor_msgs/msg/PointCloud2` | Real-time live fused 3D point cloud combining RealSense front sector + 4D LiDAR in `base_link` (10 Hz) |
+| `/perception/static_continuous_pointcloud` | `sensor_msgs/msg/PointCloud2` | Continuous accumulated static 3D point cloud in fixed `map` frame (8cm voxel resolution, persistent map) |
 | `/scan` | `sensor_msgs/msg/LaserScan` | 2D horizontal planar laser scan for SLAM |
 | `/map` | `nav_msgs/msg/OccupancyGrid` | Real-time SLAM occupancy grid map |
 | `/odom` | `nav_msgs/msg/Odometry` | Wheel odometry fused with 4WD skid-steer kinematics |

@@ -26,6 +26,7 @@ install(DIRECTORY
 # Install python scripts
 install(PROGRAMS
   scripts/grassland_mine_tracker_node.py
+  scripts/static_pointcloud_fusion_node.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

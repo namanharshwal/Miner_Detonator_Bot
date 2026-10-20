@@ -80,7 +80,22 @@ def generate_launch_description():
         parameters=[{'use_sim_time': True}]
     )
 
-    # 6. SLAM Toolbox Node (Async 2D Occupancy Grid Mapping)
+    # 6. Static Continuous PointCloud & Sensor Fusion Node (RealSense FRONT + 4D LiDAR)
+    pointcloud_fusion_node = Node(
+        package='mountain_grassland_world',
+        executable='static_pointcloud_fusion_node.py',
+        name='static_pointcloud_fusion_node',
+        output='screen',
+        parameters=[{
+            'use_sim_time': True,
+            'static_frame': 'map',
+            'robot_frame': 'base_link',
+            'voxel_size': 0.08,
+            'max_static_points': 120000
+        }]
+    )
+
+    # 7. SLAM Toolbox Node (Async 2D Occupancy Grid Mapping)
     slam_node = Node(
         package='slam_toolbox',
         executable='async_slam_toolbox_node',
@@ -89,7 +104,7 @@ def generate_launch_description():
         parameters=[slam_config, {'use_sim_time': True}]
     )
 
-    # 7. RViz2 Visualization (Side-by-side with Gazebo)
+    # 8. RViz2 Visualization (Side-by-side with Gazebo)
     rviz_args = ['-geometry', '1380x1520+1460+35']
     if os.path.exists(rviz_config):
         rviz_args.extend(['-d', rviz_config])
@@ -109,6 +124,7 @@ def generate_launch_description():
         gz_bridge,
         grassland_tracker,
         mine_laying_controller,
+        pointcloud_fusion_node,
         slam_node,
         rviz_node
     ])

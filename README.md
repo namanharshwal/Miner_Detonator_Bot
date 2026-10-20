@@ -80,6 +80,11 @@ A dedicated, photorealistic **High-Altitude Alpine Meadow World** built as an in
 |:---:|:---:|:---:|
 | ![Gazebo Meadow](docs/images/gazebo_mountain_grassland_meadow.png) | ![RViz Perception](docs/images/rviz_mountain_grassland_driving.png) | ![Remote Controller](docs/images/remote_mountain_grassland_driving.png) |
 
+### 8. Static Continuous PointCloud & Front-Aligned Depth Camera Fusion
+Strict field-of-view verification confirms the RealSense D435 RGB-D depth camera points directly forward along the robot's heading (+X axis in `camera_link`). The **Static Continuous PointCloud Fusion Node** (`static_pointcloud_fusion_node.py`) fuses forward RealSense depth with 360-degree 4D LiDAR, publishing instantaneous live fusion (`/perception/points_fused` in `base_link`) and persistent continuous static 3D accumulation (`/perception/static_continuous_pointcloud` in `map` frame with 8 cm spatial voxel downsampling).
+
+![Static Continuous PointCloud & Front FOV Depth Camera Verification](docs/images/pointcloud_fusion_verification_dashboard.png)
+
 ---
 
 ## 🏛️ System Architecture
@@ -87,7 +92,7 @@ A dedicated, photorealistic **High-Altitude Alpine Meadow World** built as an in
 ```mermaid
 flowchart TD
     subgraph GAZEBO["Gazebo Sim Harmonic (Physics & World)"]
-        GZ_WORLD["World: army_border_minefield.sdf\n(100m x 70m Mountain Terrain <= 1:8 slope)"]
+        GZ_WORLD["World: mountain_grassland_minefield.sdf\n(High-Altitude Alpine Meadow <= 1:8 slope)"]
         GZ_ROBOT["Model: army_mine_amr\n(NIPUN Carrier, 4WD Skid-Steer, RealSense D435, 4D LiDAR, IMU)"]
         GZ_SENSORS["Sensors: RealSense RGB-D Camera, GPU LiDAR (16-beam), IMU, Odom"]
         GZ_WORLD --> GZ_ROBOT
@@ -98,13 +103,18 @@ flowchart TD
         BR_ODOM["/odom (gz.msgs.Odometry -> nav_msgs/Odometry)"]
         BR_TF["/tf (gz.msgs.Pose_V -> tf2_msgs/TFMessage)"]
         BR_SCAN["/scan (Horizontal slice for 2D SLAM)"]
-        BR_PC["/lidar4d/points_raw (16-beam PointCloud2)"]
-        BR_RGBD["/camera/depth/points (3D Dense PointCloud2)"]
+        BR_PC["/lidar4d/points_raw (16-beam PointCloud2, 360 surround)"]
+        BR_RGBD["/camera/depth/points (RealSense D435, Forward FOV)"]
         BR_DEPTH["/camera/depth/image_raw (32FC1 Depth Map)"]
         BR_RGB["/camera/image_raw (RGB8 Optical Video)"]
         BR_INFO["/camera/camera_info (Camera Calibration)"]
         BR_IMU["/imu/data (gz.msgs.IMU -> sensor_msgs/Imu)"]
         BR_CMD["/cmd_vel (geometry_msgs/Twist -> gz.msgs.Twist)"]
+    end
+
+    subgraph PERCEPTION["static_pointcloud_fusion_node.py (Sensor Fusion & Static Mapping)"]
+        FUSE_LIVE["/perception/points_fused\n(Live Camera+LiDAR in base_link @ 10 Hz)"]
+        FUSE_STATIC["/perception/static_continuous_pointcloud\n(Accumulated Voxel Grid in map @ 2 Hz)"]
     end
 
     subgraph ROS2["ROS 2 Humble Computational Nodes"]
@@ -113,7 +123,7 @@ flowchart TD
         TRACKER["mine_tracker_node\n(Minefield Registry & Diagnostics)"]
         CONTROLLER["amr_mine_laying_controller\n(W-Formation & NIPUN Deployment)"]
         REMOTE["virtual_remote_controller\n(Executive Tactical Remote & Depth HUD)"]
-        RVIZ["RViz2 Visualizer\n(3D PointCloud, RealSense Cloud & SLAM Display)"]
+        RVIZ["RViz2 Visualizer\n(Fused PointClouds, Static Map & SLAM Display)"]
     end
 
     GZ_SENSORS --> BRIDGE
@@ -122,6 +132,9 @@ flowchart TD
     BRIDGE --> TRACKER
     BRIDGE --> CONTROLLER
     BRIDGE --> REMOTE
+    BRIDGE -->|/camera/depth/points| PERCEPTION
+    BRIDGE -->|/lidar4d/points_raw| PERCEPTION
+    PERCEPTION --> RVIZ
     CONTROLLER -->|/cmd_vel| BRIDGE
     REMOTE -->|/cmd_vel| BRIDGE
     SLAM --> RVIZ
