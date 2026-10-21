@@ -1,6 +1,8 @@
 # Miner Detonator Bot (`army_mine_bot`)
 ### Autonomous NIPUN Anti-Personnel Mine-Laying & Carrier AMR in High-Altitude Mountainous Terrain with Coordinated W-Shape Formation & 4D LiDAR SLAM
 
+[![Release](https://img.shields.io/badge/Release-v1.0.0-00f0ff?logo=github&logoColor=white)](https://github.com/namanharshwal/Miner_Detonator_Bot/releases/tag/v1.0.0)
+[![Version](https://img.shields.io/badge/Version-v1-success.svg)](https://github.com/namanharshwal/Miner_Detonator_Bot/releases/tag/v1)
 [![ROS 2](https://img.shields.io/badge/ROS%202-Humble%20Hawksbill-22314E?logo=ros&logoColor=white)](https://docs.ros.org/en/humble/)
 [![Gazebo](https://img.shields.io/badge/Gazebo%20Sim-Harmonic%208.14-FF6F00?logo=gazebo&logoColor=white)](https://gazebosim.org/)
 [![Ubuntu](https://img.shields.io/badge/OS-Ubuntu%2022.04%20LTS-E95420?logo=ubuntu&logoColor=white)](https://ubuntu.com/)
