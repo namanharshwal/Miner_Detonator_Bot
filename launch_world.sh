@@ -71,10 +71,10 @@ elif [ "$MODE" == "amr" ]; then
     gz sim -r "$WORLD_PATH" &
     sleep 3
     ros2 launch army_mine_amr spawn_amr.launch.py
-elif [ "$MODE" == "slam" ]; then
+elif [ "$MODE" == "slam" ] || [ "$MODE" == "border" ] || [ "$MODE" == "desert" ]; then
     echo "Launching Complete Army Border Simulation with AMR, 4D LiDAR, SLAM, and Defusal..."
     ros2 launch army_mine_amr army_border_with_amr.launch.py
-elif [ "$MODE" == "grassland" ] || [ "$MODE" == "alpine" ]; then
+elif [ "$MODE" == "grassland" ] || [ "$MODE" == "alpine" ] || [ "$MODE" == "mountain" ]; then
     echo "Launching Complete Alpine Mountain Grassland & Wildflowers World with AMR, Depth Camera & SLAM..."
     ros2 launch mountain_grassland_world mountain_grassland_with_amr.launch.py
 elif [ "$MODE" == "grassland_gui" ] || [ "$MODE" == "alpine_gui" ]; then

@@ -1,8 +1,8 @@
 # Miner Detonator Bot (`Miner_Detonator_Bot` / `army_mine_bot`)
-### Autonomous NIPUN Anti-Personnel Mine-Laying & Carrier AMR in High-Altitude Mountainous Terrain with Coordinated W-Shape Formation, Multi-Spectral 3D Perception & 4D LiDAR SLAM
+### Autonomous NIPUN Anti-Personnel Mine-Laying & Carrier AMR in Dual High-Altitude Mountainous Theaters (Desert Border Camp & Alpine Grassland) with Coordinated W-Shape Formation, RealSense D435 RGB-D Depth Perception & 4D LiDAR SLAM
 
-[![Release](https://img.shields.io/badge/Release-v1.0.0-00f0ff?logo=github&logoColor=white)](https://github.com/namanharshwal/Miner_Detonator_Bot/releases/tag/v1.0.0)
-[![Version](https://img.shields.io/badge/Version-v1-success.svg)](https://github.com/namanharshwal/Miner_Detonator_Bot/releases/tag/v1)
+[![Release v1 (Desert)](https://img.shields.io/badge/Release-v1.0.0%20(Desert%20Area)-d97706?logo=github&logoColor=white)](https://github.com/namanharshwal/Miner_Detonator_Bot/releases/tag/v1)
+[![Release v2 (Mountain)](https://img.shields.io/badge/Release-v2.0.0%20(Mountain%20Area)-10b981?logo=github&logoColor=white)](https://github.com/namanharshwal/Miner_Detonator_Bot/releases/tag/v2)
 [![ROS 2](https://img.shields.io/badge/ROS%202-Humble%20Hawksbill-22314E?logo=ros&logoColor=white)](https://docs.ros.org/en/humble/)
 [![Gazebo](https://img.shields.io/badge/Gazebo%20Sim-Harmonic%208.14-FF6F00?logo=gazebo&logoColor=white)](https://gazebosim.org/)
 [![Ubuntu](https://img.shields.io/badge/OS-Ubuntu%2022.04%20LTS-E95420?logo=ubuntu&logoColor=white)](https://ubuntu.com/)
@@ -14,30 +14,34 @@
 
 ## 📌 Table of Contents
 1. [Executive Overview & Operational Purpose](#-executive-overview--operational-purpose)
-2. [Interactive Visual Showcase & Perception Dashboards](#-interactive-visual-showcase--perception-dashboards)
-3. [System Architecture & Flowcharts](#-system-architecture--flowcharts)
-   - [3.1 Global System Architecture Flowchart](#31-global-system-architecture--dataflow)
-   - [3.2 3D Perception & PointCloud Fusion Pipeline Flowchart](#32-3d-perception--static-continuous-pointcloud-fusion-pipeline)
-   - [3.3 Autonomous W-Formation & Approval Gate State Machine](#33-autonomous-w-formation--executive-approval-gate-state-machine)
-   - [3.4 Environment Generation & Maintenance Pipeline Flowchart](#34-environment-procedural-generation--asset-maintenance-pipeline)
-   - [3.5 Seismic & Magnetometer Threat Discrimination Flowchart](#35-seismic--magnetometer-threat-discrimination-flowchart)
-4. [How Everything Is Working: Engineering Deep-Dive](#-how-everything-is-working-engineering-deep-dive)
-5. [How Environments Are Maintained & Procedurally Generated](#-how-environments-are-maintained--procedurally-generated)
-6. [Complete ROS 2 Topics & Services Master Interface](#-complete-ros-2-topics--services-master-interface)
-7. [Comprehensive Client Requirements Compliance Matrix (`1.docx`)](#-comprehensive-client-requirements-compliance-matrix-1docx)
-8. [Workspace & Package Directory Structure](#-workspace--package-directory-structure)
-9. [Installation, Build & Simulation Run Guide](#-installation-build--simulation-run-guide)
-10. [Maintainer, License & References](#-maintainer-license--references)
+2. [Version Roadmap & Dual-Theater Architecture (v1 vs v2)](#-version-roadmap--dual-theater-architecture-v1-vs-v2)
+3. [Interactive Visual Showcase & Perception Dashboards](#-interactive-visual-showcase--perception-dashboards)
+   - [Part A: Version 2 (v2.0) — Alpine Mountain Grassland & Depth Camera Theater](#part-a-version-2-v20--alpine-mountain-grassland--multi-spectral-depth-camera-theater)
+   - [Part B: Version 1 (v1.0) — Desert Mountain Border Camp Theater](#part-b-version-1-v10--desert-mountain-border-camp--fortified-outpost-theater)
+   - [Part C: Unified Mil-Spec Tactical Remote HUD & Threat Modes](#part-c-unified-mil-spec-tactical-remote-controller-hud--threat-modes)
+4. [System Architecture & Flowcharts](#-system-architecture--flowcharts)
+   - [4.1 Global System Architecture Flowchart](#41-global-system-architecture--dataflow)
+   - [4.2 3D Perception & PointCloud Fusion Pipeline Flowchart](#42-3d-perception--static-continuous-pointcloud-fusion-pipeline)
+   - [4.3 Autonomous W-Formation & Approval Gate State Machine](#43-autonomous-w-formation--executive-approval-gate-state-machine)
+   - [4.4 Environment Generation & Maintenance Pipeline Flowchart](#44-environment-procedural-generation--asset-maintenance-pipeline)
+   - [4.5 Seismic & Magnetometer Threat Discrimination Flowchart](#45-seismic--magnetometer-threat-discrimination-flowchart)
+5. [How Everything Is Working: Engineering Deep-Dive](#-how-everything-is-working-engineering-deep-dive)
+6. [How Environments Are Maintained & Procedurally Generated](#-how-environments-are-maintained--procedurally-generated)
+7. [Complete ROS 2 Topics & Services Master Interface](#-complete-ros-2-topics--services-master-interface)
+8. [Comprehensive Client Requirements Compliance Matrix (`1.docx`)](#-comprehensive-client-requirements-compliance-matrix-1docx)
+9. [Workspace & Package Directory Structure](#-workspace--package-directory-structure)
+10. [Installation, Build & Simulation Run Guide](#-installation-build--simulation-run-guide)
+11. [Maintainer, License & References](#-maintainer-license--references)
 
 ---
 
 ## 📌 Executive Overview & Operational Purpose
 
-The **Miner Detonator Bot** project is an advanced, high-fidelity robotics simulation and autonomous control system built on **ROS 2 Humble** and **Gazebo Sim Harmonic (8.14)**. Designed strictly in accordance with defense operational requirements defined in military specification document **`1.docx`**, the robot serves as an autonomous **minelet / mine-carrier mini-bot** tasked with deploying and coordinating **NIPUN Anti-Personnel (AP) Mines** in rugged, high-altitude mountainous border regions.
+The **Miner Detonator Bot** project is an advanced, high-fidelity robotics simulation and autonomous control system built on **ROS 2 Humble** and **Gazebo Sim Harmonic (8.14)**. Designed strictly in accordance with defense operational requirements defined in military specification document **`1.docx`**, the robot serves as an autonomous **minelet / mine-carrier mini-bot** tasked with deploying and coordinating **NIPUN Anti-Personnel (AP) Mines** in rugged, high-altitude mountainous border regions across dual operational environments: **Desert Mountain Border Camp** and **Alpine Mountain Grassland Meadow**.
 
 ### 🎯 Primary Defense Objectives & Operational Doctrine
 * **Tactical Role Shift**: Eliminates the danger of human combat engineers (sappers) hiking forward mountain ridges under hostile fire. Replaces manual mine laying with autonomous mini-carrier robots roughly the size of a tea-cup coaster ($\sim 10\text{ cm}$ diameter, $\le 250\text{ g}$ payload capacity).
-* **High-Altitude Mountain Theater**: Engineered to operate on steep, rugged alpine terrain with continuous variable slopes up to **$1:8$ gradient ($\sim 7.1^\circ$)** in electronically contested (EW jammed) environments under extreme temperature swings ($-50^\circ\text{C}$ to $+50^\circ\text{C}$).
+* **Dual Mountain Theater Operation**: Engineered to operate on both arid desert perimeter berms and steep alpine terrain with continuous variable slopes up to **$1:8$ gradient ($\sim 7.1^\circ$)** in electronically contested (EW jammed) environments under extreme temperature swings ($-50^\circ\text{C}$ to $+50^\circ\text{C}$).
 * **Coordinated 5-Node W-Shape Tactical Formation**: Teams of 5 autonomous minelets navigate to designated border defiles and position themselves in a mathematically precise W-shape formation to create an impassable defensive barrier.
 * **Human-in-the-Loop Executive Approval Gate**: Military rules of engagement require that autonomous positioning must pause and receive explicit Field Commander sign-off (`APPROVE W-ALIGNMENT` and `AUTHORIZE NIPUN LAYING`) on the Ground Control Station before live ordnance is released and armed.
 * **Autonomous Sentry & Multi-Sensor Threat Discrimination**: Once deployed, the bot transitions into an autonomous surveillance sentinel:
@@ -47,9 +51,32 @@ The **Miner Detonator Bot** project is an advanced, high-fidelity robotics simul
 
 ---
 
+## 🏷️ Version Roadmap & Dual-Theater Architecture (v1 vs v2)
+
+The repository provides full backwards and forwards compatibility, organized into two dedicated release versions with a single, unified documentation and execution framework:
+
+| Architecture Dimension | Version 1.0 (`v1` / `v1.0.0`) — Desert Border Theater | Version 2.0 (`v2` / `v2.0.0`) — Alpine Grassland & 3D Depth |
+| :--- | :--- | :--- |
+| **Operational Theater** | Arid Desert Mountain Outpost & Fortified Perimeter | High-Altitude Alpine Mountain Grassland & Meadow |
+| **Gazebo World Package** | `army_border_world` (`army_border_minefield.sdf`) | `mountain_grassland_world` (`mountain_grassland_minefield.sdf`) |
+| **Terrain Conditions** | Flat desert plateau, rocky berms, sand, trenches | $100\text{m}\times 80\text{m}$ procedural mesh, continuous slope $\le 1:8$ ($7.125^\circ$) |
+| **Vegetation & Assets** | Arid scrub, T-90 Main Battle Tanks, 6x6 trucks, watchtower | Conifer pines, glacial boulders, poppies, buttercups, daisies, tussock grass |
+| **Perception Suite** | 16-beam 4D GPU LiDAR (`/lidar4d/points_raw`) + 6-DOF IMU | **RealSense D435 RGB-D Depth** + 16-beam 4D LiDAR + 6-DOF IMU |
+| **3D Mapping Pipeline** | 2D Cartographer/SLAM Toolbox occupancy grid | **Static Continuous PointCloud Fusion** ($0.08\text{m}$ voxel map in `/map`) + SLAM |
+| **Tactical Remote Modes** | DAY, NVG, FLIR Thermal, Teleop Controls, E-STOP | DAY, NVG, FLIR Thermal, **RGB-D False-Color Metric Depth**, Inclinometer |
+| **Autonomous Formation** | 5-node W-formation geometry & Apex marker placement | 5-node W-formation + **Human-in-the-Loop Dual Approval Gate** |
+| **Quick Launch Command** | `bash launch_world.sh border` | `bash launch_world.sh grassland` |
+| **GitHub Release Tag** | [`v1` (Release v1.0.0)](https://github.com/namanharshwal/Miner_Detonator_Bot/releases/tag/v1) | [`v2` (Release v2.0.0)](https://github.com/namanharshwal/Miner_Detonator_Bot/releases/tag/v2) |
+
+---
+
+---
+
 ## 📸 Interactive Visual Showcase & Perception Dashboards
 
-### 1. Multi-Panel Master Verification Dashboard (Continuous PointCloud Fusion & Telemetry)
+### Part A: Version 2 (v2.0) — Alpine Mountain Grassland & Multi-Spectral Depth Camera Theater (`mountain_grassland_world`)
+
+#### 1. Multi-Panel Master Verification Dashboard (Continuous PointCloud Fusion & Telemetry)
 * **Short Description**: High-resolution operational layout validating synchronous execution across Gazebo Sim Harmonic 8.14 physics, RViz2 3D perception, and the Mil-Spec Virtual Executive Remote Controller in RGB-D Depth mode.
 * **Full Technical Description**:
   * **Gazebo Sim Harmonic 8.14 (Top-Right)**: Simulates the alpine grassland meadow with continuous slopes ($\le 1:8$ gradient), conifer pine forest boundary, weathered granite erratic boulders, and wildflower vegetation. The AMR executes skid-steer trajectory tracking while streaming multi-modal sensor telemetry.
@@ -60,7 +87,7 @@ The **Miner Detonator Bot** project is an advanced, high-fidelity robotics simul
 
 ---
 
-### 2. Alpine Grassland Simulation Verification Dashboard (`mountain_grassland_world`)
+#### 2. Alpine Grassland Simulation Verification Dashboard (`mountain_grassland_world`)
 * **Short Description**: Verification dashboard confirming strict compliance of the separate `mountain_grassland_world` package with all 1.docx terrain, flora, mobility, and human-in-the-loop requirements.
 * **Full Technical Description**:
   * **Procedural Alpine Meadow Terrain**: Continuous $100\text{m}\times 80\text{m}$ elevation surface $z(x,y) = m \cdot x + A_1\sin(\omega_1 x)\cos(\omega_2 y) + A_2\text{noise}(x,y)$ engineered to ensure $\max|\partial z/\partial x| \le 1/8$ ($7.125^\circ$), satisfying Indian Army all-terrain slope traversal criteria.
@@ -71,23 +98,20 @@ The **Miner Detonator Bot** project is an advanced, high-fidelity robotics simul
 
 ---
 
-### 3. Dual-World Simulation Environments: Alpine Meadow vs Military Base Camp
-
-* **Short Description**: Side-by-side comparison of the two distinct simulation worlds engineered for the AMR: high-altitude alpine grassland pass vs fortified desert border outpost.
+#### 3. Alpine Meadow Environment & RealSense D435 Nose Integration
+* **Short Description**: High-resolution ground-level hero view of the AMR in the high-altitude meadow alongside a macro inspection of the front-facing stereo depth camera.
 * **Full Technical Description**:
-  * **Alpine Meadow (`mountain_grassland_world`)**: Focuses on natural terrain traversal, continuous slope gradients, mud/rock slippage physics, flora clutter filtering, and long-range demining patrol in mountain warfare conditions.
-  * **Desert Border Camp (`army_border_world`)**: Features military defense infrastructure including T-90 Main Battle Tanks, 6x6 combat cargo trucks, barbed-wire fences, watchtowers, and desert perimeter minefield berms.
-  * **RealSense D435 Nose Integration**: Close-up hero inspection showing the front-chassis bracket integration of the Intel RealSense D435 stereo RGB-D sensor with optical axis aligned with robot base frame (`camera_depth_optical_frame`).
+  * **Lush Alpine Meadow**: Highlights the skid-steer AMR chassis traversing dense turf, wildflower colonies, weathered granite talus rocks, and conifer pines under high-altitude ambient lighting.
+  * **Front RealSense Nose Mount**: Demonstrates the forward $+X$ oriented Intel RealSense D435 stereo RGB-D camera assembly encased in a protective mil-spec housing, rigidly mapped via `camera_depth_optical_frame` to eliminate parallax error.
 
-| Alpine Mountain Meadow (`mountain_grassland_world`) | Desert Border Camp & Tanks (`army_border_world`) | RealSense D435 Nose Integration |
-|:---:|:---:|:---:|
-| ![Gazebo Meadow](docs/images/gazebo_mountain_grassland_meadow.png) | ![Army Camp Models](docs/images/army_camp_military_models.png) | ![RealSense Nose](docs/images/gazebo_realsense_robot.png) |
-| *High-res 1600x900 hero shot of AMR in lush alpine turf with boulders & pines* | *Main Battle Tanks, 6x6 cargo trucks, watchtower & perimeter barricades* | *Close-up inspection of front-facing RealSense D435 stereo depth sensor* |
+| High-Altitude Alpine Meadow Hero Perspective | RealSense D435 Forward Stereo Nose Assembly |
+|:---:|:---:|
+| ![Gazebo Meadow](docs/images/gazebo_mountain_grassland_meadow.png) | ![RealSense Nose](docs/images/gazebo_realsense_robot.png) |
+| *AMR in lush alpine turf with boulders, conifer pines & wildflowers (1600x900)* | *Macro inspection of front-facing RealSense D435 stereo RGB-D sensor (960x600)* |
 
 ---
 
-### 4. 3D Sensor Perception, SLAM & Static Continuous PointCloud
-
+#### 4. 3D Sensor Perception, SLAM & Static Continuous PointCloud
 * **Short Description**: Multi-sensor spatial perception suite in RViz2 showcasing point cloud fusion, persistent voxel memory, and coordinated tactical formation geometry.
 * **Full Technical Description**:
   * **Dense Multi-Sensor PointCloud**: RealSense D435 forward depth cone ($87^\circ \text{H} \times 58^\circ \text{V}$ FOV, $0.15\text{m}\text{--}15.0\text{m}$) merged with $360^\circ$ 16-beam 4D LiDAR rings into `/perception/points_fused` at 10 Hz in `base_link`.
@@ -101,9 +125,24 @@ The **Miner Detonator Bot** project is an advanced, high-fidelity robotics simul
 
 ---
 
-### 5. Multi-Spectral Remote Controller HUD & Tactical Threat Modes
+### Part B: Version 1 (v1.0) — Desert Mountain Border Camp & Fortified Outpost Theater (`army_border_world`)
 
-* **Short Description**: Executive Tactical Command Station HUD operating across 4 optical sensor shaders, dual threat discrimination indicators, and emergency failsafe switches.
+* **Short Description**: Visual documentation of the Version 1 desert border camp operational environment, featuring the 4WD AMR operating among Main Battle Tanks, fortified outposts, and arid mountain berms (all images are clean 3D simulation captures without any browser or external UI clutter).
+* **Full Technical Description**:
+  * **Desert Mountain Plateau (`gazebo_simulation_mountain_world.png`)**: Captures the initial 4WD all-terrain AMR negotiating arid desert terrain, sandy incline berms, and rocky defense ridges.
+  * **Fortified Military Base Camp (`army_camp_military_models.png`)**: High-fidelity defense camp models including T-90 Main Battle Tanks, 6x6 combat cargo transport trucks, sandbag perimeters, camouflage command post, and security watchtower.
+  * **Integrated Desert Simulation Side-by-Side (`full_simulation_side_by_side.png`)**: Synchronous verification of the Gazebo Sim physics environment running in lockstep with ROS 2 RViz 4D LiDAR SLAM mapping and W-formation autonomous alignment.
+
+| Desert Mountain Terrain & 4WD AMR | Fortified Army Base Camp & Armor | Full Desert Simulation (Gazebo + RViz) |
+|:---:|:---:|:---:|
+| ![Desert World](docs/images/gazebo_simulation_mountain_world.png) | ![Army Camp Models](docs/images/army_camp_military_models.png) | ![Desert Simulation](docs/images/full_simulation_side_by_side.png) |
+| *4WD AMR traversing arid desert terrain with natural rock berms* | *T-90 Main Battle Tanks, 6x6 combat cargo trucks & watchtower* | *Side-by-side desert Gazebo physics & 4D LiDAR SLAM in RViz2* |
+
+---
+
+### Part C: Unified Mil-Spec Tactical Remote Controller HUD & Threat Modes
+
+* **Short Description**: Common Mil-Spec Tactical Command Station HUD operating across both Version 1 and Version 2, featuring 4 optical sensor shaders, dual threat discrimination indicators, and emergency failsafe switches.
 * **Full Technical Description**:
   * **Optical & Depth Viewport Modes**: 1) High-resolution Day Optical ($640\times 480$ RGB stream); 2) Active NVG Night Vision (phosphor-green boost and noise simulation); 3) FLIR Thermal Infrared (heat-signature luminance colormap); 4) Metric RealSense RGB-D Depth (false-color JET distance colormap with dynamic range reticle).
   * **Autonomous Executive Approval Gate**: Human-in-the-loop command buttons (`APPROVE W-ALIGNMENT` and `AUTHORIZE NIPUN LAYING`) enforcing dual-key clearance before ordnance ejection.
@@ -631,17 +670,21 @@ source install/setup.bash
 
 The repository provides an automated launcher (`launch_world.sh`) that sets up Gazebo resource paths, cleans lingering processes, and coordinates all nodes:
 
-#### Mode 1: Alpine Mountain Grassland Full Mission (Recommended)
+#### Mode 1: Version 2 (v2.0) — Alpine Mountain Grassland Full Mission (Recommended)
 Launches the photorealistic Alpine Meadow World with the 4WD AMR, RealSense D435 depth perception, 4D LiDAR, SLAM Toolbox, Static PointCloud Fusion Node, and preconfigured RViz2:
 ```bash
 ./launch_world.sh grassland
-# Or alias:
+# Or aliases:
 ./launch_world.sh alpine
+./launch_world.sh mountain
 ```
 
-#### Mode 2: Desert Mountain Border Camp Mission
-Launches the military outpost world with Main Battle Tanks, trucks, base camp fortifications, SLAM, and the W-Formation controller:
+#### Mode 2: Version 1 (v1.0) — Desert Mountain Border Camp Mission
+Launches the military outpost world with Main Battle Tanks, 6x6 cargo trucks, base camp fortifications, 4D LiDAR SLAM, and the W-Formation controller:
 ```bash
+./launch_world.sh border
+# Or aliases:
+./launch_world.sh desert
 ./launch_world.sh slam
 ```
 
