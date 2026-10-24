@@ -257,7 +257,7 @@ Visualization Manager:
       Namespaces:
         w_formation_lines: true
         nipun_minelet_stations: true
-        nipun_labels: true
+        nipun_labels: false
       Queue Size: 100
       Topic:
         Depth: 5
@@ -268,7 +268,7 @@ Visualization Manager:
       Value: true
 
     - Class: rviz_default_plugins/TF
-      Enabled: true
+      Enabled: false
       Frame Timeout: 15
       Frames:
         All Enabled: true
@@ -316,11 +316,11 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 12.0
+      Distance: 9.0
       Focal Shape Size: 0.05
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 0.45
+      Pitch: 0.42
       Target Frame: base_footprint
       Value: Orbit (rviz)
-      Yaw: 0.78
+      Yaw: 0.65

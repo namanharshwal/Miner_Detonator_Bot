@@ -49,15 +49,23 @@ The **Miner Detonator Bot** project is an advanced, high-fidelity robotics simul
 
 ## 📸 Interactive Visual Showcase & Perception Dashboards
 
-### 1. Multi-Panel Master Verification Dashboard
-The master verification dashboard demonstrates end-to-end integration: Gazebo Sim Harmonic rendering the realistic alpine meadow with conifer pine trees, granite erratic boulders, and wildflowers; RViz2 displaying the persistent continuous 3D point cloud, forward-aligned RealSense depth cloud, and 4D LiDAR; and the Mil-Spec Virtual Executive Remote Controller operating in RGB-D Depth mode.
+### 1. Multi-Panel Master Verification Dashboard (Continuous PointCloud Fusion & Telemetry)
+* **Short Description**: High-resolution operational layout validating synchronous execution across Gazebo Sim Harmonic 8.14 physics, RViz2 3D perception, and the Mil-Spec Virtual Executive Remote Controller in RGB-D Depth mode.
+* **Full Technical Description**:
+  * **Gazebo Sim Harmonic 8.14 (Top-Right)**: Simulates the alpine grassland meadow with continuous slopes ($\le 1:8$ gradient), conifer pine forest boundary, weathered granite erratic boulders, and wildflower vegetation. The AMR executes skid-steer trajectory tracking while streaming multi-modal sensor telemetry.
+  * **ROS 2 RViz2 3D Perception (Top-Left)**: Illustrates real-time spatial fusion between the front-mounted RealSense D435 RGB-D depth camera (`/camera/depth/points`, $640\times 480$ dense points at 20 Hz, forward $+X$ viewing cone) and the 16-beam 4D GPU LiDAR (`/lidar4d/points_raw`, $360^\circ$ azimuth at 10 Hz). A continuous static voxel map ($0.08\text{m}$ resolution) is incrementally accumulated in the global `/map` frame, persisting throughout navigation.
+  * **Virtual Tactical Remote HUD (Bottom)**: Displays the unclipped mil-spec operator console. The central viewport renders the live RealSense RGB-D stream transformed via false-color depth shader with range reticle and metric depth readout. Real-time pitch/roll telemetry confirms terrain slope compliance ($\le 7.125^\circ$). Bottom audit logs track executive sign-offs, geophone seismic baselines, and fluxgate magnetometer readings.
 
 ![Point Cloud Fusion Verification Dashboard](docs/images/pointcloud_fusion_verification_dashboard.png)
 
 ---
 
-### 2. Alpine Grassland Simulation Verification Dashboard
-Comprehensive operational layout capturing the AMR negotiating the continuous slope gradient ($\le 1:8$), building a 2D SLAM occupancy grid map, and streaming multi-spectral sensor feeds to the executive remote console.
+### 2. Alpine Grassland Simulation Verification Dashboard (`mountain_grassland_world`)
+* **Short Description**: Verification dashboard confirming strict compliance of the separate `mountain_grassland_world` package with all 1.docx terrain, flora, mobility, and human-in-the-loop requirements.
+* **Full Technical Description**:
+  * **Procedural Alpine Meadow Terrain**: Continuous $100\text{m}\times 80\text{m}$ elevation surface $z(x,y) = m \cdot x + A_1\sin(\omega_1 x)\cos(\omega_2 y) + A_2\text{noise}(x,y)$ engineered to ensure $\max|\partial z/\partial x| \le 1/8$ ($7.125^\circ$), satisfying Indian Army all-terrain slope traversal criteria.
+  * **High-Fidelity Photogrammetry Assets**: High-density Himalayan flora including Blue Poppies (*Meconopsis betonicifolia*), Alpine Buttercups (*Ranunculus montanus*), Meadow Daisies (*Bellis perennis*), and Tussock Grass clusters (*Festuca ovina*), paired with Glacial Granite Erratic Boulders and Conifer Pine stands.
+  * **Autonomous W-Formation Layout**: 5-minelet coordinated layout with interactive Apex Station approval gate, where minelet markers are registered and managed across the tactical map.
 
 ![Mountain Grassland Verification Dashboard](docs/images/mountain_grassland_verification_dashboard.png)
 
@@ -65,23 +73,42 @@ Comprehensive operational layout capturing the AMR negotiating the continuous sl
 
 ### 3. Dual-World Simulation Environments: Alpine Meadow vs Military Base Camp
 
+* **Short Description**: Side-by-side comparison of the two distinct simulation worlds engineered for the AMR: high-altitude alpine grassland pass vs fortified desert border outpost.
+* **Full Technical Description**:
+  * **Alpine Meadow (`mountain_grassland_world`)**: Focuses on natural terrain traversal, continuous slope gradients, mud/rock slippage physics, flora clutter filtering, and long-range demining patrol in mountain warfare conditions.
+  * **Desert Border Camp (`army_border_world`)**: Features military defense infrastructure including T-90 Main Battle Tanks, 6x6 combat cargo trucks, barbed-wire fences, watchtowers, and desert perimeter minefield berms.
+  * **RealSense D435 Nose Integration**: Close-up hero inspection showing the front-chassis bracket integration of the Intel RealSense D435 stereo RGB-D sensor with optical axis aligned with robot base frame (`camera_depth_optical_frame`).
+
 | Alpine Mountain Meadow (`mountain_grassland_world`) | Desert Border Camp & Tanks (`army_border_world`) | RealSense D435 Nose Integration |
 |:---:|:---:|:---:|
 | ![Gazebo Meadow](docs/images/gazebo_mountain_grassland_meadow.png) | ![Army Camp Models](docs/images/army_camp_military_models.png) | ![RealSense Nose](docs/images/gazebo_realsense_robot.png) |
-| *Lush high-density turf, wildflowers, boulders & pines* | *Main Battle Tanks, 6x6 cargo trucks & watchtower* | *Front-facing RealSense D435 RGB-D depth sensor* |
+| *High-res 1600x900 hero shot of AMR in lush alpine turf with boulders & pines* | *Main Battle Tanks, 6x6 cargo trucks, watchtower & perimeter barricades* | *Close-up inspection of front-facing RealSense D435 stereo depth sensor* |
 
 ---
 
 ### 4. 3D Sensor Perception, SLAM & Static Continuous PointCloud
 
+* **Short Description**: Multi-sensor spatial perception suite in RViz2 showcasing point cloud fusion, persistent voxel memory, and coordinated tactical formation geometry.
+* **Full Technical Description**:
+  * **Dense Multi-Sensor PointCloud**: RealSense D435 forward depth cone ($87^\circ \text{H} \times 58^\circ \text{V}$ FOV, $0.15\text{m}\text{--}15.0\text{m}$) merged with $360^\circ$ 16-beam 4D LiDAR rings into `/perception/points_fused` at 10 Hz in `base_link`.
+  * **Persistent Static Continuous 3D Map**: Real-time spatial hash table ($0.08\text{m}$ voxel quantization) accumulating sensor returns in the global `/map` frame, published on `/perception/static_continuous_pointcloud` (2 Hz) with Z-elevation rainbow colormap and zero decay time ($0.0\text{s}$ decay = indefinite persistence).
+  * **Coordinated W-Formation & SLAM Grid**: 2D occupancy grid generated by Cartographer/SLAM Toolbox paired with 5-station W-formation vector guidelines and interactive minelet station discs (Apex station at AMR pose).
+
 | RealSense Depth Cloud & 4D LiDAR (RViz2) | Persistent Static Continuous 3D Map | Coordinated W-Formation & SLAM Grid |
 |:---:|:---:|:---:|
 | ![RViz Perception](docs/images/rviz_mountain_grassland_driving.png) | ![Depth Cloud RViz](docs/images/rviz_realsense_depth_cloud.png) | ![W-Formation RViz](docs/images/rviz_w_formation_slam_4d_lidar.png) |
-| *Forward depth cone (+X) + 360° LiDAR rings* | *Continuous 8cm spatial voxel persistent map* | *5-station W-shape guidelines & mine markers* |
+| *Forward RealSense depth cone (+X) + 16-beam 360° LiDAR rings* | *Continuous 8cm spatial voxel persistent map colored by Z elevation* | *5-station W-shape guidelines, apex approval station & SLAM occupancy grid* |
 
 ---
 
 ### 5. Multi-Spectral Remote Controller HUD & Tactical Threat Modes
+
+* **Short Description**: Executive Tactical Command Station HUD operating across 4 optical sensor shaders, dual threat discrimination indicators, and emergency failsafe switches.
+* **Full Technical Description**:
+  * **Optical & Depth Viewport Modes**: 1) High-resolution Day Optical ($640\times 480$ RGB stream); 2) Active NVG Night Vision (phosphor-green boost and noise simulation); 3) FLIR Thermal Infrared (heat-signature luminance colormap); 4) Metric RealSense RGB-D Depth (false-color JET distance colormap with dynamic range reticle).
+  * **Autonomous Executive Approval Gate**: Human-in-the-loop command buttons (`APPROVE W-ALIGNMENT` and `AUTHORIZE NIPUN LAYING`) enforcing dual-key clearance before ordnance ejection.
+  * **Dual Threat Discrimination**: Piezoelectric geophone spectral bandpass filter ($5\text{--}100\text{ Hz}$) distinguishing friendly minelet vibrations ($<0.15g$) from heavy hostile footfalls ($>0.45g$), and 3-axis fluxgate magnetometer detecting metallic firearm/helmet anomalies ($>80\ \mu\text{T}$).
+  * **Emergency E-STOP**: Physical and GUI dual-action instant power interlock interrupting motor PWM and locking skid-steer drive brakes.
 
 | Day Optical Viewport | NVG Night Vision (Phosphor Green) | FLIR Thermal Infrared | RealSense RGB-D Depth Colormap |
 |:---:|:---:|:---:|:---:|
@@ -350,7 +377,7 @@ flowchart TD
 
     subgraph SEISMIC_PROC["Seismic Spectral Analysis & Filtering"]
         BANDPASS["Bandpass Filter (5 Hz - 100 Hz)\nAttenuates high-frequency wind and acoustic noise"]
-        PEAK_AMP["Peak Acceleration Extraction: a_peak = max|a(t)|"]
+        PEAK_AMP["Peak Acceleration Extraction: a_peak = max(abs(a(t)))"]
         CHECK_SEIS{"a_peak Threshold Check"}
         
         BANDPASS --> PEAK_AMP --> CHECK_SEIS
@@ -360,14 +387,14 @@ flowchart TD
     end
 
     subgraph MAG_PROC["Magnetometer Baseline Subtraction & Anomaly Detection"]
-        MAG_MAGNITUDE["Field Magnitude: |B| = sqrt(Bx² + By² + Bz²) in microTesla"]
+        MAG_MAGNITUDE["Field Magnitude: B_mag = sqrt(Bx² + By² + Bz²) in microTesla"]
         BASELINE_SUB["Earth Magnetic Baseline Subtraction:\nB_baseline = 47.8 uT (High-Altitude Mountain Theater)"]
-        DELTA_B["Anomaly Magnitude: ΔB = ||B| - B_baseline|"]
+        DELTA_B["Anomaly Magnitude: ΔB = abs(B_mag - B_baseline)"]
         CHECK_MAG{"ΔB Threshold Check"}
         
         MAG_MAGNITUDE --> BASELINE_SUB --> DELTA_B --> CHECK_MAG
         CHECK_MAG -->|ΔB < 15 uT| MAG_CLEAR["MAGNETIC STATUS: CLEAR\nOnly natural geological granite background\nAction: No Alert"]
-        CHECK_MAG -->|ΔB >= 30 uT (|B| > 80 uT)| MAG_ANOMALY["HOSTILE WEAPON ANOMALY DETECTED!\nFerrous rifle barrel, helmet, or military vehicle\nAction: Trigger Weapon Alert"]
+        CHECK_MAG -->|ΔB >= 30 uT, B_mag > 80 uT| MAG_ANOMALY["HOSTILE WEAPON ANOMALY DETECTED!\nFerrous rifle barrel, helmet, or military vehicle\nAction: Trigger Weapon Alert"]
     end
 
     subgraph GCS_TELEMETRY["Executive Remote Station HUD Response"]

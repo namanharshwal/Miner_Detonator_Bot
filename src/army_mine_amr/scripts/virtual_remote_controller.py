@@ -260,6 +260,7 @@ class TacticalExecutiveRemote(QMainWindow):
 
         self.setWindowTitle("INDIAN ARMY TACTICAL COMMAND STATION // NIPUN AP-AMR REMOTE CONTROLLER")
         self.resize(1280, 820)
+        self.move(100, 100)
         self.setMinimumSize(1150, 750)
 
         # Telemetry state
@@ -280,7 +281,7 @@ class TacticalExecutiveRemote(QMainWindow):
         self.nipun_deployed = False
         self.seismic_val = 0.08
         self.mag_val = 47.6
-        self.optical_mode = "THERMAL"
+        self.optical_mode = "DEPTH"
         self.e_stop = False
         self.active_mode = "AUTONOMOUS"
         self.is_moving = False
@@ -777,7 +778,9 @@ class TacticalExecutiveRemote(QMainWindow):
         self.btn_nvg = QPushButton("NVG NIGHT")
         self.btn_day = QPushButton("DAY OPTICAL")
         self.btn_depth = QPushButton("RGB-D DEPTH")
-        self.btn_thermal.setStyleSheet("background-color: #4c1d95; color: #c4b5fd; border: 1px solid #8b5cf6;")
+        self.btn_thermal.setStyleSheet("background-color: #1e293b; color: #f8fafc; border: 1px solid #334155;")
+        self.btn_depth.setStyleSheet("background-color: #0e7490; color: #67e8f9; border: 1px solid #06b6d4;")
+        self.hud_viewport.set_mode("DEPTH")
         self.btn_thermal.clicked.connect(lambda: self.set_opt_mode("THERMAL"))
         self.btn_nvg.clicked.connect(lambda: self.set_opt_mode("NVG"))
         self.btn_day.clicked.connect(lambda: self.set_opt_mode("DAY"))

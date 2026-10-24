@@ -99,9 +99,10 @@ class StaticPointCloudFusionNode(Node):
     def camera_callback(self, msg: PointCloud2):
         """Processes RealSense D435 depth points in camera_link (forward FOV)."""
         try:
-            coords = pc2.read_points_numpy(msg, field_names=('x', 'y', 'z'), skip_nans=False)
-            if coords.size == 0:
+            raw = pc2.read_points(msg, field_names=('x', 'y', 'z'), skip_nans=False)
+            if raw.size == 0:
                 return
+            coords = np.column_stack([raw['x'], raw['y'], raw['z']]).astype(np.float32)
 
             # Extract finite points within valid D435 range (0.15m to 15.0m forward)
             finite_mask = (
@@ -131,9 +132,10 @@ class StaticPointCloudFusionNode(Node):
     def lidar_callback(self, msg: PointCloud2):
         """Processes 4D LiDAR points in lidar4d_link (360 deg surround)."""
         try:
-            coords = pc2.read_points_numpy(msg, field_names=('x', 'y', 'z'), skip_nans=False)
-            if coords.size == 0:
+            raw = pc2.read_points(msg, field_names=('x', 'y', 'z'), skip_nans=False)
+            if raw.size == 0:
                 return
+            coords = np.column_stack([raw['x'], raw['y'], raw['z']]).astype(np.float32)
 
             # Filter finite points and self-reflection points (< 0.25m from robot center)
             dists_sq = coords[:, 0]**2 + coords[:, 1]**2

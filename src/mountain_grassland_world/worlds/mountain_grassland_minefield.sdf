@@ -17,7 +17,7 @@
     <!-- Scene GUI Camera configured for Scenic Ground-Level Operations -->
     <gui fullscreen="0">
       <camera name="user_camera">
-        <pose>-25.0 -5.0 2.8 0 0.08 0.32</pose>
+        <pose>-22.2 -1.6 0.95 0 0.22 0.63</pose>
         <view_controller>orbit</view_controller>
       </camera>
     </gui>
