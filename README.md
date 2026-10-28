@@ -556,6 +556,10 @@ Below is the exhaustive reference table of all active ROS 2 topics and services:
 Every technical parameter, operational doctrine, and sensory specification submitted in defense document **`1.docx`** has been implemented, validated live, and documented:
 
 > 📄 **Official Executive PDF Audit Report**: [**`NIPUN_AP_AMR_PROJECT_COMPLETION_REPORT_1_DOCX.pdf`**](docs/NIPUN_AP_AMR_PROJECT_COMPLETION_REPORT_1_DOCX.pdf) — *Complete 10-page defense engineering compliance and status report covering all 20 questions, architecture deep-dive, visual telemetry showcase, and Phase 2 physical transition roadmap.*
+> 
+> 📑 **Simple Project Reports (`Defence_Robot`)**:
+> * **PDF Document**: [**`Defence_Robot.pdf`**](docs/Defence_Robot.pdf) — *Clean 6-page accessible project report with visual telemetry.*
+> * **Word Document**: [**`Defence_Robot.docx`**](docs/Defence_Robot.docx) — *Editable Microsoft Word document with formatted tables and embedded figures.*
 
 | Req # | Document `1.docx` Topic | Client Specification | Implementation in `Miner_Detonator_Bot` | Status |
 |:---:|---|---|---|:---:|
