@@ -6,6 +6,7 @@
 **Framework**: ROS 2 Humble Hawksbill & Gazebo Sim Harmonic (8.14)  
 **Author**: Antigravity Autonomous Systems Engineering Team  
 **Date**: October 2026  
+**Official PDF Deliverable**: [**`NIPUN_AP_AMR_PROJECT_COMPLETION_REPORT_1_DOCX.pdf`**](NIPUN_AP_AMR_PROJECT_COMPLETION_REPORT_1_DOCX.pdf) (Executive 10-Page PDF Report)  
 
 ---
 
